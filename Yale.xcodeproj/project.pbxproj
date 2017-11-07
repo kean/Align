@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C7D02971C9875A200DAB3ED /* Internal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C81ABB61C889C100036DFD4 /* Internal.swift */; };
-		0C81ABB71C889C100036DFD4 /* Internal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C81ABB61C889C100036DFD4 /* Internal.swift */; };
+		0C7D02971C9875A200DAB3ED /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C81ABB61C889C100036DFD4 /* Layout.swift */; };
+		0C81ABB71C889C100036DFD4 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C81ABB61C889C100036DFD4 /* Layout.swift */; };
 		0CC3A06C1D7476A700754E59 /* Yale.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE361181C86077B00EA70CF /* Yale.framework */; };
 		0CC3A0881D7477FB00754E59 /* Yale.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C7D028B1C98756C00DAB3ED /* Yale.framework */; };
 /* End PBXBuildFile section */
@@ -32,7 +32,7 @@
 
 /* Begin PBXFileReference section */
 		0C7D028B1C98756C00DAB3ED /* Yale.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Yale.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0C81ABB61C889C100036DFD4 /* Internal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Internal.swift; sourceTree = "<group>"; };
+		0C81ABB61C889C100036DFD4 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		0CC3A0671D7476A700754E59 /* Yale iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Yale iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CC3A0751D7476B300754E59 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0CC3A0831D7477FB00754E59 /* Yale tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Yale tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,7 +114,7 @@
 		0CE361261C8607D600EA70CF /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				0C81ABB61C889C100036DFD4 /* Internal.swift */,
+				0C81ABB61C889C100036DFD4 /* Layout.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -297,7 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C7D02971C9875A200DAB3ED /* Internal.swift in Sources */,
+				0C7D02971C9875A200DAB3ED /* Layout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,7 +319,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C81ABB71C889C100036DFD4 /* Internal.swift in Sources */,
+				0C81ABB71C889C100036DFD4 /* Layout.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
