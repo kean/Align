@@ -130,27 +130,27 @@ public struct EdgesCollection {
     /// Pins the edges of the view to the same edges of its superview.
     @discardableResult
     public func pinToSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return pin(to: item.superview!, margin: false, insets: insets, relation: relation)
+        return pin(to: item.superview!.al, margin: false, insets: insets, relation: relation)
     }
 
     /// Pins the edges of the view to the corresponding margins of its superview.
     @discardableResult
     public func pinToSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return pin(to: item.superview!, margin: true, insets: insets, relation: relation)
+        return pin(to: item.superview!.al, margin: true, insets: insets, relation: relation)
     }
 
     /// Pins the edges of the view to the same edges of the given view.
     @discardableResult
-    public func pin(to item2: AnchorCompatible, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    public func pin<Item>(to item2: LayoutCompatible<Item>, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] where Item: AnchorCompatible {
         return pin(to: item2, margin: false, insets: insets, relation: relation)
     }
 
     /// Pins the edges of the view to the same edges (or margins) of the given view.
     @discardableResult
-    private func pin(to item2: AnchorCompatible, margin: Bool = false, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    private func pin<Item>(to item2: LayoutCompatible<Item>, margin: Bool = false, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] where Item: AnchorCompatible {
         return edges.map {
             let anchor = Anchor<Any>(item: item, attribute: $0.toAttribute)
-            return anchor.pin(to: item2, margin: margin, inset: insets.insetForEdge($0), relation: relation)
+            return anchor.pin(to: item2.base, margin: margin, inset: insets.insetForEdge($0), relation: relation)
         }
     }
 }
@@ -222,6 +222,14 @@ public extension Stack {
     @nonobjc public convenience init(_ views: UIView..., with: (UIStackView) -> Void = { _ in }) {
         self.init(arrangedSubviews: views)
         with(self)
+    }
+
+    @nonobjc public convenience init(_ views: [UIView], axis: UILayoutConstraintAxis = .horizontal, spacing: CGFloat = 0, alignment: UIStackViewAlignment = .fill, distribution: UIStackViewDistribution = .fill) {
+        self.init(arrangedSubviews: views)
+        self.axis = axis
+        self.spacing = spacing
+        self.alignment = alignment
+        self.distribution = distribution
     }
 }
 
