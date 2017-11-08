@@ -18,7 +18,7 @@ public final class Layout {
 
     private var stack = [[NSLayoutConstraint]]()
 
-    /// All of the constraints created in the block using Yale APIs are then
+    /// All of the constraints created in the block using Yalta APIs are then
     /// automatically activated at the same time. This may be fore efficient
     /// then installing the one-be-one. But more importantly it allows you
     /// to make changes to constraints before they are installed (e.g.
@@ -62,7 +62,7 @@ extension Layout {
                                   constant: CGFloat = 0,
                                   priority: UILayoutPriority? = nil,
                                   identifier: String? = nil) -> NSLayoutConstraint {
-        assert(Thread.isMainThread, "Yale APIs can only be used from the main thread")
+        assert(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
 
         let constraint = NSLayoutConstraint(
             item: item1,

@@ -1,5 +1,5 @@
-# Yale
+# Yalta
 
 ## License
 
-Yale is available under the MIT license. See the LICENSE file for more info.
+Yalta is available under the MIT license. See the LICENSE file for more info.

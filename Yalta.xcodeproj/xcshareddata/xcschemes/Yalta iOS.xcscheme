@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0C7D028A1C98756C00DAB3ED"
-               BuildableName = "Yale.framework"
-               BlueprintName = "Yale tvOS"
-               ReferencedContainer = "container:Yale.xcodeproj">
+               BlueprintIdentifier = "0CE361171C86077B00EA70CF"
+               BuildableName = "Yalta.framework"
+               BlueprintName = "Yalta iOS"
+               ReferencedContainer = "container:Yalta.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,20 +33,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0CC3A0821D7477FB00754E59"
-               BuildableName = "Yale tvOS Tests.xctest"
-               BlueprintName = "Yale tvOS Tests"
-               ReferencedContainer = "container:Yale.xcodeproj">
+               BlueprintIdentifier = "0CC3A0661D7476A700754E59"
+               BuildableName = "Yalta iOS Tests.xctest"
+               BlueprintName = "Yalta iOS Tests"
+               ReferencedContainer = "container:Yalta.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0C7D028A1C98756C00DAB3ED"
-            BuildableName = "Yale.framework"
-            BlueprintName = "Yale tvOS"
-            ReferencedContainer = "container:Yale.xcodeproj">
+            BlueprintIdentifier = "0CE361171C86077B00EA70CF"
+            BuildableName = "Yalta.framework"
+            BlueprintName = "Yalta iOS"
+            ReferencedContainer = "container:Yalta.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -66,10 +66,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0C7D028A1C98756C00DAB3ED"
-            BuildableName = "Yale.framework"
-            BlueprintName = "Yale tvOS"
-            ReferencedContainer = "container:Yale.xcodeproj">
+            BlueprintIdentifier = "0CE361171C86077B00EA70CF"
+            BuildableName = "Yalta.framework"
+            BlueprintName = "Yalta iOS"
+            ReferencedContainer = "container:Yalta.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -84,10 +84,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0C7D028A1C98756C00DAB3ED"
-            BuildableName = "Yale.framework"
-            BlueprintName = "Yale tvOS"
-            ReferencedContainer = "container:Yale.xcodeproj">
+            BlueprintIdentifier = "0CE361171C86077B00EA70CF"
+            BuildableName = "Yalta.framework"
+            BlueprintName = "Yalta iOS"
+            ReferencedContainer = "container:Yalta.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>
