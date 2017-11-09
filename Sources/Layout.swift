@@ -65,7 +65,7 @@ extension UILayoutGuide: AnchorCompatible {
 public struct AxisX {} // phantom type
 public struct AxisY {} // phantom type
 
-public struct Anchor<Axis> { // axis is a phantom type
+public struct Anchor<Axis> { // axis is a phantom type used for type safety
     internal let item: AnchorCompatible
     internal let attribute: NSLayoutAttribute
     internal let offset: CGFloat
@@ -94,7 +94,8 @@ public struct Anchor<Axis> { // axis is a phantom type
     @discardableResult
     internal func pin(to item2: AnchorCompatible, margin: Bool = false, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         let isInverted = inverted.contains(attribute)
-        return equal(Anchor<Axis>(item: item2, attribute: margin ? attribute.toMargin : attribute), offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+        let anchor = Anchor<Axis>(item: item2, attribute: (margin ? attribute.toMargin : attribute)) // other anchor
+        return equal(anchor, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
     }
 
     /// Pins the anchor to the other anchor.
@@ -103,17 +104,12 @@ public struct Anchor<Axis> { // axis is a phantom type
         return Layout.constraint(item: item, attribute: attribute, toItem: anchor.item, attribute: anchor.attribute, relation: relation, multiplier: 1, constant: offset - self.offset + anchor.offset)
     }
 
-    /// Returns the anchor for the same axis, but offset by a given ammount.
+    /// Returns the anchor for the same axis, but offset by a given amount.
     @discardableResult
     public func offset(by offset: CGFloat) -> Anchor<Axis> {
         return Anchor<Axis>(item: item, attribute: attribute, offset: offset)
     }
 }
-
-internal let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
-
-
-// MARK: DimensionAnchor
 
 public struct DimensionAnchor {
     internal let item: Any
@@ -161,7 +157,7 @@ public struct EdgesCollection {
     @discardableResult
     private func pin<Item>(to item2: LayoutCompatible<Item>, margin: Bool = false, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] where Item: AnchorCompatible {
         return edges.map {
-            let anchor = Anchor<Any>(item: item, attribute: $0.toAttribute)
+            let anchor = Anchor<Any>(item: item, attribute: $0.toAttribute) // anchor for edge
             return anchor.pin(to: item2.base, margin: margin, inset: insets.insetForEdge($0), relation: relation)
         }
     }
@@ -187,9 +183,7 @@ public struct AxisCollection {
     /// Makes the axis equal to the other collection of axis.
     @discardableResult
     public func equal(to collection: AxisCollection) -> [NSLayoutConstraint] {
-        return anchors.map {
-            $0.equal(Anchor<Any>(item: collection.item, attribute: $0.attribute))
-        }
+        return anchors.map { $0.equal(Anchor<Any>(item: collection.item, attribute: $0.attribute)) }
     }
 }
 
@@ -215,7 +209,7 @@ public struct DimensionsCollection {
 }
 
 
-// MARK: Stack
+// MARK: Stack and Spacer
 
 public typealias Stack = UIStackView
 
@@ -234,35 +228,25 @@ public extension Stack {
     }
 }
 
-// MARK: Spacer
-
 public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to support stack views
     @nonobjc public init(width: CGFloat) {
         super.init(frame: .zero)
-        Layout.make(id: "Yalta.Spacer") {
-            al.width.equal(width).priority = UILayoutPriority(999)
-        }
+        al.width.equal(width)
     }
 
     @nonobjc public init(minWidth: CGFloat) {
         super.init(frame: .zero)
-        Layout.make(id: "Yalta.Spacer") {
-            al.width.equal(minWidth, relation: .greaterThanOrEqual).priority = UILayoutPriority(999)
-        }
+        al.width.equal(minWidth, relation: .greaterThanOrEqual)
     }
 
     @nonobjc public init(height: CGFloat) {
         super.init(frame: .zero)
-        Layout.make(id: "Yalta.Spacer") {
-            al.height.equal(height).priority = UILayoutPriority(999)
-        }
+        al.height.equal(height)
     }
 
     @nonobjc public init(minHeight: CGFloat) {
         super.init(frame: .zero)
-        Layout.make(id: "Yalta.Spacer") {
-            al.height.equal(minHeight, relation: .greaterThanOrEqual).priority = UILayoutPriority(999)
-        }
+        al.height.equal(minHeight, relation: .greaterThanOrEqual)
     }
 
     public override var intrinsicContentSize: CGSize {
@@ -284,12 +268,13 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
 }
 
 
-public final class Layout {
+// MARK: Layout
+
+public final class Layout { // this is what enabled autoinstalling
     private static let shared = Layout()
     private init() {}
 
-    /// Context in which constraits get created.
-    private final class Context {
+    private final class Context { // context in which constraits get created.
         let priority: UILayoutPriority?
         let id: String?
         var constraints = [NSLayoutConstraint]()
@@ -303,37 +288,28 @@ public final class Layout {
     private var stack = [Context]()
 
     /// All of the constraints created in the given closure are automatically
-    /// activated at the same time. This is more efficient then installing them
+    /// activated. This is more efficient then installing them
     /// one-be-one. More importantly, it allows to make changes to the constraints
     /// before they are installed (e.g. change `priority`).
-    /// - parameter priority: The priority to be set to all constraints created
-    /// inside the closure. `nil` by default.
-    /// - parameter id: The identifier to be set to all constraints created
-    /// inside the closure. `nil` by default.
     @discardableResult
     public static func make(priority: UILayoutPriority? = nil, id: String? = nil, _ closure: () -> Void) -> [NSLayoutConstraint] {
-        let layout = Layout.shared
         let context = Context(priority: priority, id: id)
-
-        layout.stack.append(context)
+        Layout.shared.stack.append(context)
         closure()
-        let constraints = layout.stack.removeLast().constraints
+        let constraints = Layout.shared.stack.removeLast().constraints
 
         NSLayoutConstraint.activate(constraints)
         return constraints
     }
 
-    private func install(constraints: [NSLayoutConstraint]) {
+    private func install(_ constraint: NSLayoutConstraint) {
         if stack.isEmpty { // no longer batching updates
-            NSLayoutConstraint.activate(constraints)
-        } else {
-            // remember which constaints to install when batch is completed
+            NSLayoutConstraint.activate([constraint])
+        } else { // remember which constaints to install when batch is completed
             let context = stack.last!
-            constraints.forEach {
-                if let priority = context.priority { $0.priority = priority }
-                $0.identifier = context.id
-            }
-            context.constraints.append(contentsOf: constraints)
+            if let priority = context.priority { constraint.priority = priority }
+            constraint.identifier = context.id
+            context.constraints.append(constraint)
         }
     }
 
@@ -345,7 +321,7 @@ public final class Layout {
         let constraint = NSLayoutConstraint( item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
         if let priority = priority { constraint.priority = priority }
         constraint.identifier = identifier
-        Layout.shared.install(constraints: [constraint])
+        Layout.shared.install(constraint)
         return constraint
     }
 }
@@ -398,3 +374,5 @@ internal extension UIEdgeInsets {
         }
     }
 }
+
+internal let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
