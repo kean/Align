@@ -229,28 +229,40 @@ public extension Stack {
 }
 
 public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to support stack views
-    @nonobjc public init(width: CGFloat) {
-        super.init(frame: .zero)
-        al.width.equal(width)
+    @nonobjc public convenience init(width: CGFloat) {
+        self.init(dimension: .width(width))
     }
 
-    @nonobjc public init(minWidth: CGFloat) {
-        super.init(frame: .zero)
-        al.width.equal(minWidth, relation: .greaterThanOrEqual)
+    @nonobjc public convenience init(minWidth: CGFloat) {
+        self.init(dimension: .width(minWidth), isFlexible: true)
     }
 
-    @nonobjc public init(height: CGFloat) {
-        super.init(frame: .zero)
-        al.height.equal(height)
+    @nonobjc public convenience init(height: CGFloat) {
+        self.init(dimension: .height(height))
     }
 
-    @nonobjc public init(minHeight: CGFloat) {
-        super.init(frame: .zero)
-        al.height.equal(minHeight, relation: .greaterThanOrEqual)
+    @nonobjc public convenience init(minHeight: CGFloat) {
+        self.init(dimension: .height(minHeight), isFlexible: true)
     }
 
-    public override var intrinsicContentSize: CGSize {
-        return CGSize(width: 1, height: 1)
+    private enum Dimension {
+        case width(CGFloat), height(CGFloat)
+    }
+
+    private init(dimension: Dimension, isFlexible: Bool = false) {
+        super.init(frame: .zero)
+        Layout.make(id: "Yalta.Spacer") {
+            switch dimension {
+            case let .width(constant):
+                al.width.equal(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
+                if isFlexible { al.width.equal(0).priority = UILayoutPriority(42) } // disambiguate
+                al.height.equal(0).priority = UILayoutPriority(42)  // disambiguate
+            case let .height(constant):
+                al.height.equal(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
+                if isFlexible { al.height.equal(0).priority = UILayoutPriority(42) } // disambiguate
+                al.width.equal(0).priority = UILayoutPriority(42) // disambiguate
+            }
+        }
     }
 
     public required init?(coder aDecoder: NSCoder) {
