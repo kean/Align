@@ -109,6 +109,18 @@ Spacer(height: 16)
 Spacer(minHeight: 16)
 ```
 
+### Priorities and Identifiers
+
+Yalta autoinstalls created constraints. However, if you'd like to lower the priority of the constraints, you can still do that inside `Layout.make` block. The `Layout.make` function also allows use to (optionally) set the priority and/or identifier for *all* of the created constraints:
+
+```swift
+Layout.make(priority: UILayoutPriority(999), id: "PinToEdges") {
+    title.al.edges(.top, .leading, .trailing).pinToSuperview() // priority `999` and id "PinToEdges"
+    title.al.bottom.pinToSuperview().identifier = "PinToBottom" // overrides "PinToEdges"
+    title.al.width.equal(80).priority = UILayoutPriority(666) // overrides `999`
+}
+```
+
 ## Why Yalta
 
 Yalta is for someone who:
