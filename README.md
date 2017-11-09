@@ -1,10 +1,8 @@
 # ⛵️ Yalta
 
-An ultimate micro Auto Layout DSL - simple and powerful. A single file with under 250 lines of code, which you can just copy into your app and own.
+A pragmatic micro Auto Layout DSL - simple and powerful. A single file with under 250 lines of code which you can just drag-n-drop into your app.
 
-Yalta combines the idea of Apple's [layout anchors](https://developer.apple.com/documentation/uikit/nslayoutanchor) with expressive power of [PureLayout](https://github.com/PureLayout/PureLayout). It's instantly familiar. Yalta APIs are designed for clarity, consistency, and discoverability.
-
-> [About me](https://kean.github.io). I made [Arranged](https://github.com/kean/Arranged) (UIStackView backport), wrote about [UIStackView under the hood](https://kean.github.io/post/lets-build-uistackview). I'm a strong proponent of creating layouts programatically with a help of Playgrounds.
+Yalta combines the idea of Apple's [layout anchors](https://developer.apple.com/documentation/uikit/nslayoutanchor) with expressive power of [PureLayout](https://github.com/PureLayout/PureLayout). It feels instantly familiar. Yalta APIs are designed for clarity, consistency, and discoverability.
 
 ## Usage
 
@@ -40,7 +38,7 @@ title.al.height.equal(100, relation: .greaterThanOrEqual)
 Anchors are similar to the native ones but with a few advantages:
 
 - Activated automatically
-- Designed for [Swift](https://swift.org/documentation/api-design-guidelines/), have a much smaller and discoverable API surface
+- Designed for [Swift](https://swift.org/documentation/api-design-guidelines/), have a smaller and more discoverable API surface
 - Less emphasis on relations which are rarely used in practice
 
 ### Anchors Collections
@@ -124,9 +122,9 @@ Layout.make(priority: UILayoutPriority(999), id: "PinToEdges") { // can be neste
 
 Yalta is for someone who:
 
-- Wants clean, concise and convenient Auto Layout code which is consistent with modern Apple's APIs
-- [Doesn't want](http://chris.eidhof.nl/post/micro-autolayout-dsl/) to depend on big, complex libraries, infected with custom operator overloads and protocols
-- Prefers [fast compile times](https://github.com/robb/Cartography/issues/215)
-- Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wished it had cleaner API, didn't requires manually activating each constraint, and allowed you to create multiple constraints at the same time
+- Wants clean, concise and convenient Auto Layout API
+- [Doesn't want](http://chris.eidhof.nl/post/micro-autolayout-dsl/) to depend on big, complex libraries
+- Prefers no operator overloads and [fast compile times](https://github.com/robb/Cartography/issues/215)
+- Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wished it had cleaner API, didn't requires manually activating constraints, and allowed you to create multiple constraints at the same time
 
 > [Yalta](https://en.wikipedia.org/wiki/Yalta) is a beautiful port city on the Black Sea, and a great name for *yet another layout tool* with *anchors*.
