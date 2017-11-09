@@ -46,7 +46,7 @@ extension LayoutCompatible where Base: AnchorCompatible {
 extension LayoutCompatible where Base: UIView {
     public var margins: LayoutCompatible<UILayoutGuide> { return base.layoutMarginsGuide.al }
 
-    @available(iOSApplicationExtension 11.0, *)
+    @available(iOSApplicationExtension 11.0, tvOSApplicationExtension 11.0, *)
     public var safeArea: LayoutCompatible<UILayoutGuide> { return base.safeAreaLayoutGuide.al }
 }
 
