@@ -23,7 +23,7 @@ class MyViewController : UIViewController {
         subtitle.text = "Micro Auto Layout DSL"
 
         let right = Stack([title, subtitle], axis: .vertical)
-        let stack = Stack([logo, right], spacing: 10, alignment: .top)
+        let stack = Stack([logo, right], spacing: 10, alignment: .center)
 
         view.addSubview(stack)
         stack.al.axis.centerInSuperview()
