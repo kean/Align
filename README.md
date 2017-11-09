@@ -116,4 +116,6 @@ Yalta is for someone who:
 - Wants clean, concise and convenient Auto Layout code which is consistent with modern Apple's APIs style
 - [Doesn't want](http://chris.eidhof.nl/post/micro-autolayout-dsl/) to depend on big, complex libraries, infected with custom operator overloads and protocols
 - Prefers [fast compile times](https://github.com/robb/Cartography/issues/215)
-- Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wished it had cleaner API, didn't requires manually activating each constraint, and allowed you to create multiple constraints at the same time.
+- Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wished it had cleaner API, didn't requires manually activating each constraint, and allowed you to create multiple constraints at the same time
+
+> [Yalta](https://en.wikipedia.org/wiki/Yalta) is a beautiful port city on the Black Sea, and a great name for *yet another layout tool* with *anchors*.
