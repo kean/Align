@@ -41,7 +41,6 @@ extension LayoutCompatible where Base: AnchorCompatible {
     public var edges: EdgesCollection { return EdgesCollection(item: base, edges: [.leading, .trailing, .bottom, .top]) }
     public var axis: AxisCollection { return AxisCollection(item: base) }
     public var size: DimensionsCollection { return DimensionsCollection(item: base) }
-    public var aspectRatio: AspectRatio { return AspectRatio(item: base) }
 }
 
 extension LayoutCompatible where Base: UIView {
@@ -199,17 +198,6 @@ public struct DimensionsCollection {
     public func equal(_ collection: DimensionsCollection, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return [width.equal(collection.width, offset: -insets.width, multiplier: multiplier, relation: relation),
                 height.equal(collection.height, offset: -insets.height, multiplier: multiplier, relation: relation)]
-    }
-}
-
-public struct AspectRatio {
-    internal let item: AnchorCompatible
-
-    /// Set the aspect ratio of the item.
-    @discardableResult
-    public func equal(_ ratio: CGFloat) -> NSLayoutConstraint {
-        let dimensions = DimensionsCollection(item: item)
-        return dimensions.width.equal(dimensions.height, multiplier: ratio)
     }
 }
 
