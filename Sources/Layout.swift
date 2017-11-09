@@ -68,6 +68,13 @@ public struct AxisY {} // phantom type
 public struct Anchor<Axis> { // axis is a phantom type
     internal let item: AnchorCompatible
     internal let attribute: NSLayoutAttribute
+    internal let offset: CGFloat
+
+    init(item: AnchorCompatible, attribute: NSLayoutAttribute, offset: CGFloat = 0) {
+        self.item = item
+        self.attribute = attribute
+        self.offset = offset
+    }
 
     /// Pins the anchor to the same anchor of the superview.
     @discardableResult
@@ -81,12 +88,6 @@ public struct Anchor<Axis> { // axis is a phantom type
         return pin(to: item.superview!, margin: true, inset: inset, relation: relation)
     }
 
-    /// Pins the anchor to the other anchor.
-    @discardableResult
-    public func equal(_ anchor: Anchor<Axis>, offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return Layout.constraint(item: item, attribute: attribute, toItem: anchor.item, attribute: anchor.attribute, relation: relation, multiplier: 1, constant: offset)
-    }
-
     /// Pins the anchor to the same anchor (or margin anchor) of the given view.
     /// Kept `internal` for now, I'm not sure how useful it is yet apart from
     /// `EdgesCollection` so I decided to reduce the API surface instead.
@@ -94,6 +95,18 @@ public struct Anchor<Axis> { // axis is a phantom type
     internal func pin(to item2: AnchorCompatible, margin: Bool = false, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         let isInverted = inverted.contains(attribute)
         return equal(Anchor<Axis>(item: item2, attribute: margin ? attribute.toMargin : attribute), offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+    }
+
+    /// Pins the anchor to the other anchor.
+    @discardableResult
+    public func equal(_ anchor: Anchor<Axis>, offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return Layout.constraint(item: item, attribute: attribute, toItem: anchor.item, attribute: anchor.attribute, relation: relation, multiplier: 1, constant: offset - self.offset + anchor.offset)
+    }
+
+    /// Returns the anchor for the same axis, but offset by a given ammount.
+    @discardableResult
+    public func offset(by offset: CGFloat) -> Anchor<Axis> {
+        return Anchor<Axis>(item: item, attribute: attribute, offset: offset)
     }
 }
 

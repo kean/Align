@@ -24,15 +24,16 @@ There is a single consistent way to use Yalta. First you select either an *ancho
 title.al.top.equal(subtitle.al.bottom)
 title.al.top.equal(subtitle.al.bottom, offset: 10, relation: .greaterThanOrEqual)
 
-title.al.height.equal(100)
+let constraint: NSLayoutConstraint = title.al.height.equal(100) // Constraint is returned
 title.al.height.equal(100, relation: .greaterThanOrEqual)
-
-title.al.centerX.equal(view.al.centerX)
-let constraint: NSLayoutConstraint = title.al.centerY.equal(view.al.centerY)
 
 // `UILayoutGuide` is also supported:
 title.al.leading.equal(view.al.margins.leading)
 title.al.leading.equal(view.al.safeArea.leading)
+
+// And you can create zero-overhead anchors with offsets on the fly:
+let anchor = title.al.bottom.offset(by: 10)
+subtitle.al.top.equal(anchor)
 ```
 
 Anchors are similar to the native ones but with a few advantages:
