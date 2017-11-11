@@ -145,22 +145,30 @@ public struct EdgesCollection {
 
     /// Pins the edges of the view to the same edges of its superview.
     @discardableResult
-    public func pinToSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return pin(to: item.superview!, insets: insets, relation: relation)
+    public func fillSuperview(insets: CGFloat, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        let insets = UIEdgeInsets(top: insets, left: insets, bottom: insets, right: insets)
+        return fill(item.superview!, insets: insets, relation: relation)
+    }
+
+    /// Pins the edges of the view to the same edges of its superview.
+    @discardableResult
+    public func fillSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return fill(item.superview!, insets: insets, relation: relation)
     }
 
     /// Pins the edges of the view to the corresponding margins of its superview.
     @discardableResult
-    public func pinToSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return pin(to: item.superview!.layoutMarginsGuide, insets: insets, relation: relation)
+    public func fillSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return fill(item.superview!.layoutMarginsGuide, insets: insets, relation: relation)
     }
 
     /// Pins the edges of the view to the same edges of the given item.
     @discardableResult
-    public func pin(to item2: AnchorCompatible, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    public func fill(_ container: AnchorCompatible, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return attributes.map {
             let anchor = Anchor<Any, Any>(item: item, attribute: $0) // anchor for edge
-            return _pin(anchor, to: item2, inset: insets.inset(for: $0), relation: relation)
+            // FIXME: don't invert twice
+            return _pin(anchor, to: container, inset: insets.inset(for: $0), relation: relation.inverted)
         }
     }
 }
