@@ -20,23 +20,23 @@ extension UILayoutGuide {
 extension LayoutCompatible where Base: AnchorCompatible {
     // MARK: Anchors
 
-    public var top: Anchor<AnchorTypeEdge, AnchorAxisY> { return Anchor(item: base, attribute: .top) }
-    public var bottom: Anchor<AnchorTypeEdge, AnchorAxisY> { return Anchor(item: base, attribute: .bottom) }
-    public var left: Anchor<AnchorTypeEdge, AnchorAxisX> { return Anchor(item: base, attribute: .left) }
-    public var right: Anchor<AnchorTypeEdge, AnchorAxisX> { return Anchor(item: base, attribute: .right) }
-    public var leading: Anchor<AnchorTypeEdge, AnchorAxisX> { return Anchor(item: base, attribute: .leading) }
-    public var trailing: Anchor<AnchorTypeEdge, AnchorAxisX> { return Anchor(item: base, attribute: .trailing) }
+    public var top: Anchor<AnchorTypeEdge, AnchorAxisVertical> { return Anchor(item: base, attribute: .top) }
+    public var bottom: Anchor<AnchorTypeEdge, AnchorAxisVertical> { return Anchor(item: base, attribute: .bottom) }
+    public var left: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .left) }
+    public var right: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .right) }
+    public var leading: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .leading) }
+    public var trailing: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .trailing) }
 
-    public var centerX: Anchor<AnchorTypeCenter, AnchorAxisX> { return Anchor(item: base, attribute: .centerX) }
-    public var centerY: Anchor<AnchorTypeCenter, AnchorAxisY> { return Anchor(item: base, attribute: .centerY) }
+    public var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .centerX) }
+    public var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical> { return Anchor(item: base, attribute: .centerY) }
 
-    public var width: Anchor<AnchorTypeDimension, AnchorAxisX> { return Anchor(item: base, attribute: .width) }
-    public var height: Anchor<AnchorTypeDimension, AnchorAxisY> { return Anchor(item: base, attribute: .height) }
+    public var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .width) }
+    public var height: Anchor<AnchorTypeDimension, AnchorAxisVertical> { return Anchor(item: base, attribute: .height) }
 
     // MARK: Anchors Collections
 
-    public func edges(_ edges: Layout.Edge...) -> EdgesCollection { return EdgesCollection(item: base, edges: edges) }
-    public var edges: EdgesCollection { return EdgesCollection(item: base, edges: [.leading, .trailing, .bottom, .top]) }
+    public func edges(_ axis: UILayoutConstraintAxis) -> EdgesCollection { return EdgesCollection(item: base, axis: [axis]) }
+    public var edges: EdgesCollection { return EdgesCollection(item: base, axis: [.horizontal, .vertical]) }
     public var axis: AxisCollection { return AxisCollection(centerX: centerX, centerY: centerY) }
     public var size: DimensionsCollection { return DimensionsCollection(width: width, height: height) }
 }
@@ -61,8 +61,8 @@ extension UILayoutGuide: AnchorCompatible {
 // MARK: Anchors
 
 // phantom types
-public class AnchorAxisX {}
-public class AnchorAxisY {}
+public class AnchorAxisHorizontal {}
+public class AnchorAxisVertical {}
 
 public class AnchorTypeDimension {}
 public class AnchorTypeCenter: AnchorTypeAlignment {}
@@ -138,7 +138,10 @@ private let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .tra
 
 public struct EdgesCollection {
     internal let item: AnchorCompatible
-    internal let edges: [Layout.Edge]
+    internal let axis: Set<UILayoutConstraintAxis>
+    private var attributes: [NSLayoutAttribute] {
+        return axis.flatMap { $0 == .horizontal ? [.left, .right] : [.top, .bottom] }
+    }
 
     /// Pins the edges of the view to the same edges of its superview.
     @discardableResult
@@ -155,16 +158,16 @@ public struct EdgesCollection {
     /// Pins the edges of the view to the same edges of the given item.
     @discardableResult
     public func pin(to item2: AnchorCompatible, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return edges.map {
-            let anchor = Anchor<Any, Any>(item: item, attribute: $0.toAttribute) // anchor for edge
-            return _pin(anchor, to: item2, inset: insets.insetForEdge($0), relation: relation)
+        return attributes.map {
+            let anchor = Anchor<Any, Any>(item: item, attribute: $0) // anchor for edge
+            return _pin(anchor, to: item2, inset: insets.inset(for: $0), relation: relation)
         }
     }
 }
 
 public struct AxisCollection {
-    internal var centerX: Anchor<AnchorTypeCenter, AnchorAxisX>
-    internal var centerY: Anchor<AnchorTypeCenter, AnchorAxisY>
+    internal var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
+    internal var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical>
 
     /// Centers the axis in the superview.
     @discardableResult
@@ -186,8 +189,8 @@ public struct AxisCollection {
 }
 
 public struct DimensionsCollection {
-    internal var width: Anchor<AnchorTypeDimension, AnchorAxisX>
-    internal var height: Anchor<AnchorTypeDimension, AnchorAxisY>
+    internal var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal>
+    internal var height: Anchor<AnchorTypeDimension, AnchorAxisVertical>
 
     /// Set the size of item.
     @discardableResult
@@ -333,22 +336,6 @@ public final class Layout { // this is what enabled autoinstalling
 }
 
 
-// MARK: Attributes
-
-extension Layout {
-    public enum Edge {
-        case top, bottom, leading, trailing, left, right
-
-        public var toAttribute: NSLayoutAttribute {
-            switch self {
-            case .top: return .top;          case .bottom: return .bottom
-            case .leading: return .leading;  case .trailing: return .trailing
-            case .left: return .left;        case .right: return .right
-            }
-        }
-    }
-}
-
 internal extension NSLayoutRelation {
     var inverted: NSLayoutRelation {
         switch self {
@@ -360,11 +347,12 @@ internal extension NSLayoutRelation {
 }
 
 internal extension UIEdgeInsets {
-    func insetForEdge(_ edge: Layout.Edge) -> CGFloat {
-        switch edge {
+    func inset(for attribute: NSLayoutAttribute) -> CGFloat {
+        switch attribute {
         case .top: return top; case .bottom: return bottom
         case .left, .leading: return left
         case .right, .trailing: return right
+        default: return 0
         }
     }
 }
