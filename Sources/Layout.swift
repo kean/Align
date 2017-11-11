@@ -33,12 +33,58 @@ extension LayoutCompatible where Base: AnchorCompatible {
     public var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .width) }
     public var height: Anchor<AnchorTypeDimension, AnchorAxisVertical> { return Anchor(item: base, attribute: .height) }
 
-    // MARK: Anchors Collections
-
-    public func edges(_ axis: UILayoutConstraintAxis) -> EdgesCollection { return EdgesCollection(item: base, axis: [axis]) }
-    public var edges: EdgesCollection { return EdgesCollection(item: base, axis: [.horizontal, .vertical]) }
     public var center: AxisCollection { return AxisCollection(centerX: centerX, centerY: centerY) }
     public var size: DimensionsCollection { return DimensionsCollection(width: width, height: height) }
+}
+
+extension LayoutCompatible where Base: AnchorCompatible {
+    // MARK: Full
+
+    /// Pins the edges of the view to the same edges of its superview.
+    @discardableResult
+    public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: CGFloat, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        let insets = UIEdgeInsets(top: insets, left: insets, bottom: insets, right: insets)
+        return fill(base.superview!, alongAxis: axis, insets: insets, relation: relation)
+    }
+
+    /// Pins the edges of the view to the same edges of its superview.
+    @discardableResult
+    public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return fill(base.superview!, alongAxis: axis, insets: insets, relation: relation)
+    }
+
+    /// Pins the edges of the view to the corresponding margins of its superview.
+    @discardableResult
+    public func fillSuperviewMargins(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return fill(base.superview!.layoutMarginsGuide, alongAxis: axis, insets: insets, relation: relation)
+    }
+
+    /// Pins the edges of the view to the same edges of the given item.
+    @discardableResult
+    public func fill(_ container: AnchorCompatible, alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return attributes(for: axis).map {
+            let anchor = Anchor<Any, Any>(item: base, attribute: $0) // anchor for edge
+            return _pin(anchor, to: container, inset: insets.inset(for: $0), relation: relation.inverted) // invert because the meaning or relation is diff
+        }
+    }
+
+    private func attributes(for axis: UILayoutConstraintAxis?) -> [NSLayoutAttribute] {
+        guard let axis = axis else { return [.left, .right, .top, .bottom] } // all
+        return axis == .horizontal ? [.left, .right] : [.top, .bottom]
+    }
+
+    // MARK: Center
+
+    /// Centers the axis in the superview.
+    @discardableResult
+    public func centerInSuperview() -> [NSLayoutConstraint] {
+        return [centerX.alignWithSuperview(), centerY.alignWithSuperview()]
+    }
+
+    @discardableResult
+    public func centerInSuperview(alongAxis axis: UILayoutConstraintAxis) -> NSLayoutConstraint {
+        return axis == .horizontal ? centerX.alignWithSuperview() : centerY.alignWithSuperview()
+    }
 }
 
 extension LayoutCompatible where Base: UIView {
@@ -147,51 +193,9 @@ private let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .tra
 
 // MARK: Collections
 
-public struct EdgesCollection {
-    internal let item: AnchorCompatible
-    internal let axis: Set<UILayoutConstraintAxis>
-    private var attributes: [NSLayoutAttribute] {
-        return axis.flatMap { $0 == .horizontal ? [.left, .right] : [.top, .bottom] }
-    }
-
-    /// Pins the edges of the view to the same edges of its superview.
-    @discardableResult
-    public func fillSuperview(insets: CGFloat, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        let insets = UIEdgeInsets(top: insets, left: insets, bottom: insets, right: insets)
-        return fill(item.superview!, insets: insets, relation: relation)
-    }
-
-    /// Pins the edges of the view to the same edges of its superview.
-    @discardableResult
-    public func fillSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return fill(item.superview!, insets: insets, relation: relation)
-    }
-
-    /// Pins the edges of the view to the corresponding margins of its superview.
-    @discardableResult
-    public func fillSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return fill(item.superview!.layoutMarginsGuide, insets: insets, relation: relation)
-    }
-
-    /// Pins the edges of the view to the same edges of the given item.
-    @discardableResult
-    public func fill(_ container: AnchorCompatible, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return attributes.map {
-            let anchor = Anchor<Any, Any>(item: item, attribute: $0) // anchor for edge
-            return _pin(anchor, to: container, inset: insets.inset(for: $0), relation: relation.inverted) // invert because the meaning or relation is diff
-        }
-    }
-}
-
 public struct AxisCollection {
     internal var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
     internal var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical>
-
-    /// Centers the axis in the superview.
-    @discardableResult
-    public func alignWithSuperview() -> [NSLayoutConstraint] {
-        return [centerX.alignWithSuperview(), centerY.alignWithSuperview()]
-    }
 
     /// Makes the axis equal to the other collection of axis.
     @discardableResult
@@ -325,8 +329,8 @@ public final class Layout { // this is what enabled autoinstalling
     }
 
     private func install(_ constraint: NSLayoutConstraint) {
-        if stack.isEmpty { // no longer batching updates
-            NSLayoutConstraint.activate([constraint])
+        if stack.isEmpty { // not batching updates
+            constraint.isActive = true
         } else { // remember which constaints to install when batch is completed
             let context = stack.last!
             if let priority = context.priority { constraint.priority = priority }

@@ -4,6 +4,22 @@
    <FileRef
       location = "group:Yalta.playground">
    </FileRef>
+   <Group
+      location = "container:"
+      name = "Meta">
+      <FileRef
+         location = "group:CHANGELOG.md">
+      </FileRef>
+      <FileRef
+         location = "group:Package.swift">
+      </FileRef>
+      <FileRef
+         location = "group:README.md">
+      </FileRef>
+      <FileRef
+         location = "group:Yalta.podspec">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:Yalta.xcodeproj">
    </FileRef>

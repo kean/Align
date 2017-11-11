@@ -1,110 +1,89 @@
 # ⛵️ Yalta
 
-A pragmatic micro Auto Layout DSL - simple and powerful. A single file with under 250 lines of code which you can just drag-n-drop into your app.
+Yalta is an intuitive and powerful Auto Layout library. Designed to be simple and approachable, Yalta is perfect for both beginners and seasoned developers.
 
-Yalta combines the idea of Apple's [layout anchors](https://developer.apple.com/documentation/uikit/nslayoutanchor) with expressive power of [PureLayout](https://github.com/PureLayout/PureLayout). It feels instantly familiar. Yalta APIs are designed for clarity, consistency, and discoverability.
+The entire library fits in a single file with under 250 lines of code which you can just drag-n-drop into your app. The best way to start using Yalta is by downloading the project and jumping into a Playground.
+
+> The philosophy behind Yalta is to strive for clarity and simplicity. Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. Yalta strives for fluent usage by providing methods that form grammatical phrases. Most common operations are easy to discover and use.
 
 ## Usage
 
-Two most common operations when defining layouts are: creating and configuring **stack views**, and then **pinning** them to superviews. That's exactly what Yalta is optimized for:
+The common way to create layouts on iOS is with **stack views** ([`UIStackView`](https://developer.apple.com/documentation/uikit/uistackview)). Yalta helps you with that:
 
 ```swift
+// Creating stack views now require much less boilerplate:
 let labels = Stack([title, subtitle], axis: .vertical)
 let stack = Stack([image, labels], spacing: 15, alignment: .top)
-stack.edges.pinToSuperviewMargins()
+
+// Spacers (including flexible ones) are also there for you:
+Stack(title, Spacer(minWidth: 16), subtitle)
 ```
+
+After you've created a stack view, it's time to add it to a view hierarchy:
+
+```swift
+view.addSubview(stack)
+
+// You may want your stack to fill the superview:
+stack.al.fillSuperview()
+
+// Or only fill along a particular axis and center along other axis:
+stack.al.fillSuperview(alongAxis: .horizontal)
+stack.al.centerInSuperview(alongAxis: .vertical)
+
+// You can also fill inside layout margins:
+stack.al.fillSuperviewMargins()
+
+// Or add insets manually instead:
+stack.al.fillSuperview(insets: 10)
+stack.al.fillSuperview(insets: UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15))
+stack.al.fillSuperview(alongAxis: .horizontal, insets: 10)
+```
+
+These are more **filling** and **centering** functions and more options available, but you are rarely going to need anything more than those simple ones.
+
 
 ### Anchors
 
-There is a single consistent way to use Yalta. First, you select either an *anchor* or a *collection of anchors*. Then you manipulate them using their methods. It requires less cognitive load then using long methods and helps with discoverability.
+In the first part we were using high level functions which allow you to think in terms on entire views. However, sometimes you have to think in terms of an individual **edge**, **dimension** or **axis** of a view.
+
+Start with a `UIView` (or `UILayoutGuide`) and select one of the object's *anchors*. Use anchor's methods to specify what kind of layout you'd like to make.
 
 ```swift
-title.al.top.equal(subtitle.al.bottom) // Returns `NSLayoutConstraint`
-title.al.height.equal(100)
+// You can pin an edge to a superview:
+title.al.top.pinToSuperview(inset: 10)
 
-// `UILayoutGuide` is supported:
-title.al.leading.equal(view.al.margins.leading)
-title.al.leading.equal(view.al.safeArea.leading)
+// Or a margin:
+title.al.top.pinToSuperviewMargin()
+title.al.top.align(with: view.al.margins.top) // Alternative syntax
 
-// And you can create zero-overhead anchors with offsets on the fly:
-let anchor = title.al.bottom.offset(by: 10)
-subtitle.al.top.equal(anchor)
+// Or align it with an other edge:
+subtitle.al.top.align(with: title.al.bottom, offset: 10)
 
-// If you need customization it's their for you:
-title.al.top.equal(subtitle.al.bottom, offset: 10, relation: .greaterThanOrEqual)
-title.al.height.equal(100, relation: .greaterThanOrEqual)
+// You can also align center of the view:
+title.al.centerX.alignWithSuperview()
+subtitle.al.centerX.align(with: title.al.centerX)
+
+// And manipulate view's dimensions:
+title.al.width.set(100)
+subtitle.al.width.same(as: title.al.width)
 ```
 
-Anchors are similar to the native ones but with a few advantages:
+In some cases you might want to operate on multiple anchors at the same time:
 
-- Activated automatically
+```swift
+subtitle.al.center.align(with: subtitle.al.size)
+subtitle.al.size.same(as: title.al.size)
+```
+
+Anchors in Yalta are similar to Apple's [NSLayoutAnchor](https://developer.apple.com/documentation/uikit/nslayoutanchor) API, but with a few advantages:
+
+- No need to manually activate created constraints
 - Designed for [Swift](https://swift.org/documentation/api-design-guidelines/), have a smaller and more discoverable API surface
 - Less emphasis on relations which are rarely used in practice
 
-### Anchors Collections
+> Anchors in Yalta are implemented as a thin layer on top of raw `NSLayoutConstraint` API. They have more type information then `NSLayoutAnchor` which enabled semantic method names. Compare `subtitle.top.align(with: title.bottom, offset: 10)` with `NSLayoutAnchor`'s `title.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 10`).
 
-The most powerful Yalta's features come with *collections of anchors* which allow you to manipulate multiple attributes at the same time:
-
-#### Edges
-
-```swift
-// Pin all the edges at the same time:
-title.al.edges.pinToSuperview()
-title.al.edges.pinToSuperviewMargins()
-
-// Or select which ones to pin:
-title.al.edges(.leading, .trailing).pinToSuperview()
-
-// `pin...` automatically figure out correct offsets and relations for you:
-let insets = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
-title.al.edges.pinToSuperview(insets: insets, relation: .greaterThanOrEqual)
-
-// If you are pinning not to superviews:
-title.al.edges.pin(to: view.)
-title.al.edges.pin(to: view.layoutMarginsGuide)
-title.al.edges.pin(to: view.safeAreaLayoutGuide)
-```
-
-#### Axis
-
-```swift
-title.al.axis.centerInSuperview()
-title.al.axis.centerInSuperviewMargins()
-title.al.axis.equal(to: view.al.axis)
-```
-
-#### Dimensions
-
-```swift
-title.al.size.equal(CGSize(width: 44, height: 44))
-title.al.size.equal(CGSize(width: 44, height: 44), relation: .greaterThanOrEqual)
-
-title.al.size.equal(subtitle.al.size)
-title.al.size.equal(view.al.size, insets: CGSize(width: 20, height: 20))
-title.al.size.equal(view.al.size, multiplier: 2)
-```
-
-### Stacks and Spacers
-
-The second part of Yalta APIs focuses on manipulating stacks:
-
-```swift
-Stack([title, subtitle], axis: .vertical, spacing: 5)
-
-Stack(title, subtitle) {
-    $0.axis = .vertical
-    $0.spacing = 5
-}
-```
-
-And spacers:
-
-```swift
-Spacer(height: 16)
-Spacer(minHeight: 16)
-Stack(title, Spacer(width: 16), subtitle)
-Stack(title, Spacer(minWidth: 16), subtitle)
-```
 
 ### Priorities and Identifiers
 
