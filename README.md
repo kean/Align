@@ -60,9 +60,9 @@ let insets = UIEdgeInsets(top: 10, left: 20, bottom: 10, right: 20)
 title.al.edges.pinToSuperview(insets: insets, relation: .greaterThanOrEqual)
 
 // If you are pinning not to superviews:
-title.al.edges.pin(to: view.al)
-title.al.edges.pin(to: view.al.margins)
-title.al.edges.pin(to: view.al.safeArea)
+title.al.edges.pin(to: view.)
+title.al.edges.pin(to: view.layoutMarginsGuide)
+title.al.edges.pin(to: view.safeAreaLayoutGuide)
 ```
 
 #### Axis
