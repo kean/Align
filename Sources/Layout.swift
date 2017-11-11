@@ -99,21 +99,21 @@ extension Anchor where Type: AnchorTypeAlignment {
     /// Pins the anchor to the same anchor of the superview.
     @discardableResult
     public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return pin(to: item.superview!, margin: false, inset: inset, relation: relation)
+        return pin(to: item.superview!, inset: inset, relation: relation)
     }
 
     /// Pins the anchor to the same margin anchor of the superview.
     @discardableResult
     public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return pin(to: item.superview!, margin: true, inset: inset, relation: relation)
+        return pin(to: item.superview!.layoutMarginsGuide, inset: inset, relation: relation)
     }
 
     /// Pins the anchor to the same anchor (or margin anchor) of the given view.
     /// Kept `internal` for now, I'm not sure how useful it is yet apart from
     /// `EdgesCollection` so I decided to reduce the API surface instead.
     @discardableResult
-    internal func pin(to item2: AnchorCompatible, margin: Bool = false, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _pin(self, to: item2, margin: margin, inset: inset, relation: relation)
+    internal func pin(to item2: AnchorCompatible, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return _pin(self, to: item2, inset: inset, relation: relation)
     }
 }
 
@@ -136,12 +136,10 @@ private func _equal<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>
 }
 
 /// Pins the anchor to the same anchor (or margin anchor) of the given view.
-/// Kept `internal` for now, I'm not sure how useful it is yet apart from
-/// `EdgesCollection` so I decided to reduce the API surface instead.
 @discardableResult
-private func _pin<T, A>(_ anchor: Anchor<T, A>, to item2: AnchorCompatible, margin: Bool = false, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+private func _pin<T, A>(_ anchor: Anchor<T, A>, to item2: AnchorCompatible, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
     let isInverted = inverted.contains(anchor.attribute)
-    let other = Anchor<T, A>(item: item2, attribute: (margin ? anchor.attribute.toMargin : anchor.attribute)) // other anchor
+    let other = Anchor<T, A>(item: item2, attribute: anchor.attribute) // other anchor
     return _equal(anchor, other, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
 }
 
@@ -157,27 +155,21 @@ public struct EdgesCollection {
     /// Pins the edges of the view to the same edges of its superview.
     @discardableResult
     public func pinToSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return pin(to: item.superview!.al, margin: false, insets: insets, relation: relation)
+        return pin(to: item.superview!.al, insets: insets, relation: relation)
     }
 
     /// Pins the edges of the view to the corresponding margins of its superview.
     @discardableResult
     public func pinToSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return pin(to: item.superview!.al, margin: true, insets: insets, relation: relation)
+        return pin(to: item.superview!.al.margins, insets: insets, relation: relation)
     }
 
-    /// Pins the edges of the view to the same edges of the given view.
+    /// Pins the edges of the view to the same edges of the given item.
     @discardableResult
     public func pin<Item>(to item2: LayoutCompatible<Item>, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] where Item: AnchorCompatible {
-        return pin(to: item2, margin: false, insets: insets, relation: relation)
-    }
-
-    /// Pins the edges of the view to the same edges (or margins) of the given view.
-    @discardableResult
-    private func pin<Item>(to item2: LayoutCompatible<Item>, margin: Bool = false, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] where Item: AnchorCompatible {
         return edges.map {
             let anchor = Anchor<Any, Any>(item: item, attribute: $0.toAttribute) // anchor for edge
-            return _pin(anchor, to: item2.base, margin: margin, inset: insets.insetForEdge($0), relation: relation)
+            return _pin(anchor, to: item2.base, inset: insets.insetForEdge($0), relation: relation)
         }
     }
 }
@@ -367,18 +359,6 @@ extension Layout {
             case .leading: return .leading;  case .trailing: return .trailing
             case .left: return .left;        case .right: return .right
             }
-        }
-    }
-}
-
-internal extension NSLayoutAttribute {
-    var toMargin: NSLayoutAttribute {
-        switch self {
-        case .top: return .topMargin;          case .bottom: return .bottomMargin
-        case .leading: return .leadingMargin;  case .trailing: return .trailingMargin
-        case .left: return .leftMargin;        case .right: return .rightMargin
-        case .centerX: return .centerXWithinMargins; case .centerY: return .centerYWithinMargins
-        default: return self
         }
     }
 }
