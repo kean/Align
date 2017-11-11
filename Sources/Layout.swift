@@ -22,25 +22,25 @@ extension UILayoutGuide {
 extension LayoutCompatible where Base: AnchorCompatible {
     // MARK: Anchors
 
-    public var top: Anchor<AxisY> { return Anchor(item: base, attribute: .top) }
-    public var bottom: Anchor<AxisY> { return Anchor(item: base, attribute: .bottom) }
-    public var centerY: Anchor<AxisY> { return Anchor(item: base, attribute: .centerY) }
+    public var top: Anchor<AnchorTypeEdge, AnchorAxisY> { return Anchor(item: base, attribute: .top) }
+    public var bottom: Anchor<AnchorTypeEdge, AnchorAxisY> { return Anchor(item: base, attribute: .bottom) }
+    public var left: Anchor<AnchorTypeEdge, AnchorAxisX> { return Anchor(item: base, attribute: .left) }
+    public var right: Anchor<AnchorTypeEdge, AnchorAxisX> { return Anchor(item: base, attribute: .right) }
+    public var leading: Anchor<AnchorTypeEdge, AnchorAxisX> { return Anchor(item: base, attribute: .leading) }
+    public var trailing: Anchor<AnchorTypeEdge, AnchorAxisX> { return Anchor(item: base, attribute: .trailing) }
 
-    public var left: Anchor<AxisX> { return Anchor(item: base, attribute: .left) }
-    public var right: Anchor<AxisX> { return Anchor(item: base, attribute: .right) }
-    public var leading: Anchor<AxisX> { return Anchor(item: base, attribute: .leading) }
-    public var trailing: Anchor<AxisX> { return Anchor(item: base, attribute: .trailing) }
-    public var centerX: Anchor<AxisX> { return Anchor(item: base, attribute: .centerX) }
+    public var centerX: Anchor<AnchorTypeCenter, AnchorAxisX> { return Anchor(item: base, attribute: .centerX) }
+    public var centerY: Anchor<AnchorTypeCenter, AnchorAxisY> { return Anchor(item: base, attribute: .centerY) }
 
-    public var width: DimensionAnchor { return DimensionAnchor(item: base, attribute: .width) }
-    public var height: DimensionAnchor { return DimensionAnchor(item: base, attribute: .height) }
+    public var width: Anchor<AnchorTypeDimension, AnchorAxisX> { return Anchor(item: base, attribute: .width) }
+    public var height: Anchor<AnchorTypeDimension, AnchorAxisY> { return Anchor(item: base, attribute: .height) }
 
     // MARK: Collections
 
     public func edges(_ edges: Layout.Edge...) -> EdgesCollection { return EdgesCollection(item: base, edges: edges) }
     public var edges: EdgesCollection { return EdgesCollection(item: base, edges: [.leading, .trailing, .bottom, .top]) }
-    public var axis: AxisCollection { return AxisCollection(item: base) }
-    public var size: DimensionsCollection { return DimensionsCollection(item: base) }
+    public var axis: AxisCollection { return AxisCollection(centerX: centerX, centerY: centerY) }
+    public var size: DimensionsCollection { return DimensionsCollection(width: width, height: height) }
 }
 
 extension LayoutCompatible where Base: UIView {
@@ -62,10 +62,17 @@ extension UILayoutGuide: AnchorCompatible {
 
 // MARK: Anchors
 
-public struct AxisX {} // phantom type
-public struct AxisY {} // phantom type
+// phantom types
+public class AnchorAxisX {}
+public class AnchorAxisY {}
 
-public struct Anchor<Axis> { // axis is a phantom type used for type safety
+public class AnchorTypeDimension {}
+public class AnchorTypeCenter: AnchorTypeAlignment {}
+public class AnchorTypeEdge: AnchorTypeAlignment {}
+
+public protocol AnchorTypeAlignment {} // center or edge
+
+public struct Anchor<Type, Axis> { // type and axis are phantom types
     internal let item: AnchorCompatible
     internal let attribute: NSLayoutAttribute
     internal let offset: CGFloat
@@ -74,6 +81,19 @@ public struct Anchor<Axis> { // axis is a phantom type used for type safety
         self.item = item
         self.attribute = attribute
         self.offset = offset
+    }
+}
+
+extension Anchor where Type: AnchorTypeAlignment {
+    @discardableResult
+    public func equal<Type: AnchorTypeAlignment>(_ anchor: Anchor<Type, Axis>, offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return _equal(self, anchor, offset: offset, relation: relation)
+    }
+
+    /// Returns the anchor for the same axis, but offset by a given amount.
+    @discardableResult
+    public func offset(by offset: CGFloat) -> Anchor<Type, Axis> {
+        return Anchor<Type, Axis>(item: item, attribute: attribute, offset: offset)
     }
 
     /// Pins the anchor to the same anchor of the superview.
@@ -93,40 +113,39 @@ public struct Anchor<Axis> { // axis is a phantom type used for type safety
     /// `EdgesCollection` so I decided to reduce the API surface instead.
     @discardableResult
     internal func pin(to item2: AnchorCompatible, margin: Bool = false, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        let isInverted = inverted.contains(attribute)
-        let anchor = Anchor<Axis>(item: item2, attribute: (margin ? attribute.toMargin : attribute)) // other anchor
-        return equal(anchor, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
-    }
-
-    /// Pins the anchor to the other anchor.
-    @discardableResult
-    public func equal(_ anchor: Anchor<Axis>, offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return Layout.constraint(item: item, attribute: attribute, toItem: anchor.item, attribute: anchor.attribute, relation: relation, multiplier: 1, constant: offset - self.offset + anchor.offset)
-    }
-
-    /// Returns the anchor for the same axis, but offset by a given amount.
-    @discardableResult
-    public func offset(by offset: CGFloat) -> Anchor<Axis> {
-        return Anchor<Axis>(item: item, attribute: attribute, offset: offset)
+        return _pin(self, to: item2, margin: margin, inset: inset, relation: relation)
     }
 }
 
-public struct DimensionAnchor {
-    internal let item: Any
-    internal let attribute: NSLayoutAttribute
+extension Anchor where Type: AnchorTypeDimension {
+    @discardableResult
+    public func equal<Axis>(_ anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return _equal(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+    }
 
     /// Sets the dimension to a specific size.
     @discardableResult
     public func equal(_ constant: CGFloat, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return Layout.constraint(item: item, attribute: attribute, relation: relation, constant: constant)
     }
-
-    /// Makes the dimension equal to the other anchor.
-    @discardableResult
-    public func equal(_ anchor: DimensionAnchor, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return Layout.constraint(item: item, attribute: attribute, toItem: anchor.item, attribute: anchor.attribute, relation: relation, multiplier: multiplier, constant: offset)
-    }
 }
+
+// Internally we can combine any anchors, but publicly it's controlled by anchor types.
+private func _equal<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    return Layout.constraint(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
+}
+
+/// Pins the anchor to the same anchor (or margin anchor) of the given view.
+/// Kept `internal` for now, I'm not sure how useful it is yet apart from
+/// `EdgesCollection` so I decided to reduce the API surface instead.
+@discardableResult
+private func _pin<T, A>(_ anchor: Anchor<T, A>, to item2: AnchorCompatible, margin: Bool = false, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    let isInverted = inverted.contains(anchor.attribute)
+    let other = Anchor<T, A>(item: item2, attribute: (margin ? anchor.attribute.toMargin : anchor.attribute)) // other anchor
+    return _equal(anchor, other, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+}
+
+private let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
 
 
 // MARK: Collections
@@ -157,41 +176,38 @@ public struct EdgesCollection {
     @discardableResult
     private func pin<Item>(to item2: LayoutCompatible<Item>, margin: Bool = false, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] where Item: AnchorCompatible {
         return edges.map {
-            let anchor = Anchor<Any>(item: item, attribute: $0.toAttribute) // anchor for edge
-            return anchor.pin(to: item2.base, margin: margin, inset: insets.insetForEdge($0), relation: relation)
+            let anchor = Anchor<Any, Any>(item: item, attribute: $0.toAttribute) // anchor for edge
+            return _pin(anchor, to: item2.base, margin: margin, inset: insets.insetForEdge($0), relation: relation)
         }
     }
 }
 
 public struct AxisCollection {
-    internal let item: AnchorCompatible
-    private var attributes: [NSLayoutAttribute] { return [.centerX, .centerY] }
-    private var anchors: [Anchor<Any>] { return attributes.map { Anchor<Any>(item: item, attribute: $0) } }
+    internal var centerX: Anchor<AnchorTypeCenter, AnchorAxisX>
+    internal var centerY: Anchor<AnchorTypeCenter, AnchorAxisY>
 
     /// Centers the axis in the superview.
     @discardableResult
     public func centerInSuperview() -> [NSLayoutConstraint] {
-        return anchors.map { $0.pinToSuperview() }
+        return [centerX.pinToSuperview(), centerY.pinToSuperview()]
     }
 
     /// Centers the axis in the superview margins.
     @discardableResult
     public func centerInSuperviewMargins() -> [NSLayoutConstraint] {
-        return anchors.map { $0.pinToSuperviewMargin() }
+        return [centerX.pinToSuperviewMargin(), centerY.pinToSuperviewMargin()]
     }
 
     /// Makes the axis equal to the other collection of axis.
     @discardableResult
     public func equal(to collection: AxisCollection) -> [NSLayoutConstraint] {
-        return anchors.map { $0.equal(Anchor<Any>(item: collection.item, attribute: $0.attribute)) }
+        return [centerX.equal(collection.centerX), centerY.equal(collection.centerY)]
     }
 }
 
 public struct DimensionsCollection {
-    internal let item: AnchorCompatible
-
-    internal var width: DimensionAnchor { return DimensionAnchor(item: item, attribute: .width) }
-    internal var height: DimensionAnchor { return DimensionAnchor(item: item, attribute: .height) }
+    internal var width: Anchor<AnchorTypeDimension, AnchorAxisX>
+    internal var height: Anchor<AnchorTypeDimension, AnchorAxisY>
 
     /// Set the size of item.
     @discardableResult
@@ -386,5 +402,3 @@ internal extension UIEdgeInsets {
         }
     }
 }
-
-internal let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
