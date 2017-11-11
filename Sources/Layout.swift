@@ -119,15 +119,16 @@ extension Anchor where Type: AnchorTypeCenter {
 }
 
 extension Anchor where Type: AnchorTypeDimension {
-    @discardableResult
-    public func equal<Axis>(_ anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _constraint(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
-    }
-
     /// Sets the dimension to a specific size.
     @discardableResult
-    public func equal(_ constant: CGFloat, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    public func set(_ constant: CGFloat, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return Layout.constraint(item: item, attribute: attribute, relation: relation, constant: constant)
+    }
+
+    /// Make the dimension
+    @discardableResult
+    public func same<Axis>(as anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return _constraint(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 }
 
@@ -205,16 +206,15 @@ public struct DimensionsCollection {
 
     /// Set the size of item.
     @discardableResult
-    public func equal(_ size: CGSize, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return [width.equal(size.width, relation: relation),
-                height.equal(size.height, relation: relation)]
+    public func set(_ size: CGSize, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return [width.set(size.width, relation: relation), height.set(size.height, relation: relation)]
     }
 
     /// Makes the size of the item equal to the size of the other item.
     @discardableResult
-    public func equal(_ collection: DimensionsCollection, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return [width.equal(collection.width, offset: -insets.width, multiplier: multiplier, relation: relation),
-                height.equal(collection.height, offset: -insets.height, multiplier: multiplier, relation: relation)]
+    public func same(as collection: DimensionsCollection, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return [width.same(as: collection.width, offset: -insets.width, multiplier: multiplier, relation: relation),
+                height.same(as: collection.height, offset: -insets.height, multiplier: multiplier, relation: relation)]
     }
 }
 
@@ -264,13 +264,13 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
         Layout.make(id: "Yalta.Spacer") {
             switch dimension {
             case let .width(constant):
-                al.width.equal(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
-                if isFlexible { al.width.equal(0).priority = UILayoutPriority(42) } // disambiguate
-                al.height.equal(0).priority = UILayoutPriority(42)  // disambiguate
+                al.width.set(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
+                if isFlexible { al.width.set(0).priority = UILayoutPriority(42) } // disambiguate
+                al.height.set(0).priority = UILayoutPriority(42)  // disambiguate
             case let .height(constant):
-                al.height.equal(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
-                if isFlexible { al.height.equal(0).priority = UILayoutPriority(42) } // disambiguate
-                al.width.equal(0).priority = UILayoutPriority(42) // disambiguate
+                al.height.set(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
+                if isFlexible { al.height.set(0).priority = UILayoutPriority(42) } // disambiguate
+                al.width.set(0).priority = UILayoutPriority(42) // disambiguate
             }
         }
     }
