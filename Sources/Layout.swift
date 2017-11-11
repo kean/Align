@@ -37,7 +37,7 @@ extension LayoutCompatible where Base: AnchorCompatible {
 
     public func edges(_ axis: UILayoutConstraintAxis) -> EdgesCollection { return EdgesCollection(item: base, axis: [axis]) }
     public var edges: EdgesCollection { return EdgesCollection(item: base, axis: [.horizontal, .vertical]) }
-    public var axis: AxisCollection { return AxisCollection(centerX: centerX, centerY: centerY) }
+    public var center: AxisCollection { return AxisCollection(centerX: centerX, centerY: centerY) }
     public var size: DimensionsCollection { return DimensionsCollection(width: width, height: height) }
 }
 
@@ -83,9 +83,10 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
 }
 
 extension Anchor where Type: AnchorTypeAlignment {
+    /// Aligns the anchors.
     @discardableResult
-    public func equal<Type: AnchorTypeAlignment>(_ anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _equal(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+    public func align<Type: AnchorTypeAlignment>(with anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return _constraint(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 
     /// Returns the anchor for the same axis, but offset by a given amount.
@@ -93,24 +94,34 @@ extension Anchor where Type: AnchorTypeAlignment {
     public func offset(by offset: CGFloat) -> Anchor<Type, Axis> {
         return Anchor<Type, Axis>(item: item, attribute: attribute, offset: offset)
     }
+}
 
-    /// Pins the anchor to the same anchor of the superview.
+extension Anchor where Type: AnchorTypeEdge {
+    /// Pins the edge to the same edge of the superview.
     @discardableResult
     public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return _pin(self, to: item.superview!, inset: inset, relation: relation)
     }
 
-    /// Pins the anchor to the same margin anchor of the superview.
+    /// Pins the edge to the respected margin of the superview.
     @discardableResult
     public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return _pin(self, to: item.superview!.layoutMarginsGuide, inset: inset, relation: relation)
     }
 }
 
+extension Anchor where Type: AnchorTypeCenter {
+    /// Aligns the axis with a superview axis.
+    @discardableResult
+    public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return align(with: Anchor<Type, Axis>(item: self.item.superview!, attribute: self.attribute), offset: offset, relation: relation)
+    }
+}
+
 extension Anchor where Type: AnchorTypeDimension {
     @discardableResult
     public func equal<Axis>(_ anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _equal(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+        return _constraint(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 
     /// Sets the dimension to a specific size.
@@ -120,15 +131,14 @@ extension Anchor where Type: AnchorTypeDimension {
     }
 }
 
-private func _equal<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+private func _constraint<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
     return Layout.constraint(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
 }
 
-/// Pins the anchor to the same anchor (or margin anchor) of the given view.
 private func _pin<T, A>(_ anchor: Anchor<T, A>, to item2: AnchorCompatible, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
     let isInverted = inverted.contains(anchor.attribute)
     let other = Anchor<T, A>(item: item2, attribute: anchor.attribute) // other anchor
-    return _equal(anchor, other, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+    return _constraint(anchor, other, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
 }
 
 private let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
@@ -167,8 +177,7 @@ public struct EdgesCollection {
     public func fill(_ container: AnchorCompatible, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return attributes.map {
             let anchor = Anchor<Any, Any>(item: item, attribute: $0) // anchor for edge
-            // FIXME: don't invert twice
-            return _pin(anchor, to: container, inset: insets.inset(for: $0), relation: relation.inverted)
+            return _pin(anchor, to: container, inset: insets.inset(for: $0), relation: relation.inverted) // invert because the meaning or relation is diff
         }
     }
 }
@@ -179,20 +188,14 @@ public struct AxisCollection {
 
     /// Centers the axis in the superview.
     @discardableResult
-    public func centerInSuperview() -> [NSLayoutConstraint] {
-        return [centerX.pinToSuperview(), centerY.pinToSuperview()]
-    }
-
-    /// Centers the axis in the superview margins.
-    @discardableResult
-    public func centerInSuperviewMargins() -> [NSLayoutConstraint] {
-        return [centerX.pinToSuperviewMargin(), centerY.pinToSuperviewMargin()]
+    public func alignWithSuperview() -> [NSLayoutConstraint] {
+        return [centerX.alignWithSuperview(), centerY.alignWithSuperview()]
     }
 
     /// Makes the axis equal to the other collection of axis.
     @discardableResult
-    public func equal(to collection: AxisCollection) -> [NSLayoutConstraint] {
-        return [centerX.equal(collection.centerX), centerY.equal(collection.centerY)]
+    public func align(with collection: AxisCollection) -> [NSLayoutConstraint] {
+        return [centerX.align(with: collection.centerX), centerY.align(with: collection.centerY)]
     }
 }
 
@@ -342,7 +345,6 @@ public final class Layout { // this is what enabled autoinstalling
         return constraint
     }
 }
-
 
 internal extension NSLayoutRelation {
     var inverted: NSLayoutRelation {

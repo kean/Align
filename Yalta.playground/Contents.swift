@@ -26,7 +26,7 @@ class MyViewController : UIViewController {
         let stack = Stack([logo, right], spacing: 10, alignment: .top)
 
         view.addSubview(stack)
-        stack.al.axis.centerInSuperview()
+        stack.al.center.alignWithSuperview()
     }
 }
 
