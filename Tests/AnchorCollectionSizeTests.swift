@@ -6,7 +6,7 @@ import XCTest
 import Yalta
 
 
-class SizeAnchorsTests: XCTestCase {
+class AnchorCollectionSizeTests: XCTestCase {
     let container = UIView()
     let view = UIView()
 

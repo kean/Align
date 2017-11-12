@@ -37,8 +37,8 @@ extension LayoutProxy where Base: LayoutItem {
     public var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal> { return Anchor(base, .width) }
     public var height: Anchor<AnchorTypeDimension, AnchorAxisVertical> { return Anchor(base, .height) }
 
-    public var center: CenterAnchors { return CenterAnchors(centerX: centerX, centerY: centerY) }
-    public var size: SizeAnchors { return SizeAnchors(width: width, height: height) }
+    public var center: AnchorCollectionCenter { return AnchorCollectionCenter(centerX: centerX, centerY: centerY) }
+    public var size: AnchorCollectionSize { return AnchorCollectionSize(width: width, height: height) }
 }
 
 extension LayoutProxy where Base: LayoutItem {
@@ -91,8 +91,7 @@ extension LayoutProxy where Base: UIView {
 
 // MARK: Anchors
 
-// phantom types
-public class AnchorAxisHorizontal {}
+public class AnchorAxisHorizontal {} // phantom types
 public class AnchorAxisVertical {}
 
 public class AnchorTypeDimension {}
@@ -103,8 +102,7 @@ public class AnchorTypeBaseline: AnchorTypeAlignment {}
 public protocol AnchorTypeAlignment {} // center or edge
 
 /// A type that represents one of the view's layout attributes (e.g. `left`,
-/// `centerX`, `width`, etc). Use the anchor’s methods to construct constraints
-/// using a fluent API.
+/// `centerX`, `width`, etc). Use the anchor’s methods to construct constraints.
 public struct Anchor<Type, Axis> { // type and axis are phantom types
     internal let item: LayoutItem
     internal let attribute: NSLayoutAttribute
@@ -169,17 +167,17 @@ private func _constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2,
     return _constrain(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
 }
 
-public struct CenterAnchors {
+public struct AnchorCollectionCenter {
     internal var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
     internal var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical>
 
     /// Makes the axis equal to the other collection of axis.
-    @discardableResult public func align(with anchors: CenterAnchors) -> [NSLayoutConstraint] {
+    @discardableResult public func align(with anchors: AnchorCollectionCenter) -> [NSLayoutConstraint] {
         return [centerX.align(with: anchors.centerX), centerY.align(with: anchors.centerY)]
     }
 }
 
-public struct SizeAnchors {
+public struct AnchorCollectionSize {
     internal var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal>
     internal var height: Anchor<AnchorTypeDimension, AnchorAxisVertical>
 
@@ -189,7 +187,7 @@ public struct SizeAnchors {
     }
 
     /// Makes the size of the item equal to the size of the other item.
-    @discardableResult public func match(_ anchors: SizeAnchors, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func match(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return [width.match(anchors.width, offset: -insets.width, multiplier: multiplier, relation: relation),
                 height.match(anchors.height, offset: -insets.height, multiplier: multiplier, relation: relation)]
     }
