@@ -301,14 +301,10 @@ public final class Layout { // this is what enabled autoinstalling
     private init() {}
 
     private final class Context { // context in which constraits get created.
-        let priority: UILayoutPriority?
         let id: String?
         var constraints = [NSLayoutConstraint]()
 
-        init(priority: UILayoutPriority?, id: String?) {
-            self.priority = priority
-            self.id = id
-        }
+        init(id: String?) { self.id = id }
     }
 
     private var stack = [Context]()
@@ -318,8 +314,8 @@ public final class Layout { // this is what enabled autoinstalling
     /// one-be-one. More importantly, it allows to make changes to the constraints
     /// before they are installed (e.g. change `priority`).
     @discardableResult
-    public static func make(priority: UILayoutPriority? = nil, id: String? = nil, _ closure: () -> Void) -> [NSLayoutConstraint] {
-        let context = Context(priority: priority, id: id)
+    public static func make(id: String? = nil, _ closure: () -> Void) -> [NSLayoutConstraint] {
+        let context = Context(id: id)
         Layout.shared.stack.append(context)
         closure()
         let constraints = Layout.shared.stack.removeLast().constraints
@@ -333,17 +329,15 @@ public final class Layout { // this is what enabled autoinstalling
             constraint.isActive = true
         } else { // remember which constaints to install when batch is completed
             let context = stack.last!
-            if let priority = context.priority { constraint.priority = priority }
             constraint.identifier = context.id
             context.constraints.append(constraint)
         }
     }
 
-    internal static func constraint(item item1: Any, attribute attr1: NSLayoutAttribute, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, relation: NSLayoutRelation = .equal, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: UILayoutPriority? = nil, identifier: String? = nil) -> NSLayoutConstraint {
+    internal static func constraint(item item1: Any, attribute attr1: NSLayoutAttribute, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, relation: NSLayoutRelation = .equal, multiplier: CGFloat = 1, constant: CGFloat = 0, identifier: String? = nil) -> NSLayoutConstraint {
         assert(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
         (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
         let constraint = NSLayoutConstraint( item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
-        if let priority = priority { constraint.priority = priority }
         constraint.identifier = identifier
         Layout.shared.install(constraint)
         return constraint

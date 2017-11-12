@@ -90,10 +90,9 @@ Anchors in Yalta are similar to Apple's [NSLayoutAnchor](https://developer.apple
 Yalta autoinstalls created constraints. To lower the priority of the constraints use `Layout.make` method:
 
 ```swift
-Layout.make(priority: UILayoutPriority(999), id: "PinToEdges") { // can be nested
-    title.al.edges(.top, .leading, .trailing).pinToSuperview() // priority `999` and id "PinToEdges"
-    title.al.bottom.pinToSuperview().identifier = "PinToBottom" // overrides "PinToEdges"
-    title.al.width.equal(80).priority = UILayoutPriority(666) // overrides `999`
+Layout.make(id: "PinToEdges") { // can be nested
+    title.al.width.equal(80).priority = UILayoutPriority(999)
+    title.al.fillSuperview()
 }
 ```
 
