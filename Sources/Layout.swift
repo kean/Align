@@ -137,7 +137,7 @@ extension Anchor where Type: AnchorTypeAlignment {
 
     /// Returns the anchor for the same axis, but offset by a given amount.
     @discardableResult
-    public func offset(by offset: CGFloat) -> Anchor<Type, Axis> {
+    public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
         return Anchor<Type, Axis>(item: item, attribute: attribute, offset: offset)
     }
 }
