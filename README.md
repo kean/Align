@@ -48,7 +48,7 @@ Stacks and `fill(...)` functions are great for laying out entire views, however 
 You can access anchors via `.al` extension however a recommended way is to create a `Constraints` group instead:
 
 ```swift
-Constraints(id: "AlignLabel", with: title, subtitle) { title, subtitle in
+Constraints(for: title, subtitle) { title, subtitle in
     // Start with a `UIView` (or `UILayoutGuide`) and select one of the object's
     // anchors. Use anchor's methods to create constraints:
     title.top.pinToSuperview()
@@ -67,12 +67,12 @@ Constraints(id: "AlignLabel", with: title, subtitle) { title, subtitle in
 }
 ```
 
-> As you've probably noticed `Constraints` group allows you to get rid of `.al` prefix. More importantly, it encourages you to split constraints into logical groups and given each group a descriptive `name`. This same `name` is then automatically set as an `identifier` of all of the constraints created within a group.
+> As you've probably noticed `Constraints` group allows you to get rid of `.al` prefix. More importantly, it encourages you to split constraints into small logical groups. Make sure that you do!
 
 In some cases you might want to operate on multiple anchors at the same time:
 
 ```swift
-Constraints(with: a, b) { a, b in
+Constraints(for: a, b) { a, b in
     a.center.align(with: b.center)
     a.size.match(b.size)
 }

@@ -6,15 +6,13 @@ import XCTest
 @testable import Yalta
 
 
-private let spacerId = "Yalta.Spacer"
-
 class SpacerTests: XCTestCase {
     func testSpacerWidth() {
         let spacer = Spacer(width: 10)
 
         let expected = [
-            NSLayoutConstraint(item: spacer, attribute: .width, constant: 10, id: spacerId),
-            NSLayoutConstraint(item: spacer, attribute: .height, constant: 0, priority: 42, id: spacerId)
+            NSLayoutConstraint(item: spacer, attribute: .width, constant: 10),
+            NSLayoutConstraint(item: spacer, attribute: .height, constant: 0, priority: 42)
         ]
         XCTAssertEqualConstraints(spacer.constraints, expected)
     }
@@ -23,8 +21,8 @@ class SpacerTests: XCTestCase {
         let spacer = Spacer(width: 10)
 
         let expected = [
-            NSLayoutConstraint(item: spacer, attribute: .height, constant: 0, priority: 42, id: spacerId),
-            NSLayoutConstraint(item: spacer, attribute: .width, constant: 10, id: spacerId)
+            NSLayoutConstraint(item: spacer, attribute: .height, constant: 0, priority: 42),
+            NSLayoutConstraint(item: spacer, attribute: .width, constant: 10)
         ]
         XCTAssertEqualConstraints(spacer.constraints, expected)
     }
@@ -33,9 +31,9 @@ class SpacerTests: XCTestCase {
         let spacer = Spacer(minWidth: 10)
 
         let expected = [
-            NSLayoutConstraint(item: spacer, attribute: .width, relation: .greaterThanOrEqual, constant: 10, id: spacerId),
-            NSLayoutConstraint(item: spacer, attribute: .width, constant: 10, priority: 42, id: spacerId),
-            NSLayoutConstraint(item: spacer, attribute: .height, constant: 0, priority: 42, id: spacerId)
+            NSLayoutConstraint(item: spacer, attribute: .width, relation: .greaterThanOrEqual, constant: 10),
+            NSLayoutConstraint(item: spacer, attribute: .width, constant: 10, priority: 42),
+            NSLayoutConstraint(item: spacer, attribute: .height, constant: 0, priority: 42)
         ]
         XCTAssertEqualConstraints(spacer.constraints, expected)
     }
@@ -44,8 +42,8 @@ class SpacerTests: XCTestCase {
         let spacer = Spacer(height: 10)
 
         let expected = [
-            NSLayoutConstraint(item: spacer, attribute: .height, constant: 10, id: spacerId),
-            NSLayoutConstraint(item: spacer, attribute: .width, constant: 0, priority: 42, id: spacerId)
+            NSLayoutConstraint(item: spacer, attribute: .height, constant: 10),
+            NSLayoutConstraint(item: spacer, attribute: .width, constant: 0, priority: 42)
         ]
         XCTAssertEqualConstraints(spacer.constraints, expected)
     }
@@ -54,9 +52,9 @@ class SpacerTests: XCTestCase {
         let spacer = Spacer(minHeight: 10)
 
         let expected = [
-            NSLayoutConstraint(item: spacer, attribute: .height, relation: .greaterThanOrEqual, constant: 10, id: spacerId),
-            NSLayoutConstraint(item: spacer, attribute: .height, constant: 10, priority: 42, id: spacerId),
-            NSLayoutConstraint(item: spacer, attribute: .width, constant: 0, priority: 42, id: spacerId)
+            NSLayoutConstraint(item: spacer, attribute: .height, relation: .greaterThanOrEqual, constant: 10),
+            NSLayoutConstraint(item: spacer, attribute: .height, constant: 10, priority: 42),
+            NSLayoutConstraint(item: spacer, attribute: .width, constant: 0, priority: 42)
         ]
         XCTAssertEqualConstraints(spacer.constraints, expected)
     }

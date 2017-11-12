@@ -25,35 +25,19 @@ class ConstraintsTests: XCTestCase {
         }
     }
 
-    func testSetsIdentifier() {
-        Constraints(id: "testSetsIdentifier") {
-            let c = view.al.top.pinToSuperview()
-            XCTAssertEqual(c.identifier, "testSetsIdentifier")
-        }
-    }
-
     // MARK: Nesting
 
-    func testCanNestGroups() {
-        Constraints(id: "group1") {
-            let c = view.al.top.pinToSuperview()
-            XCTAssertEqual(c.identifier, "group1")
-
-            Constraints(id: "group2") {
-                let c = view.al.bottom.pinToSuperview()
-                XCTAssertEqual(c.identifier, "group2")
-            }
-        }
-    }
-
-    func testDoestUseIdFromLevelHigher() {
-        Constraints(id: "group1") {
-            let c = view.al.top.pinToSuperview()
-            XCTAssertEqual(c.identifier, "group1")
-
+    func testCallsCanBeNested() { // no arguments
+        Constraints() {
+            XCTAssertEqualConstraints(
+                view.al.top.pinToSuperview(),
+                NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top)
+            )
             Constraints() {
-                let c = view.al.bottom.pinToSuperview()
-                XCTAssertEqual(c.identifier, nil)
+                XCTAssertEqualConstraints(
+                    view.al.bottom.pinToSuperview(),
+                    NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom)
+                )
             }
         }
     }
@@ -80,7 +64,7 @@ class ConstraintsArityTests: XCTestCase {
     // MARK: Test That Behaves Like Standard Init
 
     func testArity() {
-        Constraints(with: a, b) { a, b in
+        Constraints(for: a, b) { a, b in
             let constraint = a.top.align(with: b.top)
             XCTAssertEqualConstraints(constraint, NSLayoutConstraint(
                 item: self.a,
@@ -93,7 +77,7 @@ class ConstraintsArityTests: XCTestCase {
     }
 
     func testCanChangePriorityInsideInit() {
-        Constraints(with: a) {
+        Constraints(for: a) {
             let cons = $0.top.pinToSuperview()
             XCTAssertEqual(cons.priority.rawValue, 1000)
             cons.priority = UILayoutPriority(999)
@@ -101,33 +85,17 @@ class ConstraintsArityTests: XCTestCase {
         }
     }
 
-    func testSetsIdentifier() {
-        Constraints(id: "testSetsIdentifier", with: a) {
-            let cons = $0.top.pinToSuperview()
-            XCTAssertEqual(cons.identifier, "testSetsIdentifier")
-        }
-    }
-
-    func testCanNestGroups() {
-        Constraints(id: "group1", with: a) {
-            let cons = $0.top.pinToSuperview()
-            XCTAssertEqual(cons.identifier, "group1")
-
-            Constraints(id: "group2", with: a) {
-                let cons = $0.bottom.pinToSuperview()
-                XCTAssertEqual(cons.identifier, "group2")
-            }
-        }
-    }
-
-    func testDoestUseIdFromLevelHigher() {
-        Constraints(id: "group1", with: a) {
-            let cons = $0.top.pinToSuperview()
-            XCTAssertEqual(cons.identifier, "group1")
-
-            Constraints(with: a) {
-                let cons = $0.bottom.pinToSuperview()
-                XCTAssertEqual(cons.identifier, nil)
+    func testCallsCanBeNested() {
+        Constraints(for: a) {
+            XCTAssertEqualConstraints(
+                $0.top.pinToSuperview(),
+                NSLayoutConstraint(item: a, attribute: .top, toItem: container, attribute: .top)
+            )
+            Constraints(for: a) {
+                XCTAssertEqualConstraints(
+                    $0.bottom.pinToSuperview(),
+                    NSLayoutConstraint(item: a, attribute: .bottom, toItem: container, attribute: .bottom)
+                )
             }
         }
     }
@@ -135,21 +103,21 @@ class ConstraintsArityTests: XCTestCase {
     // MARK: Multiple Arguments
 
     func testOne() {
-        Constraints(with: a) {
+        Constraints(for: a) {
             XCTAssertTrue($0.base === a)
             return
         }
     }
 
     func testTwo() {
-        Constraints(with: a, b) {
+        Constraints(for: a, b) {
             XCTAssertTrue($0.base === a)
             XCTAssertTrue($1.base === b)
         }
     }
 
     func testThree() {
-        Constraints(with: a, b, c) {
+        Constraints(for: a, b, c) {
             XCTAssertTrue($0.base === a)
             XCTAssertTrue($1.base === b)
             XCTAssertTrue($2.base === c)
@@ -157,7 +125,7 @@ class ConstraintsArityTests: XCTestCase {
     }
 
     func testFour() {
-        Constraints(with: a, b, c, d) {
+        Constraints(for: a, b, c, d) {
             XCTAssertTrue($0.base === a)
             XCTAssertTrue($1.base === b)
             XCTAssertTrue($2.base === c)
@@ -166,7 +134,7 @@ class ConstraintsArityTests: XCTestCase {
     }
 
     func testFive() {
-        Constraints(with: a, b, c, d, e) {
+        Constraints(for: a, b, c, d, e) {
             XCTAssertTrue($0.base === a)
             XCTAssertTrue($1.base === b)
             XCTAssertTrue($2.base === c)

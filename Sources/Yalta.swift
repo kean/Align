@@ -228,7 +228,7 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
 
     private init(_ dimension: Dimension, isFlexible: Bool = false) {
         super.init(frame: .zero)
-        Constraints(id: "Yalta.Spacer", with: self) {
+        Constraints(for: self) {
             switch dimension {
             case let .width(width):
                 $0.width.set(width, relation: isFlexible ? .greaterThanOrEqual : .equal)
@@ -255,40 +255,37 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
 // MARK: Constraints
 
 public final class Constraints {
-    let id: String?
     internal(set) var constraints = [NSLayoutConstraint]()
 
     /// All of the constraints created in the given closure are automatically
     /// activated. This is more efficient then installing them
     /// one-be-one. More importantly, it allows to make changes to the constraints
     /// before they are installed (e.g. change `priority`).
-    @discardableResult public init(id: String? = nil, closure: () -> Void) {
-        self.id = id
-
+    @discardableResult public init(_ closure: () -> Void) {
         _stack.append(self)
         closure() // create constraints
         _stack.removeLast()
         NSLayoutConstraint.activate(constraints)
     }
 
-    @discardableResult public convenience init<A: LayoutItem>(id: String? = nil, with a: A, closure: (LayoutProxy<A>) -> Void) {
-        self.init(id: id) { closure(a.al) }
+    @discardableResult public convenience init<A: LayoutItem>(for a: A, _ closure: (LayoutProxy<A>) -> Void) {
+        self.init { closure(a.al) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem>(id: String? = nil, with a: A, _ b: B, closure: (LayoutProxy<A>, LayoutProxy<B>) -> Void) {
-        self.init(id: id) { closure(a.al, b.al) }
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem>(for a: A, _ b: B, _ closure: (LayoutProxy<A>, LayoutProxy<B>) -> Void) {
+        self.init { closure(a.al, b.al) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem>(id: String? = nil, with a: A, _ b: B, _ c: C, closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> Void) {
-        self.init(id: id) { closure(a.al, b.al, c.al) }
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem>(for a: A, _ b: B, _ c: C, _ closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> Void) {
+        self.init { closure(a.al, b.al, c.al) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(id: String? = nil, with a: A, _ b: B, _ c: C, _ d: D, closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> Void) {
-        self.init(id: id) { closure(a.al, b.al, c.al, d.al) }
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> Void) {
+        self.init { closure(a.al, b.al, c.al, d.al) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem, E: LayoutItem>(id: String? = nil, with a: A, _ b: B, _ c: C, _ d: D, _ e: E, closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>, LayoutProxy<E>) -> Void) {
-        self.init(id: id) { closure(a.al, b.al, c.al, d.al, e.al) }
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem, E: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>, LayoutProxy<E>) -> Void) {
+        self.init { closure(a.al, b.al, c.al, d.al, e.al) }
     }
 }
 
@@ -307,7 +304,6 @@ private func _install(_ constraint: NSLayoutConstraint) {
         constraint.isActive = true
     } else { // remember which constaints to install when group is completed
         let group = _stack.last!
-        constraint.identifier = group.id
         group.constraints.append(constraint)
     }
 }
