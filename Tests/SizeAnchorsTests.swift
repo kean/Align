@@ -26,7 +26,7 @@ class SizeAnchorsTests: XCTestCase {
 
     func testMatchSize() {
         XCTAssertEqualConstraints(
-            view.al.size.same(as: container.al.size),
+            view.al.size.match(container.al.size),
             [NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width),
              NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .height)]
         )
@@ -34,7 +34,7 @@ class SizeAnchorsTests: XCTestCase {
 
     func testMatchSizeWithInsets() {
         XCTAssertEqualConstraints(
-            view.al.size.same(as: container.al.size, insets: CGSize(width: 10, height: 20)),
+            view.al.size.match(container.al.size, insets: CGSize(width: 10, height: 20)),
             [NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, constant: -10),
              NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .height, constant: -20)]
         )

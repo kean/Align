@@ -154,7 +154,7 @@ extension Anchor where Type: AnchorTypeDimension {
         return _constrain(item: item, attribute: attribute, relation: relation, constant: constant)
     }
 
-    @discardableResult public func same<Axis>(as anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    @discardableResult public func match<Axis>(_ anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return _constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 }
@@ -190,9 +190,9 @@ public struct SizeAnchors {
     }
 
     /// Makes the size of the item equal to the size of the other item.
-    @discardableResult public func same(as anchors: SizeAnchors, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return [width.same(as: anchors.width, offset: -insets.width, multiplier: multiplier, relation: relation),
-                height.same(as: anchors.height, offset: -insets.height, multiplier: multiplier, relation: relation)]
+    @discardableResult public func match(_ anchors: SizeAnchors, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return [width.match(anchors.width, offset: -insets.width, multiplier: multiplier, relation: relation),
+                height.match(anchors.height, offset: -insets.height, multiplier: multiplier, relation: relation)]
     }
 }
 

@@ -40,11 +40,11 @@ class AnchorDimensionTests: XCTestCase {
 
     func testMatchWidth() {
         XCTAssertEqualConstraints(
-            view.al.width.same(as: container.al.width),
+            view.al.width.match(container.al.width),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width)
         )
         XCTAssertEqualConstraints(
-            view.al.width.same(as: container.al.height), // can mix and match
+            view.al.width.match(container.al.height), // can mix and match
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .height)
         )
     }
