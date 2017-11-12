@@ -21,18 +21,18 @@ public extension LayoutItem { // Yalta methods available via `LayoutProxy`
 extension LayoutProxy where Base: LayoutItem {
     // MARK: Anchors
 
-    public var top: Anchor<AnchorTypeEdge, AnchorAxisVertical> { return Anchor(item: base, attribute: .top) }
-    public var bottom: Anchor<AnchorTypeEdge, AnchorAxisVertical> { return Anchor(item: base, attribute: .bottom) }
-    public var left: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .left) }
-    public var right: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .right) }
-    public var leading: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .leading) }
-    public var trailing: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .trailing) }
+    public var top: Anchor<AnchorTypeEdge, AnchorAxisVertical> { return Anchor(base, .top) }
+    public var bottom: Anchor<AnchorTypeEdge, AnchorAxisVertical> { return Anchor(base, .bottom) }
+    public var left: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(base, .left) }
+    public var right: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(base, .right) }
+    public var leading: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(base, .leading) }
+    public var trailing: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(base, .trailing) }
 
-    public var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .centerX) }
-    public var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical> { return Anchor(item: base, attribute: .centerY) }
+    public var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal> { return Anchor(base, .centerX) }
+    public var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical> { return Anchor(base, .centerY) }
 
-    public var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal> { return Anchor(item: base, attribute: .width) }
-    public var height: Anchor<AnchorTypeDimension, AnchorAxisVertical> { return Anchor(item: base, attribute: .height) }
+    public var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal> { return Anchor(base, .width) }
+    public var height: Anchor<AnchorTypeDimension, AnchorAxisVertical> { return Anchor(base, .height) }
 
     public var center: CenterAnchors { return CenterAnchors(centerX: centerX, centerY: centerY) }
     public var size: SizeAnchors { return SizeAnchors(width: width, height: height) }
@@ -60,8 +60,7 @@ extension LayoutProxy where Base: LayoutItem {
     /// Pins the edges of the view to the same edges of the given item.
     @discardableResult public func fill(_ container: LayoutItem, alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return attributes(for: axis).map {
-            let anchor = Anchor<Any, Any>(item: base, attribute: $0) // anchor for edge
-            return _pin(anchor, to: container, inset: insets.inset(for: $0), relation: relation.inverted) // invert because the meaning or relation is diff
+            return _pin(Anchor<Any, Any>(base, $0), to: container, inset: insets.inset(for: $0), relation: relation.inverted) // invert because the meaning or relation is diff
         }
     }
 
@@ -107,7 +106,7 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
     internal let attribute: NSLayoutAttribute
     internal let offset: CGFloat
 
-    init(item: LayoutItem, attribute: NSLayoutAttribute, offset: CGFloat = 0) {
+    init(_ item: LayoutItem, _ attribute: NSLayoutAttribute, _ offset: CGFloat = 0) {
         self.item = item
         self.attribute = attribute
         self.offset = offset
@@ -122,7 +121,7 @@ extension Anchor where Type: AnchorTypeAlignment {
 
     /// Returns the anchor for the same axis, but offset by a given amount.
     @discardableResult public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
-        return Anchor<Type, Axis>(item: item, attribute: attribute, offset: offset)
+        return Anchor<Type, Axis>(item, attribute, offset)
     }
 }
 
@@ -141,7 +140,7 @@ extension Anchor where Type: AnchorTypeEdge {
 extension Anchor where Type: AnchorTypeCenter {
     /// Aligns the axis with a superview axis.
     @discardableResult public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return align(with: Anchor<Type, Axis>(item: self.item.superview!, attribute: self.attribute), offset: offset, relation: relation)
+        return align(with: Anchor<Type, Axis>(self.item.superview!, self.attribute), offset: offset, relation: relation)
     }
 }
 
@@ -162,8 +161,7 @@ private func _constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2,
 
 private func _pin<T, A>(_ anchor: Anchor<T, A>, to item2: LayoutItem, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
     let isInverted = inverted.contains(anchor.attribute)
-    let other = Anchor<T, A>(item: item2, attribute: anchor.attribute) // other anchor
-    return _constrain(anchor, other, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+    return _constrain(anchor, Anchor<T, A>(item2, anchor.attribute), offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
 }
 
 private let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
