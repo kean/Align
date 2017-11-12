@@ -71,7 +71,7 @@ extension LayoutProxy where Base: LayoutItem {
 
     // MARK: Center
 
-    /// Centers the axis in the superview.
+    /// Centers in the superview.
     @discardableResult public func centerInSuperview() -> [NSLayoutConstraint] {
         return [centerX.alignWithSuperview(), centerY.alignWithSuperview()]
     }
@@ -239,11 +239,11 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
             switch dimension {
             case let .width(constant):
                 $0.width.set(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
-                if isFlexible { $0.width.set(0).priority = UILayoutPriority(42) } // disambiguate
+                if isFlexible { $0.width.set(constant).priority = UILayoutPriority(42) } // disambiguate
                 $0.height.set(0).priority = UILayoutPriority(42)  // disambiguate
             case let .height(constant):
                 $0.height.set(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
-                if isFlexible { $0.height.set(0).priority = UILayoutPriority(42) } // disambiguate
+                if isFlexible { $0.height.set(constant).priority = UILayoutPriority(42) } // disambiguate
                 $0.width.set(0).priority = UILayoutPriority(42) // disambiguate
             }
         }
@@ -305,7 +305,7 @@ public final class Constraints {
 }
 
 private func _constrain(item item1: Any, attribute attr1: NSLayoutAttribute, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, relation: NSLayoutRelation = .equal, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
-    assert(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
+    precondition(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
     (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
     let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
     _install(constraint)
