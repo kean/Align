@@ -42,27 +42,23 @@ extension LayoutProxy where Base: LayoutItem {
     // MARK: Fill
 
     /// Pins the edges of the view to the same edges of its superview.
-    @discardableResult
-    public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: CGFloat, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: CGFloat, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         let insets = UIEdgeInsets(top: insets, left: insets, bottom: insets, right: insets)
         return fill(base.superview!, alongAxis: axis, insets: insets, relation: relation)
     }
 
     /// Pins the edges of the view to the same edges of its superview.
-    @discardableResult
-    public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return fill(base.superview!, alongAxis: axis, insets: insets, relation: relation)
     }
 
     /// Pins the edges of the view to the corresponding margins of its superview.
-    @discardableResult
-    public func fillSuperviewMargins(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func fillSuperviewMargins(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return fill(base.superview!.layoutMarginsGuide, alongAxis: axis, insets: insets, relation: relation)
     }
 
     /// Pins the edges of the view to the same edges of the given item.
-    @discardableResult
-    public func fill(_ container: LayoutItem, alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func fill(_ container: LayoutItem, alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return attributes(for: axis).map {
             let anchor = Anchor<Any, Any>(item: base, attribute: $0) // anchor for edge
             return _pin(anchor, to: container, inset: insets.inset(for: $0), relation: relation.inverted) // invert because the meaning or relation is diff
@@ -71,19 +67,17 @@ extension LayoutProxy where Base: LayoutItem {
 
     private func attributes(for axis: UILayoutConstraintAxis?) -> [NSLayoutAttribute] {
         guard let axis = axis else { return [.left, .right, .top, .bottom] } // all
-        return axis == .horizontal ? [.left, .right] : [.top, .bottom]
+        return (axis == .horizontal) ? [.left, .right] : [.top, .bottom]
     }
 
     // MARK: Center
 
     /// Centers the axis in the superview.
-    @discardableResult
-    public func centerInSuperview() -> [NSLayoutConstraint] {
+    @discardableResult public func centerInSuperview() -> [NSLayoutConstraint] {
         return [centerX.alignWithSuperview(), centerY.alignWithSuperview()]
     }
 
-    @discardableResult
-    public func centerInSuperview(alongAxis axis: UILayoutConstraintAxis) -> NSLayoutConstraint {
+    @discardableResult public func centerInSuperview(alongAxis axis: UILayoutConstraintAxis) -> NSLayoutConstraint {
         return axis == .horizontal ? centerX.alignWithSuperview() : centerY.alignWithSuperview()
     }
 }
@@ -122,62 +116,54 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
 
 extension Anchor where Type: AnchorTypeAlignment {
     /// Aligns the anchors.
-    @discardableResult
-    public func align<Type: AnchorTypeAlignment>(with anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _constraint(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+    @discardableResult public func align<Type: AnchorTypeAlignment>(with anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return _constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 
     /// Returns the anchor for the same axis, but offset by a given amount.
-    @discardableResult
-    public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
+    @discardableResult public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
         return Anchor<Type, Axis>(item: item, attribute: attribute, offset: offset)
     }
 }
 
 extension Anchor where Type: AnchorTypeEdge {
     /// Pins the edge to the same edge of the superview.
-    @discardableResult
-    public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    @discardableResult public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return _pin(self, to: item.superview!, inset: inset, relation: relation)
     }
 
     /// Pins the edge to the respected margin of the superview.
-    @discardableResult
-    public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return _pin(self, to: item.superview!.layoutMarginsGuide, inset: inset, relation: relation)
     }
 }
 
 extension Anchor where Type: AnchorTypeCenter {
     /// Aligns the axis with a superview axis.
-    @discardableResult
-    public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    @discardableResult public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return align(with: Anchor<Type, Axis>(item: self.item.superview!, attribute: self.attribute), offset: offset, relation: relation)
     }
 }
 
 extension Anchor where Type: AnchorTypeDimension {
     /// Sets the dimension to a specific size.
-    @discardableResult
-    public func set(_ constant: CGFloat, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return Layout.constraint(item: item, attribute: attribute, relation: relation, constant: constant)
+    @discardableResult public func set(_ constant: CGFloat, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return _constrain(item: item, attribute: attribute, relation: relation, constant: constant)
     }
 
-    /// Make the dimension
-    @discardableResult
-    public func same<Axis>(as anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _constraint(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+    @discardableResult public func same<Axis>(as anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return _constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 }
 
-private func _constraint<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-    return Layout.constraint(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
+private func _constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    return _constrain(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
 }
 
 private func _pin<T, A>(_ anchor: Anchor<T, A>, to item2: LayoutItem, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
     let isInverted = inverted.contains(anchor.attribute)
     let other = Anchor<T, A>(item: item2, attribute: anchor.attribute) // other anchor
-    return _constraint(anchor, other, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+    return _constrain(anchor, other, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
 }
 
 private let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
@@ -187,8 +173,7 @@ public struct CenterAnchors {
     internal var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical>
 
     /// Makes the axis equal to the other collection of axis.
-    @discardableResult
-    public func align(with anchors: CenterAnchors) -> [NSLayoutConstraint] {
+    @discardableResult public func align(with anchors: CenterAnchors) -> [NSLayoutConstraint] {
         return [centerX.align(with: anchors.centerX), centerY.align(with: anchors.centerY)]
     }
 }
@@ -198,14 +183,12 @@ public struct SizeAnchors {
     internal var height: Anchor<AnchorTypeDimension, AnchorAxisVertical>
 
     /// Set the size of item.
-    @discardableResult
-    public func set(_ size: CGSize, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func set(_ size: CGSize, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return [width.set(size.width, relation: relation), height.set(size.height, relation: relation)]
     }
 
     /// Makes the size of the item equal to the size of the other item.
-    @discardableResult
-    public func same(as anchors: SizeAnchors, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func same(as anchors: SizeAnchors, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return [width.same(as: anchors.width, offset: -insets.width, multiplier: multiplier, relation: relation),
                 height.same(as: anchors.height, offset: -insets.height, multiplier: multiplier, relation: relation)]
     }
@@ -254,16 +237,16 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
 
     private init(dimension: Dimension, isFlexible: Bool = false) {
         super.init(frame: .zero)
-        Layout.make(id: "Yalta.Spacer") {
+        Constraints(id: "Yalta.Spacer", with: self) {
             switch dimension {
             case let .width(constant):
-                al.width.set(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
-                if isFlexible { al.width.set(0).priority = UILayoutPriority(42) } // disambiguate
-                al.height.set(0).priority = UILayoutPriority(42)  // disambiguate
+                $0.width.set(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
+                if isFlexible { $0.width.set(0).priority = UILayoutPriority(42) } // disambiguate
+                $0.height.set(0).priority = UILayoutPriority(42)  // disambiguate
             case let .height(constant):
-                al.height.set(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
-                if isFlexible { al.height.set(0).priority = UILayoutPriority(42) } // disambiguate
-                al.width.set(0).priority = UILayoutPriority(42) // disambiguate
+                $0.height.set(constant, relation: isFlexible ? .greaterThanOrEqual : .equal)
+                if isFlexible { $0.height.set(0).priority = UILayoutPriority(42) } // disambiguate
+                $0.width.set(0).priority = UILayoutPriority(42) // disambiguate
             }
         }
     }
@@ -283,53 +266,63 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
 }
 
 
-// MARK: Layout
+// MARK: Constraints
 
-public final class Layout { // this is what enabled autoinstalling
-    private static let shared = Layout()
-    private init() {}
-
-    private final class Context { // context in which constraits get created.
-        let id: String?
-        var constraints = [NSLayoutConstraint]()
-
-        init(id: String?) { self.id = id }
-    }
-
-    private var stack = [Context]()
+public final class Constraints {
+    let id: String?
+    internal(set) var constraints = [NSLayoutConstraint]()
 
     /// All of the constraints created in the given closure are automatically
     /// activated. This is more efficient then installing them
     /// one-be-one. More importantly, it allows to make changes to the constraints
     /// before they are installed (e.g. change `priority`).
-    @discardableResult
-    public static func make(id: String? = nil, _ closure: () -> Void) -> [NSLayoutConstraint] {
-        let context = Context(id: id)
-        Layout.shared.stack.append(context)
-        closure()
-        let constraints = Layout.shared.stack.removeLast().constraints
+    @discardableResult public init(id: String? = nil, closure: () -> Void) {
+        self.id = id
 
+        _stack.append(self)
+        closure() // create constraints
+        _stack.removeLast()
         NSLayoutConstraint.activate(constraints)
-        return constraints
     }
 
-    private func install(_ constraint: NSLayoutConstraint) {
-        if stack.isEmpty { // not batching updates
-            constraint.isActive = true
-        } else { // remember which constaints to install when batch is completed
-            let context = stack.last!
-            constraint.identifier = context.id
-            context.constraints.append(constraint)
-        }
+    @discardableResult public convenience init<A: LayoutItem>(id: String? = nil, with a: A, closure: (LayoutProxy<A>) -> Void) {
+        self.init(id: id) { closure(a.al) }
     }
 
-    internal static func constraint(item item1: Any, attribute attr1: NSLayoutAttribute, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, relation: NSLayoutRelation = .equal, multiplier: CGFloat = 1, constant: CGFloat = 0, identifier: String? = nil) -> NSLayoutConstraint {
-        assert(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
-        (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
-        let constraint = NSLayoutConstraint( item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
-        constraint.identifier = identifier
-        Layout.shared.install(constraint)
-        return constraint
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem>(id: String? = nil, with a: A, _ b: B, closure: (LayoutProxy<A>, LayoutProxy<B>) -> Void) {
+        self.init(id: id) { closure(a.al, b.al) }
+    }
+
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem>(id: String? = nil, with a: A, _ b: B, _ c: C, closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> Void) {
+        self.init(id: id) { closure(a.al, b.al, c.al) }
+    }
+
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(id: String? = nil, with a: A, _ b: B, _ c: C, _ d: D, closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> Void) {
+        self.init(id: id) { closure(a.al, b.al, c.al, d.al) }
+    }
+
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem, E: LayoutItem>(id: String? = nil, with a: A, _ b: B, _ c: C, _ d: D, _ e: E, closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>, LayoutProxy<E>) -> Void) {
+        self.init(id: id) { closure(a.al, b.al, c.al, d.al, e.al) }
+    }
+}
+
+private func _constrain(item item1: Any, attribute attr1: NSLayoutAttribute, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, relation: NSLayoutRelation = .equal, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
+    assert(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
+    (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
+    let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
+    _install(constraint)
+    return constraint
+}
+
+private var _stack = [Constraints]() // this is what enabled constraint auto-installing
+
+private func _install(_ constraint: NSLayoutConstraint) {
+    if _stack.isEmpty { // not creating a group of constraints
+        constraint.isActive = true
+    } else { // remember which constaints to install when group is completed
+        let group = _stack.last!
+        constraint.identifier = group.id
+        group.constraints.append(constraint)
     }
 }
 
