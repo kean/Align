@@ -5,12 +5,17 @@
 import UIKit
 
 
-extension UIView {
-    @nonobjc public var al: LayoutProxy<UIView> { return LayoutProxy(base: self) }
+public protocol LayoutItem { // `UIView`, `UILayoutGuide`
+    var superview: UIView? { get }
 }
 
-extension UILayoutGuide {
-    @nonobjc public var al: LayoutProxy<UILayoutGuide> { return LayoutProxy(base: self) }
+extension UIView: LayoutItem {}
+extension UILayoutGuide: LayoutItem {
+    public var superview: UIView? { return self.owningView }
+}
+
+public extension LayoutItem { // Yalta methods available via `LayoutProxy`
+    @nonobjc public var al: LayoutProxy<Self> { return LayoutProxy(base: self) }
 }
 
 extension LayoutProxy where Base: LayoutItem {
@@ -330,15 +335,6 @@ public final class Layout { // this is what enabled autoinstalling
 
 
 // MARK: Helpers
-
-public protocol LayoutItem {
-    var superview: UIView? { get }
-}
-
-extension UIView: LayoutItem {}
-extension UILayoutGuide: LayoutItem {
-    public var superview: UIView? { return self.owningView }
-}
 
 public struct LayoutProxy<Base> {
     internal let base: Base
