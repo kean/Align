@@ -167,6 +167,9 @@ private func _constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2,
     return _constrain(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
 }
 
+
+// MARK: Anchor Collections
+
 public struct AnchorCollectionCenter {
     internal var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
     internal var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical>
@@ -325,9 +328,6 @@ private func _install(_ constraint: NSLayoutConstraint) {
     }
 }
 
-
-// MARK: Helpers
-
 public typealias Insets = UIEdgeInsets
 public extension UIEdgeInsets {
     public init(_ all: CGFloat) { self = UIEdgeInsetsMake(all, all, all, all) }
@@ -339,11 +339,9 @@ public struct LayoutProxy<Base> {
 
 internal extension NSLayoutRelation {
     var inverted: NSLayoutRelation {
-        switch self {
-        case .greaterThanOrEqual: return .lessThanOrEqual
-        case .lessThanOrEqual: return .greaterThanOrEqual
-        case .equal: return .equal
-        }
+        if self == .greaterThanOrEqual { return .lessThanOrEqual }
+        if self == .lessThanOrEqual { return .greaterThanOrEqual }
+        return self
     }
 }
 
