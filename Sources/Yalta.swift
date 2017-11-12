@@ -59,9 +59,8 @@ extension LayoutProxy where Base: LayoutItem {
     /// Aligns the edges of the view to the edges of the given view so the the
     /// view fills the available space in a container.
     @discardableResult public func fill(_ container: LayoutItem, alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return _attributes(for: axis).map {
-            return _pin(Anchor<Any, Any>(base, $0), to: container, inset: insets.inset(for: $0), relation: relation.inverted)
-        }
+        let anchors = _attributes(for: axis).map { Anchor<AnchorTypeEdge, Any>(base, $0) }
+        return anchors.map { $0.pin(to: container, inset: insets.inset(for: $0.attribute), relation: relation.inverted) }
     }
 
     private func _attributes(for axis: UILayoutConstraintAxis?) -> [NSLayoutAttribute] {
@@ -133,12 +132,18 @@ extension Anchor where Type: AnchorTypeAlignment {
 extension Anchor where Type: AnchorTypeEdge {
     /// Pins the edge to the same edge of the superview.
     @discardableResult public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _pin(self, to: item.superview!, inset: inset, relation: relation)
+        return pin(to: item.superview!, inset: inset, relation: relation)
     }
 
     /// Pins the edge to the respected margin of the superview.
     @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _pin(self, to: item.superview!.layoutMarginsGuide, inset: inset, relation: relation)
+        return pin(to: item.superview!.layoutMarginsGuide, inset: inset, relation: relation)
+    }
+
+    internal func pin(to container: LayoutItem, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
+        let isInverted = inverted.contains(attribute)
+        return _constrain(self, Anchor<Type, Any>(container, attribute), offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
     }
 }
 
@@ -163,13 +168,6 @@ extension Anchor where Type: AnchorTypeDimension {
 private func _constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
     return _constrain(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
 }
-
-private func _pin<T, A>(_ anchor: Anchor<T, A>, to item2: LayoutItem, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-    let isInverted = inverted.contains(anchor.attribute)
-    return _constrain(anchor, Anchor<T, A>(item2, anchor.attribute), offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
-}
-
-private let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
 
 public struct CenterAnchors {
     internal var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
