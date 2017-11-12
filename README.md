@@ -69,6 +69,15 @@ title.al.width.set(100)
 subtitle.al.width.same(as: title.al.width)
 ```
 
+It is convenient to manupulate anchors via `.al` namespace however the recommended way to create a group of constraints is by using `Constraints` type. It allows you to get rid of `.al` prefix and encourages you to split constraints into logical groups. For each group you can provide an (optional) identifier to document your intent. This same identifier would be set to all of the constraints created within a group which would help debugging.
+
+```swift
+Constraints(id: "AlignLabel", with: title, subtitle) { title, subtitle in
+    title.top.pinToSuperviewMargin()
+    subtitle.top.align(with: title.bottom, offset: 10)
+}
+```
+
 In some cases you might want to operate on multiple anchors at the same time:
 
 ```swift
@@ -85,14 +94,14 @@ Anchors in Yalta are similar to Apple's [NSLayoutAnchor](https://developer.apple
 > Anchors in Yalta are implemented as a thin layer on top of raw `NSLayoutConstraint` API. They have more type information then `NSLayoutAnchor` which enabled semantic method names. Compare `subtitle.top.align(with: title.bottom, offset: 10)` with `NSLayoutAnchor`'s `title.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 10`).
 
 
-### Priorities and Identifiers
+### Groups
 
 Yalta autoinstalls created constraints. To lower the priority of the constraints use `Layout.make` method:
 
 ```swift
-Layout.make(id: "PinToEdges") { // can be nested
-    title.al.width.equal(80).priority = UILayoutPriority(999)
-    title.al.fillSuperview()
+Constraint(id: "PinToEdges", with: title) { // can be nested
+    title.width.equal(80).priority = UILayoutPriority(999)
+    title.fillSuperview()
 }
 ```
 
