@@ -49,7 +49,7 @@ class AnchorAlignmentTests: XCTestCase {
         }
     }
 
-    func testAlignRemainingEdges() {
+    func testAlignDifferentAnchors() {
         test("align bottom") {
             let c = view.al.bottom.align(with: container.al.bottom)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom))
@@ -65,14 +65,28 @@ class AnchorAlignmentTests: XCTestCase {
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .trailing, toItem: container, attribute: .trailing))
         }
 
-        test("align left") {
+        test("align left with left") {
             let c = view.al.left.align(with: container.al.left)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left))
         }
 
-        test("align right") {
-            let c = view.al.right.align(with: container.al.right)
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right))
+        test("align right with left") {
+            let c = view.al.right.align(with: container.al.left)
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .left))
+        }
+
+        test("align firstBaseline with firstBaseline") {
+            XCTAssertEqualConstraints(
+                view.al.firstBaseline.align(with: container.al.firstBaseline),
+                NSLayoutConstraint(item: view, attribute: .firstBaseline, toItem: container, attribute: .firstBaseline)
+            )
+        }
+
+        test("align lastBaseline with top") {
+            XCTAssertEqualConstraints(
+                view.al.lastBaseline.align(with: container.al.top),
+                NSLayoutConstraint(item: view, attribute: .lastBaseline, toItem: container, attribute: .top)
+            )
         }
     }
 

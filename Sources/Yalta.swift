@@ -31,6 +31,9 @@ extension LayoutProxy where Base: LayoutItem {
     public var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal> { return Anchor(base, .centerX) }
     public var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical> { return Anchor(base, .centerY) }
 
+    public var firstBaseline: Anchor<AnchorTypeBaseline, AnchorAxisVertical> { return Anchor(base, .firstBaseline) }
+    public var lastBaseline: Anchor<AnchorTypeBaseline, AnchorAxisVertical> { return Anchor(base, .lastBaseline) }
+
     public var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal> { return Anchor(base, .width) }
     public var height: Anchor<AnchorTypeDimension, AnchorAxisVertical> { return Anchor(base, .height) }
 
@@ -98,6 +101,7 @@ public class AnchorAxisVertical {}
 public class AnchorTypeDimension {}
 public class AnchorTypeCenter: AnchorTypeAlignment {}
 public class AnchorTypeEdge: AnchorTypeAlignment {}
+public class AnchorTypeBaseline: AnchorTypeAlignment {}
 
 public protocol AnchorTypeAlignment {} // center or edge
 
