@@ -27,16 +27,6 @@ class FillingTests: XCTestCase {
     }
 
     func testFillSuperviewWithInsets() {
-        XCTAssertEqualConstraints(
-            view.al.fillSuperview(insets: 10),
-            [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 10),
-             NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left, constant: 10),
-             NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom, constant: -10),
-             NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right, constant: -10)]
-        )
-    }
-
-    func testFillSuperviewWithEdgeInsets() {
         let insets = UIEdgeInsets(top: 1, left: 2, bottom: 3, right: 4)
         XCTAssertEqualConstraints(
             view.al.fillSuperview(insets: insets),

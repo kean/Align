@@ -35,9 +35,7 @@ stack.al.centerInSuperview(alongAxis: .vertical)
 stack.al.fillSuperviewMargins()
 
 // Or add insets manually instead:
-stack.al.fillSuperview(insets: 10)
-stack.al.fillSuperview(insets: UIEdgeInsets(top: 10, left: 15, bottom: 10, right: 15))
-stack.al.fillSuperview(alongAxis: .horizontal, insets: 10)
+stack.al.fillSuperview(alongAxis: .horizontal, insets: Insets(10))
 ```
 
 These are more **filling** and **centering** functions and more options available, but you are rarely going to need anything more than those simple ones.

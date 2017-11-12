@@ -44,13 +44,8 @@ extension LayoutProxy where Base: LayoutItem {
 extension LayoutProxy where Base: LayoutItem {
     // MARK: Fill
 
-    /// Pins the edges of the view to the same edges of its superview.
-    @discardableResult public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: CGFloat, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        let insets = UIEdgeInsets(top: insets, left: insets, bottom: insets, right: insets)
-        return fill(base.superview!, alongAxis: axis, insets: insets, relation: relation)
-    }
-
-    /// Pins the edges of the view to the same edges of its superview.
+    /// Pins the edges of the view to the superview so that the view fills the
+    /// available space.
     @discardableResult public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return fill(base.superview!, alongAxis: axis, insets: insets, relation: relation)
     }
@@ -330,6 +325,11 @@ private func _install(_ constraint: NSLayoutConstraint) {
 
 
 // MARK: Helpers
+
+public typealias Insets = UIEdgeInsets
+public extension UIEdgeInsets {
+    public init(_ all: CGFloat) { self = UIEdgeInsetsMake(all, all, all, all) }
+}
 
 public struct LayoutProxy<Base> {
     internal let base: Base
