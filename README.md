@@ -79,6 +79,7 @@ Constraints(id: "AlignLabel", with: title, subtitle) { title, subtitle in
 In some cases you might want to operate on multiple anchors at the same time:
 
 ```swift
+// There are specific accessors for manipulating `center` and `size`
 subtitle.al.center.align(with: subtitle.al.size)
 subtitle.al.size.same(as: title.al.size)
 ```

@@ -44,36 +44,39 @@ extension LayoutProxy where Base: LayoutItem {
 extension LayoutProxy where Base: LayoutItem {
     // MARK: Fill
 
-    /// Pins the edges of the view to the superview so that the view fills the
-    /// available space.
+    /// Aligns the edges of the view to the edges of the superview so the the view
+    /// fills the available space in a container.
     @discardableResult public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return fill(base.superview!, alongAxis: axis, insets: insets, relation: relation)
     }
 
-    /// Pins the edges of the view to the corresponding margins of its superview.
+    /// Aligns the edges of the view to the margins of the superview so the the view
+    /// fills the available space in a container.
     @discardableResult public func fillSuperviewMargins(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return fill(base.superview!.layoutMarginsGuide, alongAxis: axis, insets: insets, relation: relation)
     }
 
-    /// Pins the edges of the view to the same edges of the given item.
+    /// Aligns the edges of the view to the edges of the given view so the the
+    /// view fills the available space in a container.
     @discardableResult public func fill(_ container: LayoutItem, alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return attributes(for: axis).map {
-            return _pin(Anchor<Any, Any>(base, $0), to: container, inset: insets.inset(for: $0), relation: relation.inverted) // invert because the meaning or relation is diff
+        return _attributes(for: axis).map {
+            return _pin(Anchor<Any, Any>(base, $0), to: container, inset: insets.inset(for: $0), relation: relation.inverted)
         }
     }
 
-    private func attributes(for axis: UILayoutConstraintAxis?) -> [NSLayoutAttribute] {
+    private func _attributes(for axis: UILayoutConstraintAxis?) -> [NSLayoutAttribute] {
         guard let axis = axis else { return [.left, .right, .top, .bottom] } // all
         return (axis == .horizontal) ? [.left, .right] : [.top, .bottom]
     }
 
     // MARK: Center
 
-    /// Centers in the superview.
+    /// Centers the view in the superview.
     @discardableResult public func centerInSuperview() -> [NSLayoutConstraint] {
         return [centerX.alignWithSuperview(), centerY.alignWithSuperview()]
     }
 
+    /// Centers the view in the superview along the given axis.
     @discardableResult public func centerInSuperview(alongAxis axis: UILayoutConstraintAxis) -> NSLayoutConstraint {
         return axis == .horizontal ? centerX.alignWithSuperview() : centerY.alignWithSuperview()
     }
@@ -100,6 +103,9 @@ public class AnchorTypeBaseline: AnchorTypeAlignment {}
 
 public protocol AnchorTypeAlignment {} // center or edge
 
+/// A type that represents one of the view's layout attributes (e.g. `left`,
+/// `centerX`, `width`, etc). Use the anchor’s methods to construct constraints
+/// using a fluent API.
 public struct Anchor<Type, Axis> { // type and axis are phantom types
     internal let item: LayoutItem
     internal let attribute: NSLayoutAttribute
@@ -113,12 +119,12 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
 }
 
 extension Anchor where Type: AnchorTypeAlignment {
-    /// Aligns the anchors.
+    /// Aligns two anchors.
     @discardableResult public func align<Type: AnchorTypeAlignment>(with anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return _constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 
-    /// Returns the anchor for the same axis, but offset by a given amount.
+    /// Returns a new anchor offset by a given amount.
     @discardableResult public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
         return Anchor<Type, Axis>(item, attribute, offset)
     }
