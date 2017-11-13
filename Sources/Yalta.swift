@@ -41,6 +41,13 @@ extension LayoutProxy where Base: LayoutItem {
     public var size: AnchorCollectionSize { return AnchorCollectionSize(width: width, height: height) }
 }
 
+extension LayoutProxy where Base: UIView {
+    public var margins: LayoutProxy<UILayoutGuide> { return base.layoutMarginsGuide.al }
+
+    @available(iOS 11.0, tvOS 11.0, *)
+    public var safeArea: LayoutProxy<UILayoutGuide> { return base.safeAreaLayoutGuide.al }
+}
+
 extension LayoutProxy where Base: LayoutItem {
     // MARK: Fill
 
@@ -81,13 +88,6 @@ extension LayoutProxy where Base: LayoutItem {
     }
 }
 
-extension LayoutProxy where Base: UIView {
-    public var margins: LayoutProxy<UILayoutGuide> { return base.layoutMarginsGuide.al }
-
-    @available(iOS 11.0, tvOS 11.0, *)
-    public var safeArea: LayoutProxy<UILayoutGuide> { return base.safeAreaLayoutGuide.al }
-}
-
 
 // MARK: Anchors
 
@@ -99,7 +99,8 @@ public class AnchorTypeCenter: AnchorTypeAlignment {}
 public class AnchorTypeEdge: AnchorTypeAlignment {}
 public class AnchorTypeBaseline: AnchorTypeAlignment {}
 
-public protocol AnchorTypeAlignment {} // center or edge
+/// Includes `center`, `edge` and `baselines` anchors.
+public protocol AnchorTypeAlignment {}
 
 /// A type that represents one of the view's layout attributes (e.g. `left`,
 /// `centerX`, `width`, etc). Use the anchor’s methods to construct constraints.

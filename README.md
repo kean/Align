@@ -4,9 +4,15 @@ Yalta is an intuitive and powerful Auto Layout library. Designed to be simple an
 
 The entire library fits in a single file with under 250 lines of code which you can just drag-n-drop into your app. The best way to start using Yalta is by downloading the project and jumping into a Playground.
 
+- [Quick Overview](#quick-overview)
+- [Full Guide](https://github.com/kean/Yalta/blob/master/Docs/Guide.md)
+
 > The philosophy behind Yalta is to strive for clarity and simplicity by  following [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. It provides fluent API that form grammatical phrases. Most common operations are easy to discover and use.
 
-## Stack and Spacers
+
+## Quick Overview
+
+### Stack and Spacers
 
 [`UIStackView`](https://developer.apple.com/documentation/uikit/uistackview) is king when it comes to aligning and distributing multiple views at the same time. Yalta doesn't try to compete with stacks - it complements them: 
 
@@ -21,7 +27,7 @@ Stack(title, Spacer(minWidth: 16), subtitle) // alt syntax
 
 > Check out [Let's Build UIStackView](https://kean.github.io/post/lets-build-uistackview) to learn how stacks work under the hood (it's constraints all the way down).
 
-## Fill and Center
+### Fill and Center
 
 It's time to add stack to a view hierarchy. Yalta has some high-level functions for that:
 
@@ -41,7 +47,7 @@ stack.al.centerInSuperview(alongAxis: .vertical)
 These are more **filling** and **centering** functions with more options available.
 
 
-## Anchors
+### Anchors
 
 Stacks and `fill(...)` functions are great for laying out entire views, however sometime you have to think in terms of individual **anchors**. Each anchor represents either **edge**, **dimension** or **axis** of a view.
 
