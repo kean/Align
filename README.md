@@ -52,10 +52,10 @@ These are more **filling** and **centering** functions with more options availab
 
 Stacks and `fill(...)` functions are great for laying out entire views, however sometime you have to think in terms of individual **anchors**. Each anchor represents either **edge**, **dimension** or **axis** of a view.
 
-You can access anchors via `.al` extension however a recommended way is to create a `Constraints` group instead:
+You can access anchors via `.al` extension however a recommended way is to use a special `al.addSubviews(...)` method instead:
 
 ```swift
-Constraints(for: title, subtitle) { title, subtitle in
+view.al.addSubviews(title, subtitle) { title, subtitle in
     // Start with a `UIView` (or `UILayoutGuide`) and select one of the object's
     // anchors. Use anchor's methods to create constraints:
     title.top.pinToSuperview()
@@ -79,6 +79,8 @@ Constraints(for: title, subtitle) { title, subtitle in
 In some cases you might want to operate on multiple anchors at the same time:
 
 ```swift
+/// `Constraints` is an alternative to `al.addSubviews(...)` method which
+/// operate on an existing view hierarchy:
 Constraints(for: a, b) { a, b in
     a.center.align(with: b.center)
     a.size.match(b.size)

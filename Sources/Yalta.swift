@@ -255,11 +255,33 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
 
 // MARK: Constraints
 
+public extension LayoutProxy where Base: UIView {
+    @discardableResult public func addSubview(_ view: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
+        base.addSubview(view)
+        return Constraints(for: view, constraints)
+    }
+
+    @discardableResult public func addSubviews(_ a: UIView, _ b: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+        [a, b].forEach { base.addSubview($0) }
+        return Constraints(for: a, b, constraints)
+    }
+
+    @discardableResult public func addSubviews(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+        [a, b, c].forEach { base.addSubview($0) }
+        return Constraints(for: a, b, c, constraints)
+    }
+
+    @discardableResult public func addSubviews(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+        [a, b, c, d].forEach { base.addSubview($0) }
+        return Constraints(for: a, b, c, d, constraints)
+    }
+}
+
 public final class Constraints {
     internal(set) var constraints = [NSLayoutConstraint]()
 
     /// All of the constraints created in the given closure are automatically
-    /// activated. This is more efficient then installing them
+    /// activated at the same time. This is more efficient then installing them
     /// one-be-one. More importantly, it allows to make changes to the constraints
     /// before they are installed (e.g. change `priority`).
     @discardableResult public init(_ closure: () -> Void) {
@@ -283,10 +305,6 @@ public final class Constraints {
 
     @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> Void) {
         self.init { closure(a.al, b.al, c.al, d.al) }
-    }
-
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem, E: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ e: E, _ closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>, LayoutProxy<E>) -> Void) {
-        self.init { closure(a.al, b.al, c.al, d.al, e.al) }
     }
 }
 

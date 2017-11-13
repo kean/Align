@@ -237,3 +237,14 @@ Constraints(for: title, subtitle) { title, subtitle in
 }
 ```
 
+There is even more convenient to define constraints which also allows you to manipulate view hierarchy:
+
+```swift
+view.al.addSubviews(title, subtitle) { title, subtitle in
+    title.top.pinToSuperview()
+    subtitle.top.align(with: title.bottom, offset: 10)
+
+    // You can change a priority of constraints inside a group:
+    subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
+}
+```

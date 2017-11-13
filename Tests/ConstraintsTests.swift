@@ -49,7 +49,6 @@ class ConstraintsArityTests: XCTestCase {
     let b = UIView()
     let c = UIView()
     let d = UIView()
-    let e = UIView()
 
     override func setUp() {
         super.setUp()
@@ -58,7 +57,6 @@ class ConstraintsArityTests: XCTestCase {
         container.addSubview(b)
         container.addSubview(c)
         container.addSubview(d)
-        container.addSubview(e)
     }
 
     // MARK: Test That Behaves Like Standard Init
@@ -132,14 +130,53 @@ class ConstraintsArityTests: XCTestCase {
             XCTAssertTrue($3.base === d)
         }
     }
+}
 
-    func testFive() {
-        Constraints(for: a, b, c, d, e) {
+class AddingSubviewsTests: XCTestCase {
+    let container = UIView()
+    let a = UIView()
+    let b = UIView()
+    let c = UIView()
+    let d = UIView()
+
+    func testOne() {
+        container.al.addSubview(a) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($0.base === a)
+            return
+        }
+    }
+
+    func testTwo() {
+        container.al.addSubviews(a, b) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($1.base.superview === container)
+            XCTAssertTrue($0.base === a)
+            XCTAssertTrue($1.base === b)
+        }
+    }
+
+    func testThree() {
+        container.al.addSubviews(a, b, c) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($1.base.superview === container)
+            XCTAssertTrue($2.base.superview === container)
+            XCTAssertTrue($0.base === a)
+            XCTAssertTrue($1.base === b)
+            XCTAssertTrue($2.base === c)
+        }
+    }
+
+    func testFour() {
+        container.al.addSubviews(a, b, c, d) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($1.base.superview === container)
+            XCTAssertTrue($2.base.superview === container)
+            XCTAssertTrue($3.base.superview === container)
             XCTAssertTrue($0.base === a)
             XCTAssertTrue($1.base === b)
             XCTAssertTrue($2.base === c)
             XCTAssertTrue($3.base === d)
-            XCTAssertTrue($4.base === e)
         }
     }
 }

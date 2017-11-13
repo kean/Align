@@ -19,6 +19,16 @@
       <FileRef
          location = "group:Yalta.podspec">
       </FileRef>
+      <Group
+         location = "group:Docs"
+         name = "Docs">
+         <FileRef
+            location = "group:InstallationGuide.md">
+         </FileRef>
+         <FileRef
+            location = "group:YaltaGuide.md">
+         </FileRef>
+      </Group>
    </Group>
    <FileRef
       location = "group:Yalta.xcodeproj">
