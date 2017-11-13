@@ -1,6 +1,6 @@
 # ⛵️ Yalta
 
-Yalta is an intuitive and powerful Auto Layout library. Designed to be simple and approachable, Yalta is perfect both for beginners and for seasoned developers.
+Yalta is an intuitive and powerful Auto Layout library. Designed to be simple and safe, Yalta is perfect for both new and seasoned developers.
 
 The entire library fits in a single file with under 250 lines of code which you can just drag-n-drop into your app. The best way to start using Yalta is by downloading the project and jumping into a Playground.
 
@@ -8,7 +8,7 @@ The entire library fits in a single file with under 250 lines of code which you 
 - [Full Guide](https://github.com/kean/Yalta/blob/master/Docs/YaltaGuide.md)
 - [Installation Guide](https://github.com/kean/Yalta/blob/master/Docs/InstallationGuide.md)
 
-> The philosophy behind Yalta is to strive for clarity and simplicity by  following [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. It provides fluent API that form grammatical phrases. Most common operations are easy to discover and use.
+> Yalta strives for clarity and simplicity by following [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. Instead Yalta provides a fluent APIs that form grammatical phrases. Most common operations are easy to discover and use.
 
 
 ## Quick Overview
@@ -85,6 +85,8 @@ Constraints(for: a, b) { a, b in
 }
 ```
 
+> Yalta has full test coverage. If you'd like to learn about which constraints (`NSLayoutConstraint`) Yalta creates each time you call one of its methods, test cases are a great place to start.
+
 
 ## Why Yalta
 
@@ -92,7 +94,7 @@ Yalta is for someone who:
 
 - Prefers fluent APIs that follow [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)
 - [Doesn't want](http://chris.eidhof.nl/post/micro-autolayout-dsl/) to depend on big, complex libraries
-- Avoids operator overloads and needs [fast compile times](https://github.com/robb/Cartography/issues/215)
+- Avoids operator overloads and prefers [fast compile times](https://github.com/robb/Cartography/issues/215)
 - Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wished it had simpler, more fluent API which didn't requires manually activating constraints
 - Is a beginner and wants to start with high-level abstractions (*stacks*, *simple methods*) and then slowly work their way down to *anchors*, and then individual *constraints*.
 
