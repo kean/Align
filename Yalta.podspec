@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
     s.name             = "Yalta"
-    s.version          = "0.1"
-    s.summary          = "Auto Layout for Humans"
+    s.version          = "0.2"
+    s.summary          = "A intuitive and powerful Auto Layout library"
 
     s.homepage         = "https://github.com/kean/Yalta"
     s.license          = "MIT"
