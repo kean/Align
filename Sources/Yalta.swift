@@ -19,6 +19,7 @@ public extension LayoutItem { // Yalta methods available via `LayoutProxy`
 }
 
 extension LayoutProxy where Base: LayoutItem {
+
     // MARK: Anchors
 
     public var top: Anchor<AnchorTypeEdge, AnchorAxisVertical> { return Anchor(base, .top) }
@@ -37,7 +38,11 @@ extension LayoutProxy where Base: LayoutItem {
     public var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal> { return Anchor(base, .width) }
     public var height: Anchor<AnchorTypeDimension, AnchorAxisVertical> { return Anchor(base, .height) }
 
-    public var center: AnchorCollectionCenter { return AnchorCollectionCenter(centerX: centerX, centerY: centerY) }
+    // MARK: Anchor Collections
+
+    public func edges(_ edges: LayoutEdge...) -> AnchorCollectionEdges { return AnchorCollectionEdges(item: base, edges: edges) }
+    public var edges: AnchorCollectionEdges { return AnchorCollectionEdges(item: base, edges: [.left, .right, .bottom, .top]) }
+    public var center: AnchorCollectionCenter { return AnchorCollectionCenter(x: centerX, y: centerY) }
     public var size: AnchorCollectionSize { return AnchorCollectionSize(width: width, height: height) }
 }
 
@@ -46,46 +51,6 @@ extension LayoutProxy where Base: UIView {
 
     @available(iOS 11.0, tvOS 11.0, *)
     public var safeArea: LayoutProxy<UILayoutGuide> { return base.safeAreaLayoutGuide.al }
-}
-
-extension LayoutProxy where Base: LayoutItem {
-    // MARK: Fill
-
-    /// Aligns the edges of the view to the edges of the superview so the the view
-    /// fills the available space in a container.
-    @discardableResult public func fillSuperview(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return fill(base.superview!, alongAxis: axis, insets: insets, relation: relation)
-    }
-
-    /// Aligns the edges of the view to the margins of the superview so the the view
-    /// fills the available space in a container.
-    @discardableResult public func fillSuperviewMargins(alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return fill(base.superview!.layoutMarginsGuide, alongAxis: axis, insets: insets, relation: relation)
-    }
-
-    /// Aligns the edges of the view to the edges of the given view so the the
-    /// view fills the available space in a container.
-    @discardableResult public func fill(_ container: LayoutItem, alongAxis axis: UILayoutConstraintAxis? = nil, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        let anchors = _attributes(for: axis).map { Anchor<AnchorTypeEdge, Any>(base, $0) }
-        return anchors.map { $0.pin(to: container, inset: insets.inset(for: $0.attribute), relation: relation.inverted) }
-    }
-
-    private func _attributes(for axis: UILayoutConstraintAxis?) -> [NSLayoutAttribute] {
-        guard let axis = axis else { return [.left, .right, .top, .bottom] } // all
-        return (axis == .horizontal) ? [.left, .right] : [.top, .bottom]
-    }
-
-    // MARK: Center
-
-    /// Centers the view in the superview.
-    @discardableResult public func centerInSuperview() -> [NSLayoutConstraint] {
-        return [centerX.alignWithSuperview(), centerY.alignWithSuperview()]
-    }
-
-    /// Centers the view in the superview along the given axis.
-    @discardableResult public func centerInSuperview(alongAxis axis: UILayoutConstraintAxis) -> NSLayoutConstraint {
-        return axis == .horizontal ? centerX.alignWithSuperview() : centerY.alignWithSuperview()
-    }
 }
 
 
@@ -139,7 +104,7 @@ extension Anchor where Type: AnchorTypeEdge {
         return pin(to: item.superview!.layoutMarginsGuide, inset: inset, relation: relation)
     }
 
-    internal func pin(to container: LayoutItem, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    @discardableResult public func pin(to container: LayoutItem, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
         let isInverted = inverted.contains(attribute)
         return _constrain(self, Anchor<Type, Any>(container, attribute), offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
@@ -171,13 +136,45 @@ private func _constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2,
 
 // MARK: Anchor Collections
 
+public struct AnchorCollectionEdges {
+    internal let item: LayoutItem
+    internal let edges: [LayoutEdge]
+
+    /// Pins the edges of the view to the edges of the superview so the the view
+    /// fills the available space in a container.
+    @discardableResult
+    public func pinToSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return pin(to: item.superview!, insets: insets, relation: relation)
+    }
+
+    /// Pins the edges of the view to the margins of the superview so the the view
+    /// fills the available space in a container.
+    @discardableResult
+    public func pinToSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return pin(to: item.superview!.layoutMarginsGuide, insets: insets, relation: relation)
+    }
+
+    /// Pins the edges of the view to the edges of the given view so the the
+    /// view fills the available space in a container.
+    @discardableResult
+    public func pin(to item2: LayoutItem, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        let anchors = edges.map { Anchor<AnchorTypeEdge, Any>(item, $0.attribute) }
+        return anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relation) }
+    }
+}
+
 public struct AnchorCollectionCenter {
-    internal var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
-    internal var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical>
+    internal var x: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
+    internal var y: Anchor<AnchorTypeCenter, AnchorAxisVertical>
+
+    /// Centers the view in the superview.
+    @discardableResult public func alignWithSuperview() -> [NSLayoutConstraint] {
+        return [x.alignWithSuperview(), y.alignWithSuperview()]
+    }
 
     /// Makes the axis equal to the other collection of axis.
     @discardableResult public func align(with anchors: AnchorCollectionCenter) -> [NSLayoutConstraint] {
-        return [centerX.align(with: anchors.centerX), centerY.align(with: anchors.centerY)]
+        return [x.align(with: anchors.x), y.align(with: anchors.y)]
     }
 }
 
@@ -351,6 +348,18 @@ internal extension UIEdgeInsets {
         case .left, .leading: return left
         case .right, .trailing: return right
         default: return 0
+        }
+    }
+}
+
+public enum LayoutEdge {
+    case top, bottom, leading, trailing, left, right
+
+    public var attribute: NSLayoutAttribute {
+        switch self {
+        case .top: return .top;          case .bottom: return .bottom
+        case .leading: return .leading;  case .trailing: return .trailing
+        case .left: return .left;        case .right: return .right
         }
     }
 }

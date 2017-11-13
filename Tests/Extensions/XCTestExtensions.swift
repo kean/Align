@@ -16,14 +16,14 @@ func test<T>(_ title: String? = nil, with element: T, _ closure: (T) -> Void) {
 // MARK: Asserts
 
 public func XCTAssertEqualConstraints(_ expected: [NSLayoutConstraint], _ received: [NSLayoutConstraint], file: StaticString = #file, line: UInt = #line) {
-    XCTAssertEqual(expected.count, received.count)
+    XCTAssertEqual(expected.count, received.count, file: file, line: line)
 
     var received = received
     for c in expected {
         let idx = received.index(where: {
             Constraint($0) == Constraint(c)
         })
-        XCTAssertNotNil(idx, "Failed to find constraints: \(c)\n\nExpected: \(expected)\n\nReceived: \(received)")
+        XCTAssertNotNil(idx, "Failed to find constraints: \(c)\n\nExpected: \(expected)\n\nReceived: \(received)", file: file, line: line)
         if let idx = idx {
             received.remove(at: idx)
         }

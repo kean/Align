@@ -6,7 +6,7 @@ import XCTest
 import Yalta
 
 
-class FillingTests: XCTestCase {
+class AnchorCollectionEdgesTests: XCTestCase {
     let container = UIView()
     let view = UIView()
 
@@ -16,9 +16,9 @@ class FillingTests: XCTestCase {
         container.addSubview(view)
     }
 
-    func testFillSuperview() {
+    func testPinToSuperview() {
         XCTAssertEqualConstraints(
-            view.al.fillSuperview(),
+            view.al.edges.pinToSuperview(),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom),
@@ -26,10 +26,10 @@ class FillingTests: XCTestCase {
         )
     }
 
-    func testFillSuperviewWithInsets() {
+    func testPinToSuperviewWithInsets() {
         let insets = UIEdgeInsets(top: 1, left: 2, bottom: 3, right: 4)
         XCTAssertEqualConstraints(
-            view.al.fillSuperview(insets: insets),
+            view.al.edges.pinToSuperview(insets: insets),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 1),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left, constant: 2),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom, constant: -3),
@@ -37,9 +37,9 @@ class FillingTests: XCTestCase {
         )
     }
 
-    func testFillSuperviewLessThanOrEqual() {
+    func testPinToSuperviewLessThanOrEqual() {
         XCTAssertEqualConstraints(
-            view.al.fillSuperview(relation: .lessThanOrEqual),
+            view.al.edges.pinToSuperview(relation: .greaterThanOrEqual),
             [NSLayoutConstraint(item: view, attribute: .top, relation: .greaterThanOrEqual, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, relation: .greaterThanOrEqual,toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, relation: .lessThanOrEqual, toItem: container, attribute: .bottom),
@@ -47,9 +47,9 @@ class FillingTests: XCTestCase {
         )
     }
 
-    func testFillSuperviewGreaterThanOrEqual() { // doens't make sense in practice really
+    func testPinToSuperviewGreaterThanOrEqual() { // doens't make sense in practice really
         XCTAssertEqualConstraints(
-            view.al.fillSuperview(relation: .greaterThanOrEqual),
+            view.al.edges.pinToSuperview(relation: .lessThanOrEqual),
             [NSLayoutConstraint(item: view, attribute: .top, relation: .lessThanOrEqual, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, relation: .lessThanOrEqual,toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, relation: .greaterThanOrEqual, toItem: container, attribute: .bottom),
@@ -57,9 +57,9 @@ class FillingTests: XCTestCase {
         )
     }
 
-    func testFillSuperviewMargins() {
+    func testPinToSuperviewMargins() {
         XCTAssertEqualConstraints(
-            view.al.fillSuperviewMargins(),
+            view.al.edges.pinToSuperviewMargins(),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container.layoutMarginsGuide, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container.layoutMarginsGuide, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container.layoutMarginsGuide, attribute: .bottom),
@@ -67,22 +67,22 @@ class FillingTests: XCTestCase {
         )
     }
 
-    func testFillSuperviewAlongAxis() {
+    func testPinToSuperviewAlongAxis() {
         XCTAssertEqualConstraints(
-            view.al.fillSuperview(alongAxis: .vertical),
+            view.al.edges(.top, .bottom).pinToSuperview(),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom)]
         )
         XCTAssertEqualConstraints(
-            view.al.fillSuperview(alongAxis: .horizontal),
+            view.al.edges(.left, .right).pinToSuperview(),
             [NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right)]
         )
     }
 
-    func testFillLayoutGuide() {
+    func testPinToSuperviewLayoutGuide() {
         XCTAssertEqualConstraints(
-            view.al.fill(container.layoutMarginsGuide),
+            view.al.edges.pin(to: container.layoutMarginsGuide),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container.layoutMarginsGuide, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container.layoutMarginsGuide, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container.layoutMarginsGuide, attribute: .bottom),

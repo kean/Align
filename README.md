@@ -28,43 +28,39 @@ Stack(title, Spacer(minWidth: 16), subtitle) // alt syntax
 
 > Check out [Let's Build UIStackView](https://kean.github.io/post/lets-build-uistackview) to learn how stacks work under the hood (it's constraints all the way down).
 
-### Fill and Center
-
-It's time to add stack to a view hierarchy. Yalta has some high-level functions for that:
-
-```swift
-view.addSubview(stack)
-
-// You may want your stack to fill the superview:
-stack.al.fillSuperview()
-stack.al.fillSuperview(insets: Insets(10)) // with insets
-stack.al.fillSuperviewMargins() // or margins
-
-// Or only fill along a particular axis and center along the other:
-stack.al.fillSuperview(alongAxis: .horizontal)
-stack.al.centerInSuperview(alongAxis: .vertical)
-```
-
-These are more **filling** and **centering** functions with more options available.
-
 
 ### Anchors
 
-Stacks and `fill(...)` functions are great for laying out entire views, however sometime you have to think in terms of individual **anchors**. Each anchor represents either **edge**, **dimension** or **axis** of a view.
+It's time to add stack to a view hierarchy and lay it out. Start by selecting an **anchor** or a **collection of anchors** of a view (or layout guide). Then use anchor's methods to create constraints.
 
-You can access anchors via `.al` extension however a recommended way is to use a special `al.addSubviews(...)` method instead:
+> Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis** and **baselines**.
+
+You can access anchors via `.al` extension however a recommended way is to use a special `al.addSubviews(...)` method:
+
+```swift
+view.al.addSubview(stack) {
+    // You may want your stack to fill the superview:
+    $0.edges.pinToSuperview()
+    $0.edges.pinToSuperview(insets: Insets(10)) // with insets
+    $0.edges.pinToSuperviewMargins() // or margins
+
+    // Or only fill along a particular axis and center along the other:
+    $0.edges(.left, .right).pinToSuperview()
+    $0.centerY.alignWithSuperview()
+}
+```
+
+> As you've probably noticed `al.addSubviews(...)` method allows you to get rid of `.al` prefix. More importantly, it encourages you to split constraints into small logical groups. Make sure that you do!
+
+Each anchor and collection of anchors have methods which make sense for that particular kind of anchor:
 
 ```swift
 view.al.addSubviews(title, subtitle) { title, subtitle in
-    // Start with a `UIView` (or `UILayoutGuide`) and select one of the object's
-    // anchors. Use anchor's methods to create constraints:
     title.top.pinToSuperview()
 
-    // Yalta has a fluent API which read like grammatical phrase:
     subtitle.top.align(with: title.bottom, offset: 10)
 
     title.centerX.alignWithSuperview()
-    subtitle.centerX.align(with: title.centerX)
 
     title.width.set(100)
     subtitle.width.match(title.width)
@@ -74,13 +70,9 @@ view.al.addSubviews(title, subtitle) { title, subtitle in
 }
 ```
 
-> As you've probably noticed `Constraints` group allows you to get rid of `.al` prefix. More importantly, it encourages you to split constraints into small logical groups. Make sure that you do!
-
-In some cases you might want to operate on multiple anchors at the same time:
+As an alternative to `al.addSubviews(...)` methods you can use `Constraints` type directly to operate on an existing view hierarchy:
 
 ```swift
-/// `Constraints` is an alternative to `al.addSubviews(...)` method which
-/// operate on an existing view hierarchy:
 Constraints(for: a, b) { a, b in
     a.center.align(with: b.center)
     a.size.match(b.size)

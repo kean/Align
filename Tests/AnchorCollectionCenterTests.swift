@@ -23,4 +23,12 @@ class AnchorCollectionCenterTests: XCTestCase {
              NSLayoutConstraint(item: view, attribute: .centerY, toItem: container, attribute: .centerY)]
         )
     }
+
+    func testAlignWithSuperview() {
+        XCTAssertEqualConstraints(
+            view.al.center.alignWithSuperview(),
+            [NSLayoutConstraint(item: view, attribute: .centerX, toItem: container, attribute: .centerX),
+             NSLayoutConstraint(item: view, attribute: .centerY, toItem: container, attribute: .centerY)]
+        )
+    }
 }
