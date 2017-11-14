@@ -330,7 +330,7 @@ public extension UIEdgeInsets {
 }
 
 public struct LayoutProxy<Base> {
-    internal let base: Base
+    public let base: Base
 }
 
 internal extension NSLayoutRelation {

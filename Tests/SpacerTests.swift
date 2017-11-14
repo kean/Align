@@ -3,7 +3,7 @@
 // Copyright (c) 2017 Alexander Grebenyuk (github.com/kean).
 
 import XCTest
-@testable import Yalta
+import Yalta
 
 
 class SpacerTests: XCTestCase {
