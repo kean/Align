@@ -35,10 +35,10 @@ It's time to add stack to a view hierarchy and lay it out. Start by selecting an
 
 > Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis** and **baselines**.
 
-You can access anchors via `.al` extension however a recommended way is to use a special `al.addSubviews(...)` method:
+The best way to access anchors is by using a special `addSubview(_:constraints:)` method (supports up to 4 views):
 
 ```swift
-view.al.addSubview(stack) {
+view.addSubview(stack) {
     // You may want your stack to fill the superview:
     $0.edges.pinToSuperview()
     $0.edges.pinToSuperview(insets: Insets(10)) // with insets
@@ -50,12 +50,12 @@ view.al.addSubview(stack) {
 }
 ```
 
-> As you've probably noticed `al.addSubviews(...)` method allows you to get rid of `.al` prefix. More importantly, it encourages you to split constraints into small logical groups. Make sure that you do!
+> You can also access anchors directly using  `.al` extension: `view.al.edges.pinToSuperview()`.
 
 Each anchor and collection of anchors have methods which make sense for that particular kind of anchor:
 
 ```swift
-view.al.addSubviews(title, subtitle) { title, subtitle in
+view.addSubview(title, subtitle) { title, subtitle in
     title.top.pinToSuperview()
 
     subtitle.top.align(with: title.bottom, offset: 10)
@@ -70,7 +70,7 @@ view.al.addSubviews(title, subtitle) { title, subtitle in
 }
 ```
 
-As an alternative to `al.addSubviews(...)` methods you can use `Constraints` type directly to operate on an existing view hierarchy:
+As an alternative to `addSubview(_:constraints:)` methods you can use `Constraints` type directly to operate on an existing view hierarchy:
 
 ```swift
 Constraints(for: a, b) { a, b in

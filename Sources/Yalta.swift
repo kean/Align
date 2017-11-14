@@ -252,24 +252,24 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
 
 // MARK: Constraints
 
-public extension LayoutProxy where Base: UIView {
-    @discardableResult public func addSubview(_ view: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
-        base.addSubview(view)
-        return Constraints(for: view, constraints)
+public extension UIView {
+    @discardableResult @nonobjc public func addSubview<A: UIView>(_ a: A, constraints: (LayoutProxy<A>) -> Void) -> Constraints {
+        addSubview(a)
+        return Constraints(for: a, constraints)
     }
 
-    @discardableResult public func addSubviews(_ a: UIView, _ b: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
-        [a, b].forEach { base.addSubview($0) }
+    @discardableResult @nonobjc public func addSubview<A: UIView, B: UIView>(_ a: A, _ b: B, constraints: (LayoutProxy<A>, LayoutProxy<B>) -> Void) -> Constraints {
+        [a, b].forEach { addSubview($0) }
         return Constraints(for: a, b, constraints)
     }
 
-    @discardableResult public func addSubviews(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
-        [a, b, c].forEach { base.addSubview($0) }
+    @discardableResult @nonobjc public func addSubview<A: UIView, B: UIView, C: UIView>(_ a: A, _ b: B, _ c: C, constraints: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> Void) -> Constraints {
+        [a, b, c].forEach { addSubview($0) }
         return Constraints(for: a, b, c, constraints)
     }
 
-    @discardableResult public func addSubviews(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
-        [a, b, c, d].forEach { base.addSubview($0) }
+    @discardableResult @nonobjc public func addSubview<A: UIView, B: UIView, C: UIView, D: UIView>(_ a: A, _ b: B, _ c: C, _ d: D, constraints: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> Void) -> Constraints {
+        [a, b, c, d].forEach { addSubview($0) }
         return Constraints(for: a, b, c, d, constraints)
     }
 }

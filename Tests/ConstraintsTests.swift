@@ -140,7 +140,7 @@ class AddingSubviewsTests: XCTestCase {
     let d = UIView()
 
     func testOne() {
-        container.al.addSubview(a) {
+        container.addSubview(a) {
             XCTAssertTrue($0.base.superview === container)
             XCTAssertTrue($0.base === a)
             return
@@ -148,7 +148,7 @@ class AddingSubviewsTests: XCTestCase {
     }
 
     func testTwo() {
-        container.al.addSubviews(a, b) {
+        container.addSubview(a, b) {
             XCTAssertTrue($0.base.superview === container)
             XCTAssertTrue($1.base.superview === container)
             XCTAssertTrue($0.base === a)
@@ -157,7 +157,7 @@ class AddingSubviewsTests: XCTestCase {
     }
 
     func testThree() {
-        container.al.addSubviews(a, b, c) {
+        container.addSubview(a, b, c) {
             XCTAssertTrue($0.base.superview === container)
             XCTAssertTrue($1.base.superview === container)
             XCTAssertTrue($2.base.superview === container)
@@ -168,7 +168,7 @@ class AddingSubviewsTests: XCTestCase {
     }
 
     func testFour() {
-        container.al.addSubviews(a, b, c, d) {
+        container.addSubview(a, b, c, d) {
             XCTAssertTrue($0.base.superview === container)
             XCTAssertTrue($1.base.superview === container)
             XCTAssertTrue($2.base.superview === container)
