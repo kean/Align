@@ -9,11 +9,14 @@
     + [Center Anchors Only](#center-anchors-only)
     + [Dimension Anchors Only](#dimension-anchors-only)
   * [Anchors Collections](#anchors-collections)
-- [Methods (Fill and Center)](#methods--fill-and-center-)
+    + [AnchorCollectionEdges](#anchorcollectionedges)
+    + [AnchorCollectionCenter](#anchorcollectioncenter)
+    + [AnchorCollectionSize](#anchorcollectionsize)
 - [Stacks and Spacers](#stacks-and-spacers)
-- [Constraint Groups](#constraint-groups)
 
 ## Anchors
+
+Yalta has a simple and consistent model for creating constraints. You start by selecting an **anchor** or a **collection of anchors** of a view (or a layout guide). Then use anchor's methods to create constraints.
 
 An anchor (`Anchor<Type, Axis>`) corresponds to a layout attribute (`NSLayoutConstraint.Attribute`) of a view (`UIView`) or layout guide (`UILayoutGuide`).
 
@@ -55,7 +58,7 @@ var height: Anchor<AnchorTypeDimension, AnchorAxisVertical>
 
 Yalta doesn't provide anchor properties for the layout margins attributes. Instead use `margins` or `safeArea` layout guides (`UILayoutGuide`) that represents these margins:
 
-```
+```swift
 let view = UIView()
 
 view.al.margins.top
@@ -69,17 +72,31 @@ view.safeAreaLayoutGuide.al.top
 
 ### Accessing Anchors
 
-You can access anchors via `.al` proxy however a recommended way is to create a `Constraints` group (more about it later) instead:
+The best way to access anchors is by using a special `addSubview(_:constraints:)` method (supports up to 4 views):
 
 ```swift
-view.al.top
-view.al.centerX
-view.al.width
+view.addSubview(stack) {
+    $0.edges(.left, .right).pinToSuperview() // fill along horizontal axis
+    $0.centerY.alignWithSuperview() // center along vertical axis
+}
+```
 
+With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents programmer errors (e.g. trying to add constraints to views not in view hierarchy). 
+
+You can asso access anchors via `.al` proxy:
+
+```swift
+stack.al.edges.pinToSuperview()
+```
+
+In addition to `addSubview(_:constraints:)` method there is a `Constraints` 
+type which allows you to operate on an existing view hierarchy:
+
+```swift
 Constraints(for: view) { view in
-	view.top
-	view.centerX
-	view.width
+    view.top
+    view.centerX
+    view.width
 }
 ```
 
@@ -162,48 +179,41 @@ title.al.width.match(title.al.height, multiplier: 2.0) // aspect ratio
 
 ### Anchors Collections
 
-There are two anchors collections which allow you to manipulate multiple anchors at the same time.
+There are three types anchors collections which allow you to manipulate multiple anchors at the same time.
 
-The first one is `AnchorCollectionCenter` which allow to align centers of the views:
+#### AnchorCollectionEdges
+
+The first one is `AnchorCollectionEdges` which allows to manipulate multiple edges of a view at the same time:
 
 ```swift
-title.al.center.align(with: view.al.center)
+view.addSubview(stack) {
+    $0.edges.pinToSuperview() // pins the edges to fill the superview
+    $0.edges.pinToSuperview(insets: Insets(10)) // with insets
+    $0.edges.pinToSuperviewMargins() // or margins
+    $0.edges(.left, .right).pinToSuperview() // fill along horizontal axis
+}
 ```
 
-The second is `AnchorCollectionSize` which allows you to manipulate size:
+#### AnchorCollectionCenter
+
+The second is `AnchorCollectionCenter` which allow to align centers of the views:
 
 ```swift
-view.al.size.set(CGSize(width: 44, height: 44))
-view.al.size.match(container.al.size)
+Constraints(for: title) {
+    $0.center.alignWithSuperview() // centers in a superview
+    $0.center.align(with: view.al.center)
+}
 ```
 
+#### AnchorCollectionSize
 
-## Methods (Fill and Center)
-
-Yalta provides a couple of high-level methods which allow you to think in terms not just individual anchors, but entire views.
-
-**Fill(...** family of methods aligns the edges of the view to the edges (or margins) of the superview so the the view fills the available space in a container.
+The third is `AnchorCollectionSize` which allows you to manipulate size:
 
 ```swift
-view.al.fillSuperview()
-view.al.fillSuperview(insets: Insets(15))
-view.al.fillSuperview(insets: Insets(top: 10, left: 20, bottom: 10, right: 20))
-view.al.fillSuperview(insets: Insets(15), relation: .lessThanOrEqual) // smaller than superview
-
-view.al.fillSuperviewMargins()
-
-view.al.fill(container)
-
-// Along a particular axis
-view.al.fillSuperview(alongAxis: .horizontal)
-view.al.fillSuperview(alongAxis: .horizontal, insets: Insets(10))
-```
-
-*Centering* functions allow to center a view in a superview:
-
-```swift
-view.al.centerInSuperview()
-view.al.centerInSuperview(alongAxis: .vertical)
+Constraints(for: view, container) { view, container in
+    view.size.set(CGSize(width: 44, height: 44))
+    view.size.match(container.size)
+}
 ```
 
 
@@ -221,30 +231,3 @@ Stack(title, Spacer(minWidth: 16), subtitle) // alt syntax
 ```
 
 > Check out [Let's Build UIStackView](https://kean.github.io/post/lets-build-uistackview) to learn how stacks work under the hood (it's constraints all the way down).
-
-
-## Constraint Groups
-
-You can access Yalta APIs via `.al` proxy however a recommended way is to create a `Constraints` group instead. The constraints that you create inside a group are not installed until the group is finished. This means that you can lower a priority of constraints inside the block:
-
-```swift
-Constraints(for: title, subtitle) { title, subtitle in
-    title.top.pinToSuperview()
-    subtitle.top.align(with: title.bottom, offset: 10)
-
-    // You can change a priority of constraints inside a group:
-    subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
-}
-```
-
-There is even more convenient to define constraints which also allows you to manipulate view hierarchy:
-
-```swift
-view.addSubview(title, subtitle) { title, subtitle in
-    title.top.pinToSuperview()
-    subtitle.top.align(with: title.bottom, offset: 10)
-
-    // You can change a priority of constraints inside a group:
-    subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
-}
-```
