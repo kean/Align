@@ -164,8 +164,8 @@ public struct AnchorCollectionEdges {
 }
 
 public struct AnchorCollectionCenter {
-    internal var x: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
-    internal var y: Anchor<AnchorTypeCenter, AnchorAxisVertical>
+    internal let x: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
+    internal let y: Anchor<AnchorTypeCenter, AnchorAxisVertical>
 
     /// Centers the view in the superview.
     @discardableResult public func alignWithSuperview() -> [NSLayoutConstraint] {
@@ -179,8 +179,8 @@ public struct AnchorCollectionCenter {
 }
 
 public struct AnchorCollectionSize {
-    internal var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal>
-    internal var height: Anchor<AnchorTypeDimension, AnchorAxisVertical>
+    internal let width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal>
+    internal let height: Anchor<AnchorTypeDimension, AnchorAxisVertical>
 
     /// Set the size of item.
     @discardableResult public func set(_ size: CGSize, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
