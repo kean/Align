@@ -17,16 +17,22 @@ class MyViewController : UIViewController {
         logo.font = UIFont.systemFont(ofSize: 30)
         title.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         subtitle.font = UIFont.systemFont(ofSize: 15)
+        subtitle.numberOfLines = 0
 
         logo.text = "⛵️"
         title.text = "Welcome to Yalta!"
-        subtitle.text = "Micro Auto Layout DSL"
+        subtitle.text = "An intuitive and powerful Auto Layout"
 
-        let right = Stack([title, subtitle], axis: .vertical)
-        let stack = Stack([logo, right], spacing: 10, alignment: .top)
+        let labels = Stack([title, subtitle], axis: .vertical)
+        let stack = Stack(logo, labels) {
+            $0.spacing = 10
+            $0.alignment = .top
+        }
 
-        view.addSubview(stack)
-        stack.al.center.alignWithSuperview()
+        view.addSubview(stack) {
+            $0.center.alignWithSuperview()
+            $0.edges(.left, .right).pinToSuperviewMargins(relation: .greaterThanOrEqual)
+        }
     }
 }
 
