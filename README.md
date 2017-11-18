@@ -2,7 +2,7 @@
 
 Yalta is an intuitive and powerful Auto Layout library. Designed to be simple and safe, Yalta is perfect for both new and seasoned developers.
 
-The entire library fits in a single file with less than 250 lines of code which you can just drag-n-drop into your app.
+The entire library fits in just two files (core + extensions) with less than 250 lines of code which you can just drag-n-drop into your app.
 
 - [Quick Overview](#quick-overview)
 - [Full Guide](https://github.com/kean/Yalta/blob/master/Docs/YaltaGuide.md)

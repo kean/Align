@@ -18,6 +18,10 @@ public extension LayoutItem { // Yalta methods available via `LayoutProxy`
     @nonobjc public var al: LayoutProxy<Self> { return LayoutProxy(base: self) }
 }
 
+public struct LayoutProxy<Base> {
+    public let base: Base
+}
+
 extension LayoutProxy where Base: LayoutItem {
 
     // MARK: Anchors
@@ -104,6 +108,7 @@ extension Anchor where Type: AnchorTypeEdge {
         return pin(to: item.superview!.layoutMarginsGuide, inset: inset, relation: relation)
     }
 
+    /// Pins the edge to the respected edges of the given container.
     @discardableResult public func pin(to container: LayoutItem, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         let inverted: Set<NSLayoutAttribute> = [.trailing, .right, .bottom, .trailingMargin, .rightMargin, .bottomMargin]
         let isInverted = inverted.contains(attribute)
@@ -127,10 +132,6 @@ extension Anchor where Type: AnchorTypeDimension {
     @discardableResult public func match<Axis>(_ anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return _constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
-}
-
-private func _constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-    return _constrain(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
 }
 
 
@@ -195,84 +196,7 @@ public struct AnchorCollectionSize {
 }
 
 
-// MARK: Stack and Spacer
-
-public typealias Stack = UIStackView
-
-public extension Stack {
-    @nonobjc public convenience init(_ views: UIView..., with: (UIStackView) -> Void = { _ in }) {
-        self.init(arrangedSubviews: views)
-        with(self)
-    }
-
-    @nonobjc public convenience init(_ views: [UIView], axis: UILayoutConstraintAxis = .horizontal, spacing: CGFloat = 0, alignment: UIStackViewAlignment = .fill, distribution: UIStackViewDistribution = .fill) {
-        self.init(arrangedSubviews: views)
-        self.axis = axis
-        self.spacing = spacing
-        self.alignment = alignment
-        self.distribution = distribution
-    }
-}
-
-public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to support stack views
-    @nonobjc public convenience init(width: CGFloat) { self.init(.width(width)) }
-    @nonobjc public convenience init(minWidth: CGFloat) { self.init(.width(minWidth), isFlexible: true) }
-    @nonobjc public convenience init(height: CGFloat) { self.init(.height(height)) }
-    @nonobjc public convenience init(minHeight: CGFloat) { self.init(.height(minHeight), isFlexible: true) }
-
-    private enum Dimension {
-        case width(CGFloat), height(CGFloat)
-    }
-
-    private init(_ dimension: Dimension, isFlexible: Bool = false) {
-        super.init(frame: .zero)
-        Constraints(for: self) {
-            switch dimension {
-            case let .width(width):
-                $0.width.set(width, relation: isFlexible ? .greaterThanOrEqual : .equal)
-                if isFlexible { $0.width.set(width).priority = UILayoutPriority(42) } // disambiguate
-                $0.height.set(0).priority = UILayoutPriority(42)  // disambiguate
-            case let .height(height):
-                $0.height.set(height, relation: isFlexible ? .greaterThanOrEqual : .equal)
-                if isFlexible { $0.height.set(height).priority = UILayoutPriority(42) } // disambiguate
-                $0.width.set(0).priority = UILayoutPriority(42) // disambiguate
-            }
-        }
-    }
-
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    // don't draw anything
-    override public class var layerClass: AnyClass { return CATransformLayer.self }
-    override public var backgroundColor: UIColor? { get { return nil } set { return } }
-}
-
-
 // MARK: Constraints
-
-public extension UIView {
-    @discardableResult @nonobjc public func addSubview<A: UIView>(_ a: A, constraints: (LayoutProxy<A>) -> Void) -> Constraints {
-        addSubview(a)
-        return Constraints(for: a, constraints)
-    }
-
-    @discardableResult @nonobjc public func addSubview<A: UIView, B: UIView>(_ a: A, _ b: B, constraints: (LayoutProxy<A>, LayoutProxy<B>) -> Void) -> Constraints {
-        [a, b].forEach { addSubview($0) }
-        return Constraints(for: a, b, constraints)
-    }
-
-    @discardableResult @nonobjc public func addSubview<A: UIView, B: UIView, C: UIView>(_ a: A, _ b: B, _ c: C, constraints: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> Void) -> Constraints {
-        [a, b, c].forEach { addSubview($0) }
-        return Constraints(for: a, b, c, constraints)
-    }
-
-    @discardableResult @nonobjc public func addSubview<A: UIView, B: UIView, C: UIView, D: UIView>(_ a: A, _ b: B, _ c: C, _ d: D, constraints: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> Void) -> Constraints {
-        [a, b, c, d].forEach { addSubview($0) }
-        return Constraints(for: a, b, c, d, constraints)
-    }
-}
 
 public final class Constraints {
     internal(set) var constraints = [NSLayoutConstraint]()
@@ -286,22 +210,6 @@ public final class Constraints {
         closure() // create constraints
         _stack.removeLast()
         NSLayoutConstraint.activate(constraints)
-    }
-
-    @discardableResult public convenience init<A: LayoutItem>(for a: A, _ closure: (LayoutProxy<A>) -> Void) {
-        self.init { closure(a.al) }
-    }
-
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem>(for a: A, _ b: B, _ closure: (LayoutProxy<A>, LayoutProxy<B>) -> Void) {
-        self.init { closure(a.al, b.al) }
-    }
-
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem>(for a: A, _ b: B, _ c: C, _ closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> Void) {
-        self.init { closure(a.al, b.al, c.al) }
-    }
-
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> Void) {
-        self.init { closure(a.al, b.al, c.al, d.al) }
     }
 }
 
@@ -324,20 +232,32 @@ private func _install(_ constraint: NSLayoutConstraint) {
     }
 }
 
-public typealias Insets = UIEdgeInsets
-public extension UIEdgeInsets {
-    public init(_ all: CGFloat) { self = UIEdgeInsetsMake(all, all, all, all) }
+private func _constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    return _constrain(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
 }
 
-public struct LayoutProxy<Base> {
-    public let base: Base
+
+// MARK: Misc
+
+public enum LayoutEdge {
+    case top, bottom, leading, trailing, left, right
+
+    internal var attribute: NSLayoutAttribute {
+        switch self {
+        case .top: return .top;          case .bottom: return .bottom
+        case .leading: return .leading;  case .trailing: return .trailing
+        case .left: return .left;        case .right: return .right
+        }
+    }
 }
 
 internal extension NSLayoutRelation {
     var inverted: NSLayoutRelation {
-        if self == .greaterThanOrEqual { return .lessThanOrEqual }
-        if self == .lessThanOrEqual { return .greaterThanOrEqual }
-        return self
+        switch self {
+        case .greaterThanOrEqual: return .lessThanOrEqual
+        case .lessThanOrEqual: return .greaterThanOrEqual
+        case .equal: return self
+        }
     }
 }
 
@@ -348,18 +268,6 @@ internal extension UIEdgeInsets {
         case .left, .leading: return left
         case .right, .trailing: return right
         default: return 0
-        }
-    }
-}
-
-public enum LayoutEdge {
-    case top, bottom, leading, trailing, left, right
-
-    public var attribute: NSLayoutAttribute {
-        switch self {
-        case .top: return .top;          case .bottom: return .bottom
-        case .leading: return .leading;  case .trailing: return .trailing
-        case .left: return .left;        case .right: return .right
         }
     }
 }

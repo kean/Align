@@ -35,6 +35,8 @@
 		0C8FD79E1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD79C1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift */; };
 		0CC3A06C1D7476A700754E59 /* Yalta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE361181C86077B00EA70CF /* Yalta.framework */; };
 		0CC3A0881D7477FB00754E59 /* Yalta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C7D028B1C98756C00DAB3ED /* Yalta.framework */; };
+		0CEA09BE1FC0DE2B00E746FF /* Yalta+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CEA09BD1FC0DE2B00E746FF /* Yalta+Extensions.swift */; };
+		0CEA09BF1FC0DE2B00E746FF /* Yalta+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CEA09BD1FC0DE2B00E746FF /* Yalta+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +76,7 @@
 		0CC3A0831D7477FB00754E59 /* Yalta tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Yalta tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CE361181C86077B00EA70CF /* Yalta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Yalta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CE361241C8607BB00EA70CF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Supporting/Info.plist; sourceTree = "<group>"; };
+		0CEA09BD1FC0DE2B00E746FF /* Yalta+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Yalta+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +174,7 @@
 			isa = PBXGroup;
 			children = (
 				0C81ABB61C889C100036DFD4 /* Yalta.swift */,
+				0CEA09BD1FC0DE2B00E746FF /* Yalta+Extensions.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -355,6 +359,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C7D02971C9875A200DAB3ED /* Yalta.swift in Sources */,
+				0CEA09BF1FC0DE2B00E746FF /* Yalta+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -401,6 +406,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0C81ABB71C889C100036DFD4 /* Yalta.swift in Sources */,
+				0CEA09BE1FC0DE2B00E746FF /* Yalta+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
