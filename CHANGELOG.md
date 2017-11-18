@@ -1,6 +1,16 @@
 [Changelog](https://github.com/kean/Yale/releases) for all versions
 
 
+## Yalta 0.3.1
+
+Small update that focuses on improving  `offsetting(by:)` method.
+
+- `offsetting(by:)` method now available for all anchors
+- Add an operator that wraps `offsetting(by:)` method (which wasn't very covnenient by itself)
+- [Fix] Offsetting anchor which already has an offset now works correctly
+- Split the project into two files
+
+
 ## Yalta 0.3
 
 -  With new `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents programmer errors (e.g. trying to add constraints to views not in view hierarchy).
@@ -25,7 +35,7 @@ This is a much simpler model which removes entire layer of standalone methods av
 - Make LayoutProxy's `base` public to enable adding custom extensions on top of it.
 
 
-# Yalta 0.2
+## Yalta 0.2
 
 - Redesigned Yalta API which now follow [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. Instead Yalta provides a fluent APIs that form grammatical phrases.
 - Full test coverage
