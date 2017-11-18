@@ -131,8 +131,11 @@ Constraints(for: title, subtitle) { title, subtitle in
 An `offsetting(by:)` method allows you to create a new (zero-overhead) anchor with a given `offset` from the current anchor.
 
 ```swift
-let anchor = title.al.top.offsetting(by: 10)
+let anchor = title.al.bottom.offsetting(by: 10)
 subtitle.al.top.align(with: anchor)
+
+// There is also a convenience operator available:
+subtitle.al.top.align(with: title.al.bottom + 10)
 ```
 
 #### Edge Anchors Only

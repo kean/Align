@@ -58,7 +58,7 @@ Each anchor and collection of anchors have methods which make sense for that par
 
 ```swift
 view.addSubview(title, subtitle) { title, subtitle in
-    subtitle.top.align(with: title.bottom, offset: 10)
+    subtitle.top.align(with: title.bottom + 10)
 
     title.centerX.alignWithSuperview()
 

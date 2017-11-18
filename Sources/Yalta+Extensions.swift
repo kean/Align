@@ -106,6 +106,17 @@ public final class Spacer: UIView { // using `UIView` and not `UILayoutGuide` to
 }
 
 
+// MARK: Operators
+
+public func + <Type: AnchorTypeAlignment, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
+    return anchor.offsetting(by: offset)
+}
+
+public func - <Type: AnchorTypeAlignment, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
+    return anchor.offsetting(by: -offset)
+}
+
+
 // MARK: Insets
 
 public typealias Insets = UIEdgeInsets

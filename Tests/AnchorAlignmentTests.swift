@@ -108,6 +108,17 @@ class AnchorAlignmentTests: XCTestCase {
         )
     }
 
+    func testOffsettingUsingOperators() {
+        XCTAssertEqualConstraints(
+            view.al.top.align(with: container.al.top + 10),
+            NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 10)
+        )
+        XCTAssertEqualConstraints(
+            view.al.top.align(with: container.al.top - 10),
+            NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: -10)
+        )
+    }
+
     func testOffsettingRightAnchor() {
         let anchor = container.al.right.offsetting(by: -10)
         XCTAssertEqualConstraints(
