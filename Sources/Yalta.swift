@@ -85,15 +85,17 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
     }
 }
 
+extension Anchor {
+    /// Returns a new anchor offset by a given amount.
+    @discardableResult public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
+        return Anchor<Type, Axis>(item, attribute, offset)
+    }
+}
+
 extension Anchor where Type: AnchorTypeAlignment {
     /// Aligns two anchors.
     @discardableResult public func align<Type: AnchorTypeAlignment>(with anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return _constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
-    }
-
-    /// Returns a new anchor offset by a given amount.
-    @discardableResult public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
-        return Anchor<Type, Axis>(item, attribute, offset)
     }
 }
 

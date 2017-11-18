@@ -63,7 +63,7 @@ view.addSubview(title, subtitle) { title, subtitle in
     title.centerX.alignWithSuperview()
 
     title.width.set(100)
-    subtitle.width.match(title.width)
+    subtitle.width.match(title.width + 20)
 
     // You can change a priority of constraints inside a group:
     subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
