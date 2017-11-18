@@ -100,4 +100,11 @@ class AnchorTests: XCTestCase {
             NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .width, constant: -10)
         )
     }
+
+    func testOffsetingMultipleTimes() {
+        XCTAssertEqualConstraints(
+            view.al.height.match((container.al.width + 10) + 10),
+            NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .width, constant: 20)
+        )
+    }
 }
