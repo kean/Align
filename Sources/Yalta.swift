@@ -87,7 +87,7 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
 
 extension Anchor {
     /// Returns a new anchor offset by a given amount.
-    @discardableResult public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
+    public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
         return Anchor<Type, Axis>(item, attribute, self.offset + offset)
     }
 }
