@@ -57,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C62A9A81FD28B5900C6EA6E /* Yalta.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Yalta.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0C683A0F1FBA4624002ACEB9 /* AnchorCollectionEdgesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCollectionEdgesTests.swift; sourceTree = "<group>"; };
 		0C7D028B1C98756C00DAB3ED /* Yalta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Yalta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C81ABB61C889C100036DFD4 /* Yalta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Yalta.swift; sourceTree = "<group>"; };
@@ -144,6 +145,7 @@
 		0CE3610E1C86077B00EA70CF = {
 			isa = PBXGroup;
 			children = (
+				0C62A9A81FD28B5900C6EA6E /* Yalta.playground */,
 				0CE361261C8607D600EA70CF /* Sources */,
 				0CC3A0721D7476B300754E59 /* Tests */,
 				0CE361231C8607A900EA70CF /* Supporting */,
