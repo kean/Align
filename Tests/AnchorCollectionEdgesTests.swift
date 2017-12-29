@@ -60,10 +60,10 @@ class AnchorCollectionEdgesTests: XCTestCase {
     func testPinToSuperviewMargins() {
         XCTAssertEqualConstraints(
             view.al.edges.pinToSuperviewMargins(),
-            [NSLayoutConstraint(item: view, attribute: .top, toItem: container.layoutMarginsGuide, attribute: .top),
-             NSLayoutConstraint(item: view, attribute: .left, toItem: container.layoutMarginsGuide, attribute: .left),
-             NSLayoutConstraint(item: view, attribute: .bottom, toItem: container.layoutMarginsGuide, attribute: .bottom),
-             NSLayoutConstraint(item: view, attribute: .right, toItem: container.layoutMarginsGuide, attribute: .right)]
+            [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .topMargin),
+             NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .leftMargin),
+             NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottomMargin),
+             NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .rightMargin)]
         )
     }
 

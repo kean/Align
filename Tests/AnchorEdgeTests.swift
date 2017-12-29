@@ -61,41 +61,41 @@ class AnchorEdgeTests: XCTestCase {
     func testPinToSuperviewMargin() {
         test("pin top to superview margin") {
             let c = view.al.top.pinToSuperviewMargin()
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .top, toItem: container.layoutMarginsGuide, attribute: .top))
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .topMargin))
         }
 
         test("pin top to superview margin with inset") {
             let c = view.al.top.pinToSuperviewMargin(inset: 10)
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .top, toItem: container.layoutMarginsGuide, attribute: .top, constant: 10))
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .topMargin, constant: 10))
         }
         test("pin bottom to superview margin with inset") {
             let c = view.al.bottom.pinToSuperviewMargin(inset: 10)
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .bottom, toItem: container.layoutMarginsGuide, attribute: .bottom, constant: -10))
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottomMargin, constant: -10))
         }
         test("pin left to superview margin with inset") {
             let c = view.al.left.pinToSuperviewMargin(inset: 10)
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .left, toItem: container.layoutMarginsGuide, attribute: .left, constant: 10))
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .leftMargin, constant: 10))
         }
         test("pin right to superview margin with inset") {
             let c = view.al.right.pinToSuperviewMargin(inset: 10)
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .right, toItem: container.layoutMarginsGuide, attribute: .right, constant: -10))
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .rightMargin, constant: -10))
         }
 
         test("pin top to superview margin with inset and relation") {
             let c = view.al.top.pinToSuperviewMargin(inset: 10, relation: .greaterThanOrEqual)
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .top, relation: .greaterThanOrEqual, toItem: container.layoutMarginsGuide, attribute: .top, constant: 10))
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .top, relation: .greaterThanOrEqual, toItem: container, attribute: .topMargin, constant: 10))
         }
         test("pin bottom to superview margin with inset and relation") {
             let c = view.al.bottom.pinToSuperviewMargin(inset: 10, relation: .greaterThanOrEqual)
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .bottom, relation: .lessThanOrEqual, toItem: container.layoutMarginsGuide, attribute: .bottom, constant: -10))
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .bottom, relation: .lessThanOrEqual, toItem: container, attribute: .bottomMargin, constant: -10))
         }
         test("pin left to superview margin with inset and relation") {
             let c = view.al.left.pinToSuperviewMargin(inset: 10, relation: .greaterThanOrEqual)
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .left, relation: .greaterThanOrEqual, toItem: container.layoutMarginsGuide, attribute: .left, constant: 10))
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .left, relation: .greaterThanOrEqual, toItem: container, attribute: .leftMargin, constant: 10))
         }
         test("pin right to superview margin with inset and relation") {
             let c = view.al.right.pinToSuperviewMargin(inset: 10, relation: .greaterThanOrEqual)
-            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .right, relation: .lessThanOrEqual, toItem: container.layoutMarginsGuide, attribute: .right, constant: -10))
+            XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .right, relation: .lessThanOrEqual, toItem: container, attribute: .rightMargin, constant: -10))
         }
     }
 }
