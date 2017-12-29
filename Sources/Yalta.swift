@@ -95,7 +95,7 @@ extension Anchor {
 extension Anchor where Type: AnchorTypeAlignment {
     /// Aligns two anchors.
     @discardableResult public func align<Type: AnchorTypeAlignment>(with anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+        return Constraints.constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 }
 
@@ -117,7 +117,7 @@ extension Anchor where Type: AnchorTypeEdge {
 
     private func _pin(to item2: LayoutItem, attribute attr2: NSLayoutAttribute, inset: CGFloat, relation: NSLayoutRelation) -> NSLayoutConstraint {
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
-        return _constrain(self, Anchor<Type, Any>(item2, attr2), offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+        return Constraints.constrain(self, Anchor<Type, Any>(item2, attr2), offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
     }
 }
 
@@ -131,11 +131,11 @@ extension Anchor where Type: AnchorTypeCenter {
 extension Anchor where Type: AnchorTypeDimension {
     /// Sets the dimension to a specific size.
     @discardableResult public func set(_ constant: CGFloat, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _constrain(item: item, attribute: attribute, relation: relation, constant: constant)
+        return Constraints.constrain(item: item, attribute: attribute, relatedBy: relation, constant: constant)
     }
 
     @discardableResult public func match<Axis>(_ anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return _constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+        return Constraints.constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 }
 
@@ -211,37 +211,37 @@ public final class Constraints {
     /// one-be-one. More importantly, it allows to make changes to the constraints
     /// before they are installed (e.g. change `priority`).
     @discardableResult public init(_ closure: () -> Void) {
-        _stack.append(self)
+        Constraints._stack.append(self)
         closure() // create constraints
-        _stack.removeLast()
+        Constraints._stack.removeLast()
         NSLayoutConstraint.activate(constraints)
     }
-}
 
-private func _constrain(item item1: Any, attribute attr1: NSLayoutAttribute, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, relation: NSLayoutRelation = .equal, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
-    precondition(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
+    /// Creates and automatically installs a constraint.
+    public static func constrain(item item1: Any, attribute attr1: NSLayoutAttribute, relatedBy relation: NSLayoutRelation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
+        precondition(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
+        (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
+        let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
+        _install(constraint)
+        return constraint
+    }
 
-    (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
-    let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
-    _install(constraint)
-    return constraint
-}
+    /// Creates and automatically installs a constraint between two anchors.
+    public static func constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
+    }
 
-private var _stack = [Constraints]() // this is what enabled constraint auto-installing
+    private static var _stack = [Constraints]() // this is what enabled constraint auto-installing
 
-private func _install(_ constraint: NSLayoutConstraint) {
-    if _stack.isEmpty { // not creating a group of constraints
-        constraint.isActive = true
-    } else { // remember which constaints to install when group is completed
-        let group = _stack.last!
-        group.constraints.append(constraint)
+    private static func _install(_ constraint: NSLayoutConstraint) {
+        if _stack.isEmpty { // not creating a group of constraints
+            constraint.isActive = true
+        } else { // remember which constaints to install when group is completed
+            let group = _stack.last!
+            group.constraints.append(constraint)
+        }
     }
 }
-
-private func _constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-    return _constrain(item: lhs.item, attribute: lhs.attribute, toItem: rhs.item, attribute: rhs.attribute, relation: relation, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
-}
-
 
 // MARK: Misc
 
