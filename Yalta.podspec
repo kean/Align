@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "Yalta"
-    s.version          = "0.3.1"
+    s.version          = "0.4"
     s.summary          = "Auto Layout for Humans"
 
     s.homepage         = "https://github.com/kean/Yalta"

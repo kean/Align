@@ -1,6 +1,13 @@
 [Changelog](https://github.com/kean/Yale/releases) for all versions
 
 
+## Yalta 0.4
+
+- `pinToSuperviewMargins` methods now use margin attributes (e.g. `.topMargin`) and not `layoutMarginsGuide` to workaround issues on iOS 10 where layout guides are unpredictable https://stackoverflow.com/questions/32694124/auto-layout-layoutmarginsguide
+- Add `pinToSafeArea(of:)` family of methods which use `safeAreaLayoutGuide` on iOS 11 and fall back to `topLayoutGuide` and `bottomLayoutGuide` on iOS 10
+- `addSubview` methods are no longer generic which allows for more extra flexibility when adding constraints (e.g. you can create and operate on an array of layout proxies)
+
+
 ## Yalta 0.3.1
 
 Small update that focuses on improving  `offsetting(by:)` method.
