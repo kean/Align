@@ -5,26 +5,25 @@
 import UIKit
 
 
-
 // MARK: UIView + Constraints
 
 public extension UIView {
-    @discardableResult @nonobjc public func addSubview<A: UIView>(_ a: A, constraints: (LayoutProxy<A>) -> Void) -> Constraints {
+    @discardableResult @nonobjc public func addSubview(_ a: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
         addSubview(a)
         return Constraints(for: a, constraints)
     }
 
-    @discardableResult @nonobjc public func addSubview<A: UIView, B: UIView>(_ a: A, _ b: B, constraints: (LayoutProxy<A>, LayoutProxy<B>) -> Void) -> Constraints {
+    @discardableResult @nonobjc public func addSubview(_ a: UIView, _ b: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
         [a, b].forEach { addSubview($0) }
         return Constraints(for: a, b, constraints)
     }
 
-    @discardableResult @nonobjc public func addSubview<A: UIView, B: UIView, C: UIView>(_ a: A, _ b: B, _ c: C, constraints: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> Void) -> Constraints {
+    @discardableResult @nonobjc public func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
         [a, b, c].forEach { addSubview($0) }
         return Constraints(for: a, b, c, constraints)
     }
 
-    @discardableResult @nonobjc public func addSubview<A: UIView, B: UIView, C: UIView, D: UIView>(_ a: A, _ b: B, _ c: C, _ d: D, constraints: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> Void) -> Constraints {
+    @discardableResult @nonobjc public func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
         [a, b, c, d].forEach { addSubview($0) }
         return Constraints(for: a, b, c, d, constraints)
     }
