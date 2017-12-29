@@ -115,9 +115,30 @@ extension Anchor where Type: AnchorTypeEdge {
         return _pin(to: container, attribute: attribute, inset: inset, relation: relation)
     }
 
-    private func _pin(to item2: LayoutItem, attribute attr2: NSLayoutAttribute, inset: CGFloat, relation: NSLayoutRelation) -> NSLayoutConstraint {
+    /// Pins the edge to the safe area of the view controller.
+    /// Falls back to layout guides on iOS 10.
+    @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        let item2: Any
+        var attr2 = self.attribute
+        if #available(iOS 11, tvOS 11, *) {
+            item2 = vc.view.safeAreaLayoutGuide
+        } else {
+            switch attr2 {
+            case .top:
+                item2 = vc.topLayoutGuide
+                attr2 = .bottom // pin self.top to topLayoutGuide.bottom
+            case .bottom:
+                item2 = vc.bottomLayoutGuide
+                attr2 = .top // pin self.bottom to bottomLayoutGuide.top
+            default: item2 = vc.view
+            }
+        }
+        return _pin(to: item2, attribute: attr2, inset: inset, relation: relation)
+    }
+
+    private func _pin(to item2: Any, attribute attr2: NSLayoutAttribute, inset: CGFloat, relation: NSLayoutRelation) -> NSLayoutConstraint {
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
-        return Constraints.constrain(self, Anchor<Type, Any>(item2, attr2), offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+        return Constraints.constrain(self, toItem: item2, attribute: attr2, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
     }
 }
 
@@ -149,23 +170,26 @@ public struct AnchorCollectionEdges {
 
     /// Pins the edges of the view to the edges of the superview so the the view
     /// fills the available space in a container.
-    @discardableResult
-    public func pinToSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func pinToSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return anchors.map { $0.pinToSuperview(inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
     /// Pins the edges of the view to the margins of the superview so the the view
     /// fills the available space in a container.
-    @discardableResult
-    public func pinToSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func pinToSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
     /// Pins the edges of the view to the edges of the given view so the the
     /// view fills the available space in a container.
-    @discardableResult
-    public func pin(to item2: LayoutItem, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func pin(to item2: LayoutItem, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
         return anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relation) }
+    }
+
+    /// Pins the edges to the safe area of the view controller.
+    /// Falls back to layout guides on iOS 10.
+    @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 }
 
@@ -218,7 +242,7 @@ public final class Constraints {
     }
 
     /// Creates and automatically installs a constraint.
-    public static func constrain(item item1: Any, attribute attr1: NSLayoutAttribute, relatedBy relation: NSLayoutRelation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
+    internal static func constrain(item item1: Any, attribute attr1: NSLayoutAttribute, relatedBy relation: NSLayoutRelation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
         precondition(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
         (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
         let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
@@ -227,8 +251,14 @@ public final class Constraints {
     }
 
     /// Creates and automatically installs a constraint between two anchors.
-    public static func constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+    internal static func constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
+    }
+
+    /// Creates and automatically installs a constraint between an anchor and
+    /// a given item.
+    internal static func constrain<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: Any?, attribute attr2: NSLayoutAttribute?, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier, constant: offset - lhs.offset)
     }
 
     private static var _stack = [Constraints]() // this is what enabled constraint auto-installing
