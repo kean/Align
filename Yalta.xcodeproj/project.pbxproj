@@ -19,8 +19,6 @@
 		0C8FD7831FB85F5600A20E3D /* AnchorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7811FB85F5600A20E3D /* AnchorTests.swift */; };
 		0C8FD7851FB8608E00A20E3D /* ConstraintsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7841FB8608E00A20E3D /* ConstraintsTests.swift */; };
 		0C8FD7861FB8608E00A20E3D /* ConstraintsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7841FB8608E00A20E3D /* ConstraintsTests.swift */; };
-		0C8FD7881FB8664F00A20E3D /* SpacerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7871FB8664F00A20E3D /* SpacerTests.swift */; };
-		0C8FD7891FB8664F00A20E3D /* SpacerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7871FB8664F00A20E3D /* SpacerTests.swift */; };
 		0C8FD78E1FB88B9B00A20E3D /* AnchorAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD78D1FB88B9B00A20E3D /* AnchorAlignmentTests.swift */; };
 		0C8FD78F1FB88B9B00A20E3D /* AnchorAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD78D1FB88B9B00A20E3D /* AnchorAlignmentTests.swift */; };
 		0C8FD7911FB88BC300A20E3D /* AnchorEdgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7901FB88BC300A20E3D /* AnchorEdgeTests.swift */; };
@@ -65,7 +63,6 @@
 		0C8FD77E1FB85EA500A20E3D /* Diff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diff.swift; sourceTree = "<group>"; };
 		0C8FD7811FB85F5600A20E3D /* AnchorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorTests.swift; sourceTree = "<group>"; };
 		0C8FD7841FB8608E00A20E3D /* ConstraintsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstraintsTests.swift; sourceTree = "<group>"; };
-		0C8FD7871FB8664F00A20E3D /* SpacerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacerTests.swift; sourceTree = "<group>"; };
 		0C8FD78D1FB88B9B00A20E3D /* AnchorAlignmentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorAlignmentTests.swift; sourceTree = "<group>"; };
 		0C8FD7901FB88BC300A20E3D /* AnchorEdgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorEdgeTests.swift; sourceTree = "<group>"; };
 		0C8FD7931FB88BED00A20E3D /* AnchorCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCenterTests.swift; sourceTree = "<group>"; };
@@ -136,7 +133,6 @@
 				0C8FD7991FB88CE100A20E3D /* AnchorCollectionCenterTests.swift */,
 				0C8FD79C1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift */,
 				0C8FD7841FB8608E00A20E3D /* ConstraintsTests.swift */,
-				0C8FD7871FB8664F00A20E3D /* SpacerTests.swift */,
 				0C8FD7771FB85E7A00A20E3D /* Extensions */,
 			);
 			path = Tests;
@@ -378,7 +374,6 @@
 				0C8FD78E1FB88B9B00A20E3D /* AnchorAlignmentTests.swift in Sources */,
 				0C8FD7911FB88BC300A20E3D /* AnchorEdgeTests.swift in Sources */,
 				0C8FD7821FB85F5600A20E3D /* AnchorTests.swift in Sources */,
-				0C8FD7881FB8664F00A20E3D /* SpacerTests.swift in Sources */,
 				0C8FD7851FB8608E00A20E3D /* ConstraintsTests.swift in Sources */,
 				0C8FD7971FB88C0600A20E3D /* AnchorDimensionTests.swift in Sources */,
 			);
@@ -397,7 +392,6 @@
 				0C8FD78F1FB88B9B00A20E3D /* AnchorAlignmentTests.swift in Sources */,
 				0C8FD7921FB88BC300A20E3D /* AnchorEdgeTests.swift in Sources */,
 				0C8FD7831FB85F5600A20E3D /* AnchorTests.swift in Sources */,
-				0C8FD7891FB8664F00A20E3D /* SpacerTests.swift in Sources */,
 				0C8FD7861FB8608E00A20E3D /* ConstraintsTests.swift in Sources */,
 				0C8FD7981FB88C0600A20E3D /* AnchorDimensionTests.swift in Sources */,
 			);

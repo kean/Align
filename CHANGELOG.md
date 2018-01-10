@@ -1,5 +1,9 @@
 [Changelog](https://github.com/kean/Yale/releases) for all versions
 
+## Yalta 0.5
+
+- Remove Stacks and Spacers
+- Remove Insets
 
 ## Yalta 0.4
 

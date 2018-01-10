@@ -12,7 +12,6 @@
     + [AnchorCollectionEdges](#anchorcollectionedges)
     + [AnchorCollectionCenter](#anchorcollectioncenter)
     + [AnchorCollectionSize](#anchorcollectionsize)
-- [Stacks and Spacers](#stacks-and-spacers)
 
 ## Anchors
 
@@ -218,19 +217,3 @@ Constraints(for: view, container) { view, container in
     view.size.match(container.size)
 }
 ```
-
-
-## Stacks and Spacers
-
-[`UIStackView`](https://developer.apple.com/documentation/uikit/uistackview) is king when it comes to aligning and distributing multiple views at the same time. Yalta doesn't try to compete with stacks - it complements them:
-
-```swift
-// Creating stack views with Yalta require much less boilerplate:
-let labels = Stack([title, subtitle], axis: .vertical)
-let stack = Stack([image, labels], spacing: 15, alignment: .top)
-
-// You also get a convenience of Spacers (including flexible ones):
-Stack(title, Spacer(minWidth: 16), subtitle) // alt syntax
-```
-
-> Check out [Let's Build UIStackView](https://kean.github.io/post/lets-build-uistackview) to learn how stacks work under the hood (it's constraints all the way down).
