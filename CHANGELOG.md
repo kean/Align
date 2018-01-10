@@ -2,7 +2,7 @@
 
 ## Yalta 0.5
 
-- Remove Stacks and Spacers
+- Remove Stacks and Spacers ([gist](https://gist.github.com/kean/e77bac3625124b1de559a241a72d1e09))
 - Remove Insets
 
 ## Yalta 0.4
