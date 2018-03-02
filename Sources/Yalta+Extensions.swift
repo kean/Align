@@ -4,7 +4,6 @@
 
 import UIKit
 
-
 // MARK: UIView + Constraints
 
 public extension UIView {
@@ -29,7 +28,6 @@ public extension UIView {
     }
 }
 
-
 // MARK: Constraints + Arity
 
 extension Constraints {
@@ -49,7 +47,6 @@ extension Constraints {
         self.init { closure(a.al, b.al, c.al, d.al) }
     }
 }
-
 
 // MARK: Operators
 

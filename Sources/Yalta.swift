@@ -4,7 +4,6 @@
 
 import UIKit
 
-
 public protocol LayoutItem { // `UIView`, `UILayoutGuide`
     var superview: UIView? { get }
 }
@@ -57,7 +56,6 @@ extension LayoutProxy where Base: UIView {
     public var safeArea: LayoutProxy<UILayoutGuide> { return base.safeAreaLayoutGuide.al }
 }
 
-
 // MARK: Anchors
 
 public class AnchorAxisHorizontal {} // phantom types
@@ -71,7 +69,7 @@ public class AnchorTypeBaseline: AnchorTypeAlignment {}
 /// Includes `center`, `edge` and `baselines` anchors.
 public protocol AnchorTypeAlignment {}
 
-/// A type that represents one of the view's layout attributes (e.g. `left`,
+/// An anchor represents one of the view's layout attributes (e.g. `left`,
 /// `centerX`, `width`, etc). Use the anchor’s methods to construct constraints.
 public struct Anchor<Type, Axis> { // type and axis are phantom types
     internal let item: LayoutItem
@@ -79,9 +77,7 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
     internal let offset: CGFloat
 
     init(_ item: LayoutItem, _ attribute: NSLayoutAttribute, _ offset: CGFloat = 0) {
-        self.item = item
-        self.attribute = attribute
-        self.offset = offset
+        self.item = item; self.attribute = attribute; self.offset = offset
     }
 }
 
@@ -115,28 +111,31 @@ extension Anchor where Type: AnchorTypeEdge {
         return _pin(to: container, attribute: attribute, inset: inset, relation: relation)
     }
 
-    /// Pins the edge to the safe area of the view controller.
-    /// Falls back to layout guides on iOS 10.
+    /// Pins the edge to the safe area of the view controller. Falls back to
+    /// layout guides (`.topLayoutGuide` and `.bottomLayoutGuide` on iOS 10.
     @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        let item2: Any
-        var attr2 = self.attribute
+        let item2: Any, attr2: NSLayoutAttribute
         if #available(iOS 11, tvOS 11, *) {
-            item2 = vc.view.safeAreaLayoutGuide
+            // Pin to `safeAreaLayoutGuide` on iOS 11
+            (item2, attr2) = (vc.view.safeAreaLayoutGuide, self.attribute)
         } else {
-            switch attr2 {
-            case .top:
-                item2 = vc.topLayoutGuide
-                attr2 = .bottom // pin self.top to topLayoutGuide.bottom
-            case .bottom:
-                item2 = vc.bottomLayoutGuide
-                attr2 = .top // pin self.bottom to bottomLayoutGuide.top
-            default: item2 = vc.view
+            switch self.attribute {
+            // Fall back to .topLayoutGuide and pin to it's .bottom.
+            case .top: (item2, attr2) = (vc.topLayoutGuide, .bottom)
+            // Fall back to .bottomLayoutGuide and pin to it's .top.
+            case .bottom: (item2, attr2) = (vc.bottomLayoutGuide, .top)
+            // There are no layout guides for .left and .right, so just pin
+            // to the superview instead.
+            default: (item2, attr2) = (vc.view, self.attribute)
             }
         }
         return _pin(to: item2, attribute: attr2, inset: inset, relation: relation)
     }
 
+    // Pin the anchor to another layout item.
     private func _pin(to item2: Any, attribute attr2: NSLayoutAttribute, inset: CGFloat, relation: NSLayoutRelation) -> NSLayoutConstraint {
+        // Invert attribute and relation in certain cases. The `pin` semantics
+        // are inspired by https://github.com/PureLayout/PureLayout
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
         return Constraints.constrain(self, toItem: item2, attribute: attr2, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
     }
@@ -159,7 +158,6 @@ extension Anchor where Type: AnchorTypeDimension {
         return Constraints.constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 }
-
 
 // MARK: Anchor Collections
 
@@ -223,7 +221,6 @@ public struct AnchorCollectionSize {
                 height.match(anchors.height, offset: -insets.height, multiplier: multiplier, relation: relation)]
     }
 }
-
 
 // MARK: Constraints
 

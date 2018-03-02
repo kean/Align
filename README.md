@@ -2,7 +2,7 @@
 
 Yalta is an intuitive and powerful Auto Layout library. Designed to be simple and safe, Yalta is perfect for both new and seasoned developers.
 
-The entire library fits in just two files (core + extensions) with less than 300 lines of code which you can just drag-n-drop into your app.
+The entire library fits in just two files (core + extensions) with less than 250 lines of code which you can just drag-n-drop into your app.
 
 - [Quick Overview](#quick-overview)
 - [Full Guide](https://github.com/kean/Yalta/blob/master/Docs/YaltaGuide.md)
@@ -17,20 +17,20 @@ In Yalta, you start by selecting an **anchor** or a **collection of anchors** of
 
 > Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis** and **baselines**.
 
-The best way to access anchors is by using a special `addSubview(_:constraints:)` method (supports up to 4 views):
+The best way to access anchors is by using a special `addSubview(_:constraints:)` method (supports up to 4 views). Here are some examples of what you can do using anchors:
 
 ```swift
 view.addSubview(subview) {
-    $0.edges.pinToSuperview() // pins the edges to fill the superview
-    $0.edges.pinToSuperview(insets: Insets(10)) // with insets
-    $0.edges.pinToSuperviewMargins() // or margins
+    $0.edges.pinToSuperview() // Pins the edges to fill the superview
+    $0.edges.pinToSuperview(insets: Insets(10)) // With insets
+    $0.edges.pinToSuperviewMargins() // Or margins
 
-    $0.edges(.left, .right).pinToSuperview() // fill along horizontal axis
-    $0.centerY.alignWithSuperview() // center along vertical axis
+    $0.edges(.left, .right).pinToSuperview() // Fill along horizontal axis
+    $0.centerY.alignWithSuperview() // Center along vertical axis
 }
 ```
 
-> With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents programmer errors (e.g. trying to add constraints to views not in view hierarchy).
+> With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents some programmer errors (e.g. trying to add constraints to views not in view hierarchy).
 
 
 Each anchor and collection of anchors have methods which make sense for that particular kind of anchor:
@@ -47,17 +47,12 @@ view.addSubview(title, subtitle) { title, subtitle in
     // You can change a priority of constraints inside a group:
     subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
 }
-
-title.al.top.pinToSuperview() // all anchors are also accessible via `.al` proxy
 ```
 
-In addition to `addSubview(_:constraints:)` method there is a `Constraints` type which allows you to operate on an existing view hierarchy:
+All anchors are also accessible via `.al` proxy:
 
 ```swift
-Constraints(for: a, b) { a, b in
-    a.center.align(with: b.center)
-    a.size.match(b.size)
-}
+title.al.top.pinToSuperview()
 ```
 
 > Yalta has full test coverage. If you'd like to learn about which constraints (`NSLayoutConstraint`) Yalta creates each time you call one of its methods, test cases are a great place to start.
