@@ -1,5 +1,11 @@
 [Changelog](https://github.com/kean/Yale/releases) for all versions
 
+## Yalta 0.5.1
+
+- Improve documentation
+- Improve some minor implementation details
+- Update project to Xcode 9.3 recommended settings
+
 ## Yalta 0.5
 
 - Remove Stacks and Spacers ([gist](https://gist.github.com/kean/e77bac3625124b1de559a241a72d1e09))
