@@ -5,7 +5,6 @@
 import XCTest
 import Yalta
 
-
 class AnchorCenterTests: XCTestCase {
     let container = UIView()
     let view = UIView()
@@ -26,6 +25,10 @@ class AnchorCenterTests: XCTestCase {
         XCTAssertEqualConstraints(
             view.al.centerY.alignWithSuperview(),
             NSLayoutConstraint(item: view, attribute: .centerY, toItem: container, attribute: .centerY)
+        )
+        XCTAssertEqualConstraints(
+            view.al.centerY.alignWithSuperview(offset: -10),
+            NSLayoutConstraint(item: view, attribute: .centerY, toItem: container, attribute: .centerY, constant: -10)
         )
     }
 }

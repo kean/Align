@@ -153,8 +153,8 @@ extension Anchor where Type: AnchorType.Edge {
 
 extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
-    @discardableResult public func alignWithSuperview(relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return align(with: Anchor<Type, Axis>(self.item.superview!, self.attribute), relation: relation)
+    @discardableResult public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return align(with: Anchor<Type, Axis>(self.item.superview!, self.attribute) + offset, relation: relation)
     }
 }
 
@@ -226,9 +226,9 @@ public struct AnchorCollectionSize {
     }
 
     /// Makes the size of the item equal to the size of the other item.
-    @discardableResult public func match(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return [width.match(anchors.width - insets.width, relation: relation),
-                height.match(anchors.height - insets.height, relation: relation)]
+    @discardableResult public func match(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return [width.match(anchors.width * multiplier - insets.width, relation: relation),
+                height.match(anchors.height * multiplier - insets.height, relation: relation)]
     }
 }
 

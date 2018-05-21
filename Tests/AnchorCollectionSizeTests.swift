@@ -42,7 +42,7 @@ class AnchorCollectionSizeTests: XCTestCase {
 
     func testMatchSizeMultiplier() {
         XCTAssertEqualConstraints(
-            view.al.size.match(container.al.size * 2),
+            view.al.size.match(container.al.size, multiplier: 2),
             [NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 2),
              NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .height, multiplier: 2)]
         )

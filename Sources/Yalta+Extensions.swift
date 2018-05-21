@@ -62,16 +62,18 @@ public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> A
     return anchor.multiplied(by: multiplier)
 }
 
-// MARK: Operators (Collections)
+// MARK: Deprecated
 
-public func + (collection: AnchorCollectionSize, insets: CGSize) -> AnchorCollectionSize {
-    return AnchorCollectionSize(width: collection.width + insets.width, height: collection.height + insets.height)
+extension Anchor where Type: AnchorType.Alignment {
+    @available(*, deprecated, message: "Please use operators instead, e.g. `view.top.align(with: view.bottom * 2 + 10)`.")
+    @discardableResult public func align<Type: AnchorType.Alignment>(with anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return Constraints.constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+    }
 }
 
-public func - (collection: AnchorCollectionSize, insets: CGSize) -> AnchorCollectionSize {
-    return AnchorCollectionSize(width: collection.width - insets.width, height: collection.height - insets.height)
-}
-
-public func * (collection: AnchorCollectionSize, multiplier: CGFloat) -> AnchorCollectionSize {
-    return AnchorCollectionSize(width: collection.width * multiplier, height: collection.height * multiplier)
+extension Anchor where Type: AnchorType.Dimension {
+    @available(*, deprecated, message: "Please use operators instead, e.g. `view.width.match(view.height * 2 + 10)`.")
+    @discardableResult public func match<Axis>(_ anchor: Anchor<AnchorType.Dimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return Constraints.constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+    }
 }
