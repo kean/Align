@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2017-2018 Alexander Grebenyuk (github.com/kean).
 
 import UIKit
 
@@ -25,21 +25,21 @@ extension LayoutProxy where Base: LayoutItem {
 
     // MARK: Anchors
 
-    public var top: Anchor<AnchorTypeEdge, AnchorAxisVertical> { return Anchor(base, .top) }
-    public var bottom: Anchor<AnchorTypeEdge, AnchorAxisVertical> { return Anchor(base, .bottom) }
-    public var left: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(base, .left) }
-    public var right: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(base, .right) }
-    public var leading: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(base, .leading) }
-    public var trailing: Anchor<AnchorTypeEdge, AnchorAxisHorizontal> { return Anchor(base, .trailing) }
+    public var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { return Anchor(base, .top) }
+    public var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { return Anchor(base, .bottom) }
+    public var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { return Anchor(base, .left) }
+    public var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { return Anchor(base, .right) }
+    public var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { return Anchor(base, .leading) }
+    public var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { return Anchor(base, .trailing) }
 
-    public var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal> { return Anchor(base, .centerX) }
-    public var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical> { return Anchor(base, .centerY) }
+    public var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { return Anchor(base, .centerX) }
+    public var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { return Anchor(base, .centerY) }
 
-    public var firstBaseline: Anchor<AnchorTypeBaseline, AnchorAxisVertical> { return Anchor(base, .firstBaseline) }
-    public var lastBaseline: Anchor<AnchorTypeBaseline, AnchorAxisVertical> { return Anchor(base, .lastBaseline) }
+    public var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { return Anchor(base, .firstBaseline) }
+    public var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { return Anchor(base, .lastBaseline) }
 
-    public var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal> { return Anchor(base, .width) }
-    public var height: Anchor<AnchorTypeDimension, AnchorAxisVertical> { return Anchor(base, .height) }
+    public var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { return Anchor(base, .width) }
+    public var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { return Anchor(base, .height) }
 
     // MARK: Anchor Collections
 
@@ -58,16 +58,20 @@ extension LayoutProxy where Base: UIView {
 
 // MARK: Anchors
 
-public class AnchorAxisHorizontal {} // phantom types
-public class AnchorAxisVertical {}
+// phantom types
+public enum AnchorAxis {
+    public class Horizontal {}
+    public class Vertical {}
+}
 
-public class AnchorTypeDimension {}
-public class AnchorTypeCenter: AnchorTypeAlignment {}
-public class AnchorTypeEdge: AnchorTypeAlignment {}
-public class AnchorTypeBaseline: AnchorTypeAlignment {}
-
-/// Includes `center`, `edge` and `baselines` anchors.
-public protocol AnchorTypeAlignment {}
+public enum AnchorType {
+    public class Dimension {}
+    /// Includes `center`, `edge` and `baselines` anchors.
+    public class Alignment {}
+    public class Center: Alignment {}
+    public class Edge: Alignment {}
+    public class Baseline: Alignment {}
+}
 
 /// An anchor represents one of the view's layout attributes (e.g. `left`,
 /// `centerX`, `width`, etc). Use the anchor’s methods to construct constraints.
@@ -75,27 +79,33 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
     internal let item: LayoutItem
     internal let attribute: NSLayoutAttribute
     internal let offset: CGFloat
+    internal let multiplier: CGFloat
 
-    init(_ item: LayoutItem, _ attribute: NSLayoutAttribute, _ offset: CGFloat = 0) {
-        self.item = item; self.attribute = attribute; self.offset = offset
+    init(_ item: LayoutItem, _ attribute: NSLayoutAttribute, offset: CGFloat = 0, multiplier: CGFloat = 1) {
+        self.item = item; self.attribute = attribute; self.offset = offset; self.multiplier = multiplier
     }
 }
 
 extension Anchor {
     /// Returns a new anchor offset by a given amount.
-    public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
-        return Anchor<Type, Axis>(item, attribute, self.offset + offset)
+    internal func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
+        return Anchor<Type, Axis>(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
+    }
+
+    /// Returns a new anchor with a given multiplier.
+    internal func multiplied(by multiplier: CGFloat) -> Anchor<Type, Axis> {
+        return Anchor<Type, Axis>(item, attribute, offset: self.offset * multiplier, multiplier: self.multiplier * multiplier)
     }
 }
 
-extension Anchor where Type: AnchorTypeAlignment {
+extension Anchor where Type: AnchorType.Alignment {
     /// Aligns two anchors.
-    @discardableResult public func align<Type: AnchorTypeAlignment>(with anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return Constraints.constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+    @discardableResult public func align<Type: AnchorType.Alignment>(with anchor: Anchor<Type, Axis>, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return Constraints.constrain(self, anchor, relation: relation)
     }
 }
 
-extension Anchor where Type: AnchorTypeEdge {
+extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the same edge of the superview.
     @discardableResult public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return _pin(to: item.superview!, attribute: attribute, inset: inset, relation: relation)
@@ -141,21 +151,21 @@ extension Anchor where Type: AnchorTypeEdge {
     }
 }
 
-extension Anchor where Type: AnchorTypeCenter {
+extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
-    @discardableResult public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return align(with: Anchor<Type, Axis>(self.item.superview!, self.attribute), offset: offset, relation: relation)
+    @discardableResult public func alignWithSuperview(relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return align(with: Anchor<Type, Axis>(self.item.superview!, self.attribute), relation: relation)
     }
 }
 
-extension Anchor where Type: AnchorTypeDimension {
+extension Anchor where Type: AnchorType.Dimension {
     /// Sets the dimension to a specific size.
     @discardableResult public func set(_ constant: CGFloat, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
         return Constraints.constrain(item: item, attribute: attribute, relatedBy: relation, constant: constant)
     }
 
-    @discardableResult public func match<Axis>(_ anchor: Anchor<AnchorTypeDimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return Constraints.constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
+    @discardableResult public func match<Axis>(_ anchor: Anchor<AnchorType.Dimension, Axis>, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
+        return Constraints.constrain(self, anchor, relation: relation)
     }
 }
 
@@ -164,7 +174,7 @@ extension Anchor where Type: AnchorTypeDimension {
 public struct AnchorCollectionEdges {
     internal let item: LayoutItem
     internal let edges: [LayoutEdge]
-    private var anchors: [Anchor<AnchorTypeEdge, Any>] { return edges.map { Anchor(item, $0.attribute) } }
+    private var anchors: [Anchor<AnchorType.Edge, Any>] { return edges.map { Anchor(item, $0.attribute) } }
 
     /// Pins the edges of the view to the edges of the superview so the the view
     /// fills the available space in a container.
@@ -192,8 +202,8 @@ public struct AnchorCollectionEdges {
 }
 
 public struct AnchorCollectionCenter {
-    internal let x: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
-    internal let y: Anchor<AnchorTypeCenter, AnchorAxisVertical>
+    internal let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
+    internal let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
 
     /// Centers the view in the superview.
     @discardableResult public func alignWithSuperview() -> [NSLayoutConstraint] {
@@ -207,8 +217,8 @@ public struct AnchorCollectionCenter {
 }
 
 public struct AnchorCollectionSize {
-    internal let width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal>
-    internal let height: Anchor<AnchorTypeDimension, AnchorAxisVertical>
+    internal let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
+    internal let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
 
     /// Set the size of item.
     @discardableResult public func set(_ size: CGSize, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
@@ -216,9 +226,9 @@ public struct AnchorCollectionSize {
     }
 
     /// Makes the size of the item equal to the size of the other item.
-    @discardableResult public func match(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
-        return [width.match(anchors.width, offset: -insets.width, multiplier: multiplier, relation: relation),
-                height.match(anchors.height, offset: -insets.height, multiplier: multiplier, relation: relation)]
+    @discardableResult public func match(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, relation: NSLayoutRelation = .equal) -> [NSLayoutConstraint] {
+        return [width.match(anchors.width - insets.width, relation: relation),
+                height.match(anchors.height - insets.height, relation: relation)]
     }
 }
 
@@ -249,13 +259,13 @@ public final class Constraints {
 
     /// Creates and automatically installs a constraint between two anchors.
     internal static func constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: multiplier, constant: offset - lhs.offset + rhs.offset)
+        return constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: (multiplier / lhs.multiplier) * rhs.multiplier, constant: offset - lhs.offset + rhs.offset)
     }
 
     /// Creates and automatically installs a constraint between an anchor and
     /// a given item.
     internal static func constrain<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: Any?, attribute attr2: NSLayoutAttribute?, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutRelation = .equal) -> NSLayoutConstraint {
-        return constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier, constant: offset - lhs.offset)
+        return constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: offset - lhs.offset)
     }
 
     private static var _stack = [Constraints]() // this is what enabled constraint auto-installing

@@ -1,10 +1,9 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2017-2018 Alexander Grebenyuk (github.com/kean).
 
 import XCTest
 import Yalta
-
 
 /// Everything that applies for both edges and center
 class AnchorAlignmentTests: XCTestCase {
@@ -36,7 +35,7 @@ class AnchorAlignmentTests: XCTestCase {
         }
 
         test("align top with offset, relation, multiplier") {
-            let c = view.al.top.align(with: container.al.top, offset: 10, multiplier: 2, relation: .greaterThanOrEqual)
+            let c = view.al.top.align(with: container.al.top * 2 + 10, relation: .greaterThanOrEqual)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(
                 item: view,
                 attribute: .top,

@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2017-2018 Alexander Grebenyuk (github.com/kean).
 
 import XCTest
 import Yalta
@@ -39,6 +39,12 @@ class AnchorCollectionSizeTests: XCTestCase {
              NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .height, constant: -20)]
         )
     }
+
+    func testMatchSizeMultiplier() {
+        XCTAssertEqualConstraints(
+            view.al.size.match(container.al.size * 2),
+            [NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 2),
+             NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .height, multiplier: 2)]
+        )
+    }
 }
-
-

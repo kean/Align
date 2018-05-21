@@ -44,6 +44,7 @@ view.addSubview(title, subtitle) { title, subtitle in
 
     title.width.set(100)
     subtitle.width.match(title.width + 20)
+    subtitle.height.match(title.height * 2)
 
     // You can change a priority of constraints inside a group:
     subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
@@ -65,7 +66,7 @@ Yalta is for someone who:
 
 - Prefers fluent APIs that follow [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)
 - [Doesn't want](http://chris.eidhof.nl/post/micro-autolayout-dsl/) to depend on big, complex libraries
-- Avoids operator overloads and prefers [fast compile times](https://github.com/robb/Cartography/issues/215)
+- Doesn't overuse operator overloads, [fast compile times](https://github.com/robb/Cartography/issues/215)
 - Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wished it had simpler, more fluent API which didn't require manually activating constraints
 
 > [Yalta](https://en.wikipedia.org/wiki/Yalta) is a beautiful port city on the Black Sea, and a great name for *yet another layout tool* with *anchors*.

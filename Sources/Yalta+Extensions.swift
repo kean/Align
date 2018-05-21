@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2017-2018 Alexander Grebenyuk (github.com/kean).
 
 import UIKit
 
@@ -48,7 +48,7 @@ extension Constraints {
     }
 }
 
-// MARK: Operators
+// MARK: Operators (Anchors)
 
 public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     return anchor.offsetting(by: offset)
@@ -56,4 +56,22 @@ public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Ancho
 
 public func - <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     return anchor.offsetting(by: -offset)
+}
+
+public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
+    return anchor.multiplied(by: multiplier)
+}
+
+// MARK: Operators (Collections)
+
+public func + (collection: AnchorCollectionSize, insets: CGSize) -> AnchorCollectionSize {
+    return AnchorCollectionSize(width: collection.width + insets.width, height: collection.height + insets.height)
+}
+
+public func - (collection: AnchorCollectionSize, insets: CGSize) -> AnchorCollectionSize {
+    return AnchorCollectionSize(width: collection.width - insets.width, height: collection.height - insets.height)
+}
+
+public func * (collection: AnchorCollectionSize, multiplier: CGFloat) -> AnchorCollectionSize {
+    return AnchorCollectionSize(width: collection.width * multiplier, height: collection.height * multiplier)
 }
