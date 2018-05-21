@@ -15,47 +15,47 @@
 
 ## Anchors
 
-Yalta has a simple and consistent model for creating constraints. You start by selecting an **anchor** or a **collection of anchors** of a view (or a layout guide). Then use anchor's methods to create constraints.
+Yalta has a simple and consistent model for creating constraints. Start by selecting an **anchor** or a **collection of anchors** of a view (or of a layout guide). Then use anchor's methods to create constraints.
 
-An anchor (`Anchor<Type, Axis>`) corresponds to a layout attribute (`NSLayoutConstraint.Attribute`) of a view (`UIView`) or layout guide (`UILayoutGuide`).
+An anchor (`Anchor<Type, Axis>`) corresponds to a layout attribute (`NSLayoutConstraint.Attribute`) of a view (`UIView`) or of a layout guide (`UILayoutGuide`).
 
 ### Type of Anchors
 
 There are four types of anchors:
 
-**AnchorTypeEdge:**
+**AnchorType.Edge:**
 
 ```swift
-var top: Anchor<AnchorTypeEdge, AnchorAxisVertical>
-var bottom: Anchor<AnchorTypeEdge, AnchorAxisVertical>
-var left: Anchor<AnchorTypeEdge, AnchorAxisHorizontal>
-var right: Anchor<AnchorTypeEdge, AnchorAxisHorizontal>
-var leading: Anchor<AnchorTypeEdge, AnchorAxisHorizontal>
-var trailing: Anchor<AnchorTypeEdge, AnchorAxisHorizontal>
+var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical>
+var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical>
+var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal>
+var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal>
+var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal>
+var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal>
 ```
 
-**AnchorTypeCenter:**
+**AnchorType.Center:**
 
 ```swift
-var centerX: Anchor<AnchorTypeCenter, AnchorAxisHorizontal>
-var centerY: Anchor<AnchorTypeCenter, AnchorAxisVertical>
+var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
+var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical>
 ```
 
-**AnchorTypeBaseline:**
+**AnchorType.Baseline:**
 
 ```swift
-var firstBaseline: Anchor<AnchorTypeBaseline, AnchorAxisVertical>
-var lastBaseline: Anchor<AnchorTypeBaseline, AnchorAxisVertical>
+var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical>
+var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical>
 ```
 
-**AnchorTypeDimension:**
+**AnchorType.Dimension:**
 
 ```swift
-var width: Anchor<AnchorTypeDimension, AnchorAxisHorizontal>
-var height: Anchor<AnchorTypeDimension, AnchorAxisVertical>
+var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
+var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
 ```
 
-Yalta doesn't provide anchor properties for the layout margins attributes. Instead use `margins` or `safeArea` layout guides (`UILayoutGuide`) that represents these margins:
+To get access to margins and safe area use `margins` or `safeArea` layout guides (`UILayoutGuide`) respectively:
 
 ```swift
 let view = UIView()
@@ -63,7 +63,7 @@ let view = UIView()
 view.al.margins.top
 view.al.safeArea.top
 
-// alternative syntax:
+// Alternative syntax:
 view.layoutMarginsGuide.al.top
 view.safeAreaLayoutGuide.al.top
 ```
@@ -82,7 +82,7 @@ view.addSubview(stack) {
 
 With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents programmer errors (e.g. trying to add constraints to views not in view hierarchy). 
 
-You can asso access anchors via `.al` proxy:
+As an alternativey you can asso access anchors via `.al` proxy, but it's better to stick to a single approach:
 
 ```swift
 stack.al.edges.pinToSuperview()
@@ -92,21 +92,20 @@ In addition to `addSubview(_:constraints:)` method there is a `Constraints`
 type which allows you to operate on an existing view hierarchy:
 
 ```swift
-Constraints(for: view) { view in
-    view.top
-    view.centerX
-    view.width
+Constraints(for: view) { $0 in
+    $0.top.pinToSuperview()
+    $0.centerX.alignWithSuperview()
 }
 ```
 
 
 ### Creating Constraints Using Anchors
 
-Anchors can be used for creating layout constraints (`NSLayoutConstraint`) using a fluent API. Different types of anchors have different APIs designed specifically for the type.
+Anchors can be used for creating layout constraints (`NSLayoutConstraint`) using a fluent API. Different types of anchors have different APIs designed specifically for this type.
 
 #### Alignment Anchors (Edge, Center, Baseline)
 
-Alignment anchors have a subtype `AnchorTypeAlignment` and include `AnchorTypeEdge`, `AnchorTypeCenter`, `AnchorTypeBaseline`.
+Alignment anchors have a subtype `AnchorTypeAlignment` and include `AnchorType.Edge`, `AnchorType.Center`, `AnchorType.Baseline`.
 
 Alignment anchor can be `aligned` with another alignment anchor of any type, but only as long as they have the same axis. Invalid combinations of anchors are not going to compile.
 
@@ -121,12 +120,22 @@ Constraints(for: title, subtitle) { title, subtitle in
     title.top.align(with: subtitle.left)
     title.top.align(with: subtitle.centerX)
     title.left.align(with: subtitle.firstBaseline)
+}
+```
 
-    // With offset and multiplier:
+Yalta also provides convenient way to set `constants` and `multipliers`:
+
+```swift
+Constraints(for: title, subtitle) { title, subtitle in
     title.top.align(with: subtitle.top * 2 + 10)
     title.top.align(with: subtitle.top + 10) * 2) // This will also do the right thing
+}
+```
 
-    // With relation:
+You can also set relations:
+
+```swift
+Constraints(for: title, subtitle) { title, subtitle in
     title.top.align(with: subtitle.top * 2 + 10, relation: .greaterThanOrEqual)
 }
 ```
@@ -173,7 +182,7 @@ title.al.width.match(title.al.height)
 title.al.width.match(title.al.height * 2) // aspect ratio
 ```
 
-### Anchors Collections
+### Anchor Collections
 
 There are three types anchors collections which allow you to manipulate multiple anchors at the same time.
 
