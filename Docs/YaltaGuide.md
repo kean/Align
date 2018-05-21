@@ -122,19 +122,13 @@ Constraints(for: title, subtitle) { title, subtitle in
     title.top.align(with: subtitle.centerX)
     title.left.align(with: subtitle.firstBaseline)
 
-    // Full signature:
-    title.top.align(with: subtitle.top, offset: 10, multiplier: 2, relation: .greaterThanOrEqual)
+    // With offset and multiplier:
+    title.top.align(with: subtitle.top * 2 + 10)
+    title.top.align(with: subtitle.top + 10) * 2) // This will also do the right thing
+
+    // With relation:
+    title.top.align(with: subtitle.top * 2 + 10, relation: .greaterThanOrEqual)
 }
-```
-
-An `offsetting(by:)` method allows you to create a new (zero-overhead) anchor with a given `offset` from the current anchor.
-
-```swift
-let anchor = title.al.bottom.offsetting(by: 10)
-subtitle.al.top.align(with: anchor)
-
-// There is also a convenience operator available:
-subtitle.al.top.align(with: title.al.bottom + 10)
 ```
 
 #### Edge Anchors Only
@@ -176,7 +170,7 @@ And the second one allows to `match` the size of one dimension with another:
 
 ```swift
 title.al.width.match(title.al.height)
-title.al.width.match(title.al.height, multiplier: 2.0) // aspect ratio
+title.al.width.match(title.al.height * 2) // aspect ratio
 ```
 
 ### Anchors Collections

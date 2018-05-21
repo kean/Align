@@ -1,5 +1,14 @@
 [Changelog](https://github.com/kean/Yale/releases) for all versions
 
+## Yalta 0.6
+
+A minor update to make Yalta a bit more ergonomic.
+
+- Add iOS 9 and tvOS 9 compatibility (used to require iOS 10 and tvOS 10).
+- Add operators for setting multipliers: `subtitle.height.match(title.height * 2)`.
+- Deprecated `align(with:)` and `match(:)` method that had `offset` and `multiplier` parameters. Operators are the preferred way to set those (more compact and more obvious what they mean).
+- Move phantom types (e.g. `AnchorAxisVertical`) into namespaces to reduce clutter in a global namespace.
+
 ## Yalta 0.5.1
 
 - Improve documentation
