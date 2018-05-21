@@ -2,6 +2,8 @@
 
 Yalta is an intuitive and powerful Auto Layout library. Designed to be simple and safe, Yalta is perfect for both new and seasoned developers.
 
+> This project is in use in production, but if you're working in a team I would personally recommend looking at more established tools first - there is a better chance that new developers are going to be familiar with them and there is no reason to learn yet another syntax.
+
 The entire library fits in just two files (core + extensions) with less than 250 lines of code which you can just drag-n-drop into your app.
 
 - [Quick Overview](#quick-overview)
@@ -9,7 +11,6 @@ The entire library fits in just two files (core + extensions) with less than 250
 - [Installation Guide](https://github.com/kean/Yalta/blob/master/Docs/InstallationGuide.md)
 
 > Yalta strives for clarity and simplicity by following [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. Instead, Yalta has a fluent API that makes use sites form grammatical English phrases - that's what makes Swift code really stand out.
-
 
 ## Anchors
 
