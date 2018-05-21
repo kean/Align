@@ -14,39 +14,49 @@ The entire library fits in just two files (core + extensions) with less than 250
 
 ## Anchors
 
-In Yalta, you start by selecting an **anchor** or a **collection of anchors** of a view (or a layout guide). Then use anchor's methods to create constraints.
+Start by selecting an **anchor** or a **collection of anchors** of a view (or of a layout guide). Then use anchor's methods to create constraints.
 
-> Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis** and **baselines**.
+> Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**.
 
 The best way to access anchors is by using a special `addSubview(_:constraints:)` method (supports up to 4 views). Here are some examples of what you can do using anchors:
 
 ```swift
 view.addSubview(subview) {
-    $0.edges.pinToSuperview() // Pins the edges to fill the superview
-    $0.edges.pinToSuperview(insets: Insets(10)) // With insets
-    $0.edges.pinToSuperviewMargins() // Or margins
+    $0.edges.pinToSuperview(insets: Insets(10)) // Pin to superview edges
+}
+```
 
+```swift
+view.addSubview(subview) {
+    $0.edges.pinToSuperviewMargins() // Or margins
+}
+```
+
+```swift
+view.addSubview(subview) {
     $0.edges(.left, .right).pinToSuperview() // Fill along horizontal axis
     $0.centerY.alignWithSuperview() // Center along vertical axis
 }
 ```
 
-> With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents some programmer errors (e.g. trying to add constraints to views not in view hierarchy).
+> With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents some programmer errors (e.g. trying to add constraints to views which are not in a view hierarchy).
 
 
-Each anchor and collection of anchors have methods which make sense for that particular kind of anchor:
+Each anchor and collection of anchors have methods tailored for that particular kind of anchor:
 
 ```swift
 view.addSubview(title, subtitle) { title, subtitle in
+    // Align one anchor with another
     subtitle.top.align(with: title.bottom + 10)
 
+    // Align center with a superview
     title.centerX.alignWithSuperview()
 
+    // Manipulate dimenstions
     title.width.set(100)
-    subtitle.width.match(title.width + 20)
-    subtitle.height.match(title.height * 2)
+    subtitle.width.match(title.width * 2)
 
-    // You can change a priority of constraints inside a group:
+    // Change a priority of constraints inside a group:
     subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
 }
 ```
@@ -69,4 +79,4 @@ Yalta is for someone who:
 - Doesn't overuse operator overloads, [fast compile times](https://github.com/robb/Cartography/issues/215)
 - Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wished it had simpler, more fluent API which didn't require manually activating constraints
 
-> [Yalta](https://en.wikipedia.org/wiki/Yalta) is a beautiful port city on the Black Sea, and a great name for *yet another layout tool* with *anchors*.
+> [Yalta](https://en.wikipedia.org/wiki/Yalta) is a beautiful port city on the Black Sea and a great name for *yet another layout tool* with *anchors*.
