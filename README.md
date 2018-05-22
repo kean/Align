@@ -4,7 +4,7 @@ Yalta is an intuitive and powerful Auto Layout library. Designed to be simple an
 
 > This project is in use in production, but if you're working in a team I would personally recommend looking at more established tools first - there is a better chance that new developers are going to be familiar with them and there is no reason to learn yet another syntax.
 
-The entire library fits in just two files (core + extensions) with less than 250 lines of code which you can just drag-n-drop into your app.
+The entire library fits in a single file with less than 300 lines of code which you can just drag-n-drop into your app.
 
 - [Quick Overview](#quick-overview)
 - [Full Guide](https://github.com/kean/Yalta/blob/master/Docs/YaltaGuide.md)
