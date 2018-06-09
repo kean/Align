@@ -1,8 +1,10 @@
 # ⛵️ Yalta
 
-Yalta is an intuitive and powerful Auto Layout library. Designed to be simple and safe, Yalta is perfect for both new and seasoned developers.
+An intuitive and powerful Auto Layout library.
 
-> This project is in use in production, but if you're working in a team I would personally recommend looking at more established tools first - there is a better chance that new developers are going to be familiar with them and there is no reason to learn yet another syntax.
+> **Warning:** This project is an experiment to see whether it's possible to use phantom types to build a safer and more semantic alternative to native layout anchors. If you're working in a team I would recommend looking at more established tools first.
+
+> **Warning:** This project is in maintanence mode.
 
 The entire library fits in a single file with less than 300 lines of code which you can just drag-n-drop into your app.
 
@@ -17,6 +19,31 @@ The entire library fits in a single file with less than 300 lines of code which 
 Start by selecting an **anchor** or a **collection of anchors** of a view (or of a layout guide). Then use anchor's methods to create constraints.
 
 > Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**.
+
+Each anchor and collection of anchors have methods tailored for that particular kind of anchor:
+
+```swift
+Constraints(for: title, subtitle) { title, subtitle in
+    // Align one anchor with another
+    subtitle.top.align(with: title.bottom + 10)
+
+    // Align center with a superview
+    title.centerX.alignWithSuperview()
+
+    // Manipulate dimenstions
+    title.width.set(100)
+    subtitle.width.match(title.width * 2)
+
+    // Change a priority of constraints inside a group:
+    subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
+}
+```
+
+All anchors can be also be accessed using `.al` proxy:
+
+```swift
+title.al.top.pinToSuperview()
+```
 
 The best way to access anchors is by using a special `addSubview(_:constraints:)` method (supports up to 4 views). Here are some examples of what you can do using anchors:
 
@@ -40,32 +67,6 @@ view.addSubview(subview) {
 ```
 
 > With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents some programmer errors (e.g. trying to add constraints to views which are not in a view hierarchy).
-
-
-Each anchor and collection of anchors have methods tailored for that particular kind of anchor:
-
-```swift
-view.addSubview(title, subtitle) { title, subtitle in
-    // Align one anchor with another
-    subtitle.top.align(with: title.bottom + 10)
-
-    // Align center with a superview
-    title.centerX.alignWithSuperview()
-
-    // Manipulate dimenstions
-    title.width.set(100)
-    subtitle.width.match(title.width * 2)
-
-    // Change a priority of constraints inside a group:
-    subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
-}
-```
-
-All anchors are also accessible via `.al` proxy:
-
-```swift
-title.al.top.pinToSuperview()
-```
 
 > Yalta has full test coverage. If you'd like to learn about which constraints (`NSLayoutConstraint`) Yalta creates each time you call one of its methods, test cases are a great place to start.
 
