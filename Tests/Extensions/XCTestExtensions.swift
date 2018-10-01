@@ -42,7 +42,7 @@ private func XCTAssertEqualConstraints<T: Equatable>(_ expected: T, _ received: 
 // MARK: Constraints
 
 extension NSLayoutConstraint {
-    @nonobjc convenience init(item item1: Any, attribute attr1: NSLayoutAttribute, relation: NSLayoutRelation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutAttribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: Float? = nil, id: String? = nil) {
+    @nonobjc convenience init(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: Float? = nil, id: String? = nil) {
         self.init(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
         if let priority = priority { self.priority = UILayoutPriority(priority) }
         if let id = id { self.identifier = id }
@@ -54,7 +54,7 @@ private struct Constraint: Equatable {
     let firstAttribute: String
     let secondItem: AnyObject?
     let secondAttribute: String
-    let relation: NSLayoutRelation.RawValue
+    let relation: NSLayoutConstraint.Relation.RawValue
     let multiplier: CGFloat
     let constant: CGFloat
     let priority: UILayoutPriority.RawValue
@@ -87,7 +87,7 @@ private struct Constraint: Equatable {
 
 // MARK: Helpers
 
-extension NSLayoutAttribute {
+extension NSLayoutConstraint.Attribute {
     var toString: String {
         switch self {
         case .width: return "width"

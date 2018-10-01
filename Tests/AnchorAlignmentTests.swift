@@ -39,7 +39,7 @@ class AnchorAlignmentTests: XCTestCase {
             XCTAssertEqualConstraints(c, NSLayoutConstraint(
                 item: view,
                 attribute: .top,
-                relation: .greaterThanOrEqual,
+                relatedBy: .greaterThanOrEqual,
                 toItem: container,
                 attribute: .top,
                 multiplier: 2,
