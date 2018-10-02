@@ -13,7 +13,7 @@ extension UILayoutGuide: LayoutItem {
     public var superview: UIView? { return self.owningView }
 }
 
-public extension LayoutItem { // Yalta methods available via `LayoutProxy`
+public extension LayoutItem { // Yalta methods are available via `LayoutProxy`
     @nonobjc public var al: LayoutProxy<Self> { return LayoutProxy(base: self) }
 }
 
@@ -392,21 +392,5 @@ internal extension UIEdgeInsets {
         case .right, .trailing: return right
         default: return 0
         }
-    }
-}
-
-// MARK: - Deprecated
-
-extension Anchor where Type: AnchorType.Alignment {
-    @available(*, deprecated, message: "Please use operators instead, e.g. `view.top.align(with: view.bottom * 2 + 10)`.")
-    @discardableResult public func align<Type: AnchorType.Alignment>(with anchor: Anchor<Type, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return Constraints.constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
-    }
-}
-
-extension Anchor where Type: AnchorType.Dimension {
-    @available(*, deprecated, message: "Please use operators instead, e.g. `view.width.match(view.height * 2 + 10)`.")
-    @discardableResult public func match<Axis>(_ anchor: Anchor<AnchorType.Dimension, Axis>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return Constraints.constrain(self, anchor, offset: offset, multiplier: multiplier, relation: relation)
     }
 }
