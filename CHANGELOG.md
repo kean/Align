@@ -1,5 +1,9 @@
 [Changelog](https://github.com/kean/Yale/releases) for all versions
 
+## Yalta 1.0
+
+Updated to Swift 4.2 (required) and Xcode 10.
+
 ## Yalta 0.6
 
 A minor update to make Yalta a bit more ergonomic.
