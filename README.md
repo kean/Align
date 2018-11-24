@@ -2,8 +2,6 @@
 
 An intuitive and powerful Auto Layout library.
 
-> **Warning:** This project is an experiment to see whether it's possible to use phantom types to build a safer and more semantic alternative to native layout anchors. If you're working in a team I would recommend looking at more established tools first.
-
 The entire library fits in a single file with less than 300 lines of code which you can just drag-n-drop into your app.
 
 - [Quick Overview](#quick-overview)
