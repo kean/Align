@@ -229,3 +229,47 @@ class AddingArrangedSubviewsTests: XCTestCase {
         }
     }
 }
+
+class InsertingSubviewTests: XCTestCase {
+    let container = UIView()
+    let a = UIView()
+    let b = UIView()
+    let c = UIView()
+    
+    func testOne() {
+        container.insertSubview(a, at: 0) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($0.base === a)
+            return
+        }
+    }
+    
+    func testTwo() {
+        container.insertSubview(b, aboveSubview: a) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($0.base === b)
+            return
+        }
+    }
+    
+    func testThree() {
+        container.insertSubview(c, belowSubview: a) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($0.base === c)
+            return
+        }
+    }
+}
+
+class InsertingArrangedSubviewTest: XCTestCase {
+    let container = UIStackView()
+    let a = UIView()
+    
+    func testOne() {
+        container.insertArrangedSubview(a, at: 0) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($0.base === a)
+            return
+        }
+    }
+}

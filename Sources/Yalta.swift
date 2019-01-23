@@ -327,6 +327,21 @@ public extension UIView {
         [a, b, c, d].forEach { addSubview($0) }
         return Constraints(for: a, b, c, d, constraints)
     }
+    
+    @discardableResult @nonobjc public func insertSubview(_ a: UIView, at index: Int, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
+        insertSubview(a, at: index)
+        return Constraints(for: a, constraints)
+    }
+    
+    @discardableResult @nonobjc public func insertSubview(_ a: UIView, aboveSubview siblingSubview: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
+        insertSubview(a, aboveSubview: siblingSubview)
+        return Constraints(for: a, constraints)
+    }
+    
+    @discardableResult @nonobjc public func insertSubview(_ a: UIView, belowSubview siblingSubview: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
+        insertSubview(a, belowSubview: siblingSubview)
+        return Constraints(for: a, constraints)
+    }
 }
 
 // MARK: - UIStackView + Constraints
@@ -350,6 +365,11 @@ public extension UIStackView {
     @discardableResult @nonobjc public func addArrangedSubview(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
         [a, b, c, d].forEach { addArrangedSubview($0) }
         return Constraints(for: a, b, c, d, constraints)
+    }
+    
+    @discardableResult @nonobjc public func insertArrangedSubview(_ a: UIView, at stackIndex: Int, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
+        insertArrangedSubview(a, at: stackIndex)
+        return Constraints(for: a, constraints)
     }
 }
 
