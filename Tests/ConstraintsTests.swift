@@ -180,3 +180,52 @@ class AddingSubviewsTests: XCTestCase {
         }
     }
 }
+
+class AddingArrangedSubviewsTests: XCTestCase {
+    let container = UIStackView()
+    let a = UIView()
+    let b = UIView()
+    let c = UIView()
+    let d = UIView()
+    
+    func testOne() {
+        container.addArrangedSubview(a) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($0.base === a)
+            return
+        }
+    }
+    
+    func testTwo() {
+        container.addArrangedSubview(a, b) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($1.base.superview === container)
+            XCTAssertTrue($0.base === a)
+            XCTAssertTrue($1.base === b)
+        }
+    }
+    
+    func testThree() {
+        container.addArrangedSubview(a, b, c) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($1.base.superview === container)
+            XCTAssertTrue($2.base.superview === container)
+            XCTAssertTrue($0.base === a)
+            XCTAssertTrue($1.base === b)
+            XCTAssertTrue($2.base === c)
+        }
+    }
+    
+    func testFour() {
+        container.addArrangedSubview(a, b, c, d) {
+            XCTAssertTrue($0.base.superview === container)
+            XCTAssertTrue($1.base.superview === container)
+            XCTAssertTrue($2.base.superview === container)
+            XCTAssertTrue($3.base.superview === container)
+            XCTAssertTrue($0.base === a)
+            XCTAssertTrue($1.base === b)
+            XCTAssertTrue($2.base === c)
+            XCTAssertTrue($3.base === d)
+        }
+    }
+}
