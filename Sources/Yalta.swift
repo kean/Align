@@ -329,6 +329,30 @@ public extension UIView {
     }
 }
 
+// MARK: - UIStackView + Constraints
+
+public extension UIStackView {
+    @discardableResult @nonobjc public func addArrangedSubview(_ a: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
+        addArrangedSubview(a)
+        return Constraints(for: a, constraints)
+    }
+    
+    @discardableResult @nonobjc public func addArrangedSubview(_ a: UIView, _ b: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+        [a, b].forEach { addArrangedSubview($0) }
+        return Constraints(for: a, b, constraints)
+    }
+    
+    @discardableResult @nonobjc public func addArrangedSubview(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+        [a, b, c].forEach { addArrangedSubview($0) }
+        return Constraints(for: a, b, c, constraints)
+    }
+    
+    @discardableResult @nonobjc public func addArrangedSubview(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+        [a, b, c, d].forEach { addArrangedSubview($0) }
+        return Constraints(for: a, b, c, d, constraints)
+    }
+}
+
 // MARK: - Constraints (Arity)
 
 extension Constraints {
