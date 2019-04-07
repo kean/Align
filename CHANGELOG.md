@@ -1,5 +1,11 @@
 [Changelog](https://github.com/kean/Yale/releases) for all versions
 
+## Yalta 1.1
+
+- Add Swift 5.0 support
+- Remove Swift 4.0 and Swift 4.1 support
+- Remove iOS 9, tvOS 9 support
+
 ## Yalta 1.0
 
 Updated to Swift 4.2 (required) and Xcode 10.
