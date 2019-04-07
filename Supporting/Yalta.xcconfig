@@ -1,10 +1,9 @@
-
 // Configuration settings file format documentation can be found at:
 // https://help.apple.com/xcode/#/dev745c5c974
 
 SUPPORTED_PLATFORMS = iphoneos appletvos iphonesimulator appletvsimulator
 
-SWIFT_VERSION = 4.2
+SWIFT_VERSION = 5.0
 
 IPHONEOS_DEPLOYMENT_TARGET = 10.0
 TVOS_DEPLOYMENT_TARGET = 10.0

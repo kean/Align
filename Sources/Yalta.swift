@@ -14,9 +14,9 @@ extension UILayoutGuide: LayoutItem {
 }
 
 public extension LayoutItem { // Yalta methods are available via `LayoutProxy`
-    @nonobjc public var al: LayoutProxy<Self> { return LayoutProxy(base: self) }
+    @nonobjc var al: LayoutProxy<Self> { return LayoutProxy(base: self) }
 
-    public func al(_ closure: (LayoutProxy<Self>) -> Void) {
+    func al(_ closure: (LayoutProxy<Self>) -> Void) {
         closure(LayoutProxy(base: self))
     }
 }
@@ -144,7 +144,7 @@ extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the safe area of the view controller. Falls back to
     /// layout guides (`.topLayoutGuide` and `.bottomLayoutGuide` on iOS 10.
     @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        let item2: Any, attr2: NSLayoutConstraint.Attribute
+        let item2: Any?, attr2: NSLayoutConstraint.Attribute
         if #available(iOS 11, tvOS 11, *) {
             // Pin to `safeAreaLayoutGuide` on iOS 11
             (item2, attr2) = (vc.view.safeAreaLayoutGuide, self.attribute)
@@ -163,7 +163,7 @@ extension Anchor where Type: AnchorType.Edge {
     }
 
     // Pin the anchor to another layout item.
-    private func _pin(to item2: Any, attribute attr2: NSLayoutConstraint.Attribute, inset: CGFloat, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
+    private func _pin(to item2: Any?, attribute attr2: NSLayoutConstraint.Attribute, inset: CGFloat, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
         // Invert attribute and relation in certain cases. The `pin` semantics
         // are inspired by https://github.com/PureLayout/PureLayout
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
@@ -264,7 +264,7 @@ public struct AnchorCollectionSize {
 // MARK: - Constraints
 
 public final class Constraints {
-    internal(set) var constraints = [NSLayoutConstraint]()
+    var constraints = [NSLayoutConstraint]()
 
     /// All of the constraints created in the given closure are automatically
     /// activated at the same time. This is more efficient then installing them
@@ -312,22 +312,22 @@ public final class Constraints {
 // MARK: - UIView + Constraints
 
 public extension UIView {
-    @discardableResult @nonobjc public func addSubview(_ a: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
+    @discardableResult @nonobjc func addSubview(_ a: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
         addSubview(a)
         return Constraints(for: a, constraints)
     }
 
-    @discardableResult @nonobjc public func addSubview(_ a: UIView, _ b: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
         [a, b].forEach { addSubview($0) }
         return Constraints(for: a, b, constraints)
     }
 
-    @discardableResult @nonobjc public func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
         [a, b, c].forEach { addSubview($0) }
         return Constraints(for: a, b, c, constraints)
     }
 
-    @discardableResult @nonobjc public func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
         [a, b, c, d].forEach { addSubview($0) }
         return Constraints(for: a, b, c, d, constraints)
     }
@@ -380,11 +380,20 @@ internal extension NSLayoutConstraint.Attribute {
 
 internal extension NSLayoutConstraint.Relation {
     var inverted: NSLayoutConstraint.Relation {
+        #if swift(>=5.0)
+        switch self {
+        case .greaterThanOrEqual: return .lessThanOrEqual
+        case .lessThanOrEqual: return .greaterThanOrEqual
+        case .equal: return self
+        @unknown default: return self
+        }
+        #else
         switch self {
         case .greaterThanOrEqual: return .lessThanOrEqual
         case .lessThanOrEqual: return .greaterThanOrEqual
         case .equal: return self
         }
+        #endif
     }
 }
 
