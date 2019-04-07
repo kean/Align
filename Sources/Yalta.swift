@@ -15,6 +15,10 @@ extension UILayoutGuide: LayoutItem {
 
 public extension LayoutItem { // Yalta methods are available via `LayoutProxy`
     @nonobjc public var al: LayoutProxy<Self> { return LayoutProxy(base: self) }
+
+    public func al(_ closure: (LayoutProxy<Self>) -> Void) {
+        closure(LayoutProxy(base: self))
+    }
 }
 
 // MARK: - LayoutProxy

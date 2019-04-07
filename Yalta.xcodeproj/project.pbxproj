@@ -8,31 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		0C683A111FBA462D002ACEB9 /* AnchorCollectionEdgesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C683A0F1FBA4624002ACEB9 /* AnchorCollectionEdgesTests.swift */; };
-		0C683A121FBA462F002ACEB9 /* AnchorCollectionEdgesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C683A0F1FBA4624002ACEB9 /* AnchorCollectionEdgesTests.swift */; };
-		0C7D02971C9875A200DAB3ED /* Yalta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C81ABB61C889C100036DFD4 /* Yalta.swift */; };
 		0C81ABB71C889C100036DFD4 /* Yalta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C81ABB61C889C100036DFD4 /* Yalta.swift */; };
 		0C8FD7791FB85E8B00A20E3D /* XCTestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7781FB85E8B00A20E3D /* XCTestExtensions.swift */; };
-		0C8FD77A1FB85E8B00A20E3D /* XCTestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7781FB85E8B00A20E3D /* XCTestExtensions.swift */; };
 		0C8FD77F1FB85EA500A20E3D /* Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD77E1FB85EA500A20E3D /* Diff.swift */; };
-		0C8FD7801FB85EA500A20E3D /* Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD77E1FB85EA500A20E3D /* Diff.swift */; };
 		0C8FD7821FB85F5600A20E3D /* AnchorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7811FB85F5600A20E3D /* AnchorTests.swift */; };
-		0C8FD7831FB85F5600A20E3D /* AnchorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7811FB85F5600A20E3D /* AnchorTests.swift */; };
 		0C8FD7851FB8608E00A20E3D /* ConstraintsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7841FB8608E00A20E3D /* ConstraintsTests.swift */; };
-		0C8FD7861FB8608E00A20E3D /* ConstraintsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7841FB8608E00A20E3D /* ConstraintsTests.swift */; };
 		0C8FD78E1FB88B9B00A20E3D /* AnchorAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD78D1FB88B9B00A20E3D /* AnchorAlignmentTests.swift */; };
-		0C8FD78F1FB88B9B00A20E3D /* AnchorAlignmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD78D1FB88B9B00A20E3D /* AnchorAlignmentTests.swift */; };
 		0C8FD7911FB88BC300A20E3D /* AnchorEdgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7901FB88BC300A20E3D /* AnchorEdgeTests.swift */; };
-		0C8FD7921FB88BC300A20E3D /* AnchorEdgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7901FB88BC300A20E3D /* AnchorEdgeTests.swift */; };
 		0C8FD7941FB88BED00A20E3D /* AnchorCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7931FB88BED00A20E3D /* AnchorCenterTests.swift */; };
-		0C8FD7951FB88BED00A20E3D /* AnchorCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7931FB88BED00A20E3D /* AnchorCenterTests.swift */; };
 		0C8FD7971FB88C0600A20E3D /* AnchorDimensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7961FB88C0600A20E3D /* AnchorDimensionTests.swift */; };
-		0C8FD7981FB88C0600A20E3D /* AnchorDimensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7961FB88C0600A20E3D /* AnchorDimensionTests.swift */; };
 		0C8FD79A1FB88CE100A20E3D /* AnchorCollectionCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7991FB88CE100A20E3D /* AnchorCollectionCenterTests.swift */; };
-		0C8FD79B1FB88CE100A20E3D /* AnchorCollectionCenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD7991FB88CE100A20E3D /* AnchorCollectionCenterTests.swift */; };
 		0C8FD79D1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD79C1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift */; };
-		0C8FD79E1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD79C1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift */; };
 		0CC3A06C1D7476A700754E59 /* Yalta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE361181C86077B00EA70CF /* Yalta.framework */; };
-		0CC3A0881D7477FB00754E59 /* Yalta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C7D028B1C98756C00DAB3ED /* Yalta.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,19 +30,12 @@
 			remoteGlobalIDString = 0CE361171C86077B00EA70CF;
 			remoteInfo = "Arranged iOS";
 		};
-		0CC3A0891D7477FB00754E59 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0CE3610F1C86077B00EA70CF /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0C7D028A1C98756C00DAB3ED;
-			remoteInfo = "Arranged tvOS";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C2EE5C3225A700E00743F47 /* Yalta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Yalta.xcconfig; path = Supporting/Yalta.xcconfig; sourceTree = "<group>"; };
 		0C62A9A81FD28B5900C6EA6E /* Yalta.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Yalta.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0C683A0F1FBA4624002ACEB9 /* AnchorCollectionEdgesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCollectionEdgesTests.swift; sourceTree = "<group>"; };
-		0C7D028B1C98756C00DAB3ED /* Yalta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Yalta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C81ABB61C889C100036DFD4 /* Yalta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Yalta.swift; sourceTree = "<group>"; };
 		0C8FD7781FB85E8B00A20E3D /* XCTestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestExtensions.swift; sourceTree = "<group>"; };
 		0C8FD77E1FB85EA500A20E3D /* Diff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diff.swift; sourceTree = "<group>"; };
@@ -67,34 +47,18 @@
 		0C8FD7961FB88C0600A20E3D /* AnchorDimensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorDimensionTests.swift; sourceTree = "<group>"; };
 		0C8FD7991FB88CE100A20E3D /* AnchorCollectionCenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCollectionCenterTests.swift; sourceTree = "<group>"; };
 		0C8FD79C1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCollectionSizeTests.swift; sourceTree = "<group>"; };
-		0CC3A0671D7476A700754E59 /* Yalta iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Yalta iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0CC3A0671D7476A700754E59 /* Yalta Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Yalta Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CC3A0751D7476B300754E59 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0CC3A0831D7477FB00754E59 /* Yalta tvOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Yalta tvOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CE361181C86077B00EA70CF /* Yalta.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Yalta.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CE361241C8607BB00EA70CF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Supporting/Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0C7D02871C98756C00DAB3ED /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0CC3A0641D7476A700754E59 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				0CC3A06C1D7476A700754E59 /* Yalta.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0CC3A0801D7477FB00754E59 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0CC3A0881D7477FB00754E59 /* Yalta.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,9 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				0CE361181C86077B00EA70CF /* Yalta.framework */,
-				0C7D028B1C98756C00DAB3ED /* Yalta.framework */,
-				0CC3A0671D7476A700754E59 /* Yalta iOS Tests.xctest */,
-				0CC3A0831D7477FB00754E59 /* Yalta tvOS Tests.xctest */,
+				0CC3A0671D7476A700754E59 /* Yalta Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -161,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				0CE361241C8607BB00EA70CF /* Info.plist */,
+				0C2EE5C3225A700E00743F47 /* Yalta.xcconfig */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -176,13 +139,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		0C7D02881C98756C00DAB3ED /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0CE361151C86077B00EA70CF /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -193,27 +149,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		0C7D028A1C98756C00DAB3ED /* Yalta tvOS */ = {
+		0CC3A0661D7476A700754E59 /* Yalta Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0C7D02901C98756C00DAB3ED /* Build configuration list for PBXNativeTarget "Yalta tvOS" */;
-			buildPhases = (
-				0C7D02861C98756C00DAB3ED /* Sources */,
-				0C7D02871C98756C00DAB3ED /* Frameworks */,
-				0C7D02881C98756C00DAB3ED /* Headers */,
-				0C7D02891C98756C00DAB3ED /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Yalta tvOS";
-			productName = "Arranged tvOS";
-			productReference = 0C7D028B1C98756C00DAB3ED /* Yalta.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		0CC3A0661D7476A700754E59 /* Yalta iOS Tests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0CC3A06F1D7476A700754E59 /* Build configuration list for PBXNativeTarget "Yalta iOS Tests" */;
+			buildConfigurationList = 0CC3A06F1D7476A700754E59 /* Build configuration list for PBXNativeTarget "Yalta Tests" */;
 			buildPhases = (
 				0CC3A0631D7476A700754E59 /* Sources */,
 				0CC3A0641D7476A700754E59 /* Frameworks */,
@@ -224,32 +162,14 @@
 			dependencies = (
 				0CC3A06E1D7476A700754E59 /* PBXTargetDependency */,
 			);
-			name = "Yalta iOS Tests";
+			name = "Yalta Tests";
 			productName = "Arranged iOS Tests";
-			productReference = 0CC3A0671D7476A700754E59 /* Yalta iOS Tests.xctest */;
+			productReference = 0CC3A0671D7476A700754E59 /* Yalta Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		0CC3A0821D7477FB00754E59 /* Yalta tvOS Tests */ = {
+		0CE361171C86077B00EA70CF /* Yalta */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0CC3A08B1D7477FB00754E59 /* Build configuration list for PBXNativeTarget "Yalta tvOS Tests" */;
-			buildPhases = (
-				0CC3A07F1D7477FB00754E59 /* Sources */,
-				0CC3A0801D7477FB00754E59 /* Frameworks */,
-				0CC3A0811D7477FB00754E59 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				0CC3A08A1D7477FB00754E59 /* PBXTargetDependency */,
-			);
-			name = "Yalta tvOS Tests";
-			productName = "Arranged tvOS Tests";
-			productReference = 0CC3A0831D7477FB00754E59 /* Yalta tvOS Tests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		0CE361171C86077B00EA70CF /* Yalta iOS */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 0CE361201C86077B00EA70CF /* Build configuration list for PBXNativeTarget "Yalta iOS" */;
+			buildConfigurationList = 0CE361201C86077B00EA70CF /* Build configuration list for PBXNativeTarget "Yalta" */;
 			buildPhases = (
 				0CE361131C86077B00EA70CF /* Sources */,
 				0CE361141C86077B00EA70CF /* Frameworks */,
@@ -260,7 +180,7 @@
 			);
 			dependencies = (
 			);
-			name = "Yalta iOS";
+			name = Yalta;
 			productName = Stack;
 			productReference = 0CE361181C86077B00EA70CF /* Yalta.framework */;
 			productType = "com.apple.product-type.framework";
@@ -275,16 +195,7 @@
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "Alexander Grebenyuk";
 				TargetAttributes = {
-					0C7D028A1C98756C00DAB3ED = {
-						CreatedOnToolsVersion = 7.2.1;
-					};
 					0CC3A0661D7476A700754E59 = {
-						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = NR8DLKJ7E6;
-						LastSwiftMigration = 0910;
-						ProvisioningStyle = Automatic;
-					};
-					0CC3A0821D7477FB00754E59 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = NR8DLKJ7E6;
 						LastSwiftMigration = 0910;
@@ -301,6 +212,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 0CE3610E1C86077B00EA70CF;
@@ -308,30 +220,14 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0CE361171C86077B00EA70CF /* Yalta iOS */,
-				0C7D028A1C98756C00DAB3ED /* Yalta tvOS */,
-				0CC3A0661D7476A700754E59 /* Yalta iOS Tests */,
-				0CC3A0821D7477FB00754E59 /* Yalta tvOS Tests */,
+				0CE361171C86077B00EA70CF /* Yalta */,
+				0CC3A0661D7476A700754E59 /* Yalta Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		0C7D02891C98756C00DAB3ED /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0CC3A0651D7476A700754E59 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		0CC3A0811D7477FB00754E59 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -348,14 +244,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		0C7D02861C98756C00DAB3ED /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0C7D02971C9875A200DAB3ED /* Yalta.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0CC3A0631D7476A700754E59 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -374,24 +262,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		0CC3A07F1D7477FB00754E59 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				0C8FD79B1FB88CE100A20E3D /* AnchorCollectionCenterTests.swift in Sources */,
-				0C8FD79E1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift in Sources */,
-				0C8FD7951FB88BED00A20E3D /* AnchorCenterTests.swift in Sources */,
-				0C8FD7801FB85EA500A20E3D /* Diff.swift in Sources */,
-				0C683A121FBA462F002ACEB9 /* AnchorCollectionEdgesTests.swift in Sources */,
-				0C8FD77A1FB85E8B00A20E3D /* XCTestExtensions.swift in Sources */,
-				0C8FD78F1FB88B9B00A20E3D /* AnchorAlignmentTests.swift in Sources */,
-				0C8FD7921FB88BC300A20E3D /* AnchorEdgeTests.swift in Sources */,
-				0C8FD7831FB85F5600A20E3D /* AnchorTests.swift in Sources */,
-				0C8FD7861FB8608E00A20E3D /* ConstraintsTests.swift in Sources */,
-				0C8FD7981FB88C0600A20E3D /* AnchorDimensionTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		0CE361131C86077B00EA70CF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -405,59 +275,12 @@
 /* Begin PBXTargetDependency section */
 		0CC3A06E1D7476A700754E59 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0CE361171C86077B00EA70CF /* Yalta iOS */;
+			target = 0CE361171C86077B00EA70CF /* Yalta */;
 			targetProxy = 0CC3A06D1D7476A700754E59 /* PBXContainerItemProxy */;
-		};
-		0CC3A08A1D7477FB00754E59 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0C7D028A1C98756C00DAB3ED /* Yalta tvOS */;
-			targetProxy = 0CC3A0891D7477FB00754E59 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		0C7D02911C98756C00DAB3ED /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Supporting/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.github.kean.Yalta;
-				PRODUCT_NAME = Yalta;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-			};
-			name = Debug;
-		};
-		0C7D02921C98756C00DAB3ED /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				APPLICATION_EXTENSION_API_ONLY = YES;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = Supporting/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.github.kean.Yalta;
-				PRODUCT_NAME = Yalta;
-				SDKROOT = appletvos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-			};
-			name = Release;
-		};
 		0CC3A0701D7476A700754E59 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -492,44 +315,9 @@
 			};
 			name = Release;
 		};
-		0CC3A08C1D7477FB00754E59 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				DEVELOPMENT_TEAM = NR8DLKJ7E6;
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.kean.Yalta-tvOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-			};
-			name = Debug;
-		};
-		0CC3A08D1D7477FB00754E59 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				DEVELOPMENT_TEAM = NR8DLKJ7E6;
-				INFOPLIST_FILE = Tests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.github.kean.Yalta-tvOS-Tests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
-				TVOS_DEPLOYMENT_TARGET = 10.0;
-			};
-			name = Release;
-		};
 		0CE3611E1C86077B00EA70CF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0C2EE5C3225A700E00743F47 /* Yalta.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -575,13 +363,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -589,6 +373,7 @@
 		};
 		0CE3611F1C86077B00EA70CF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0C2EE5C3225A700E00743F47 /* Yalta.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -628,12 +413,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -652,7 +433,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Supporting/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.kean.Yalta;
 				PRODUCT_NAME = Yalta;
@@ -673,7 +453,6 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = "$(SRCROOT)/Supporting/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.kean.Yalta;
 				PRODUCT_NAME = Yalta;
@@ -684,29 +463,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0C7D02901C98756C00DAB3ED /* Build configuration list for PBXNativeTarget "Yalta tvOS" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0C7D02911C98756C00DAB3ED /* Debug */,
-				0C7D02921C98756C00DAB3ED /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		0CC3A06F1D7476A700754E59 /* Build configuration list for PBXNativeTarget "Yalta iOS Tests" */ = {
+		0CC3A06F1D7476A700754E59 /* Build configuration list for PBXNativeTarget "Yalta Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0CC3A0701D7476A700754E59 /* Debug */,
 				0CC3A0711D7476A700754E59 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		0CC3A08B1D7477FB00754E59 /* Build configuration list for PBXNativeTarget "Yalta tvOS Tests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				0CC3A08C1D7477FB00754E59 /* Debug */,
-				0CC3A08D1D7477FB00754E59 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -720,7 +481,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0CE361201C86077B00EA70CF /* Build configuration list for PBXNativeTarget "Yalta iOS" */ = {
+		0CE361201C86077B00EA70CF /* Build configuration list for PBXNativeTarget "Yalta" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0CE361211C86077B00EA70CF /* Debug */,
