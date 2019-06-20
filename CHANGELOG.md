@@ -1,4 +1,8 @@
-[Changelog](https://github.com/kean/Yale/releases) for all versions
+[Changelog](https://github.com/kean/Align/releases) for all versions
+
+## Align 1.2
+
+- Rebrand
 
 ## Align 1.1
 
