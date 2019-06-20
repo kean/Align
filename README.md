@@ -70,7 +70,7 @@ view.addSubview(subview) {
 
 | Align            | Swift                 | Xcode                | Platforms              |
 |------------------|-----------------------|----------------------|------------------------|
-| Align 1.1        | Swift 4.2 – 5.0       | Xcode 10.1 – 10.2    | iOS 10.0 / tvOS 10.0   |
+| Align 1.1-1.2    | Swift 4.2 – 5.0       | Xcode 10.1 – 10.2    | iOS 10.0 / tvOS 10.0   |
 | Align 1.0        | Swift 4.0 – 4.2       | Xcode 9.2 – 10.1     | iOS 9.0 / tvOS 9.0     | 
 
 ## Why Align
