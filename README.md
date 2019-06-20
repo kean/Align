@@ -1,4 +1,4 @@
-# ⛵️ Align
+# Align
 
 An intuitive and powerful Auto Layout library.
 
