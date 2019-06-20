@@ -16,8 +16,8 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0CE361171C86077B00EA70CF"
                BuildableName = "Yalta.framework"
-               BlueprintName = "Yalta"
-               ReferencedContainer = "container:Yalta.xcodeproj">
+               BlueprintName = "Align"
+               ReferencedContainer = "container:Align.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0CC3A0661D7476A700754E59"
-               BuildableName = "Yalta Tests.xctest"
-               BlueprintName = "Yalta Tests"
-               ReferencedContainer = "container:Yalta.xcodeproj">
+               BuildableName = "Align Tests.xctest"
+               BlueprintName = "Align Tests"
+               ReferencedContainer = "container:Align.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -44,8 +44,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0CE361171C86077B00EA70CF"
             BuildableName = "Yalta.framework"
-            BlueprintName = "Yalta"
-            ReferencedContainer = "container:Yalta.xcodeproj">
+            BlueprintName = "Align"
+            ReferencedContainer = "container:Align.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -66,8 +66,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0CE361171C86077B00EA70CF"
             BuildableName = "Yalta.framework"
-            BlueprintName = "Yalta"
-            ReferencedContainer = "container:Yalta.xcodeproj">
+            BlueprintName = "Align"
+            ReferencedContainer = "container:Align.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -84,8 +84,8 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0CE361171C86077B00EA70CF"
             BuildableName = "Yalta.framework"
-            BlueprintName = "Yalta"
-            ReferencedContainer = "container:Yalta.xcodeproj">
+            BlueprintName = "Align"
+            ReferencedContainer = "container:Align.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

@@ -6,7 +6,7 @@ git:
 
 env:
   global:
-    - SCHEME="Yalta"
+    - SCHEME="Align"
 
 matrix:
   include:

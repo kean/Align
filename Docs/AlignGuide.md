@@ -1,4 +1,4 @@
-# Yalta Guide
+# Align Guide
 
 - [Anchors](#anchors)
   * [Type of Anchors](#type-of-anchors)
@@ -15,7 +15,7 @@
 
 ## Anchors
 
-Yalta has a simple and consistent model for creating constraints. Start by selecting an **anchor** or a **collection of anchors** of a view (or of a layout guide). Then use anchor's methods to create constraints.
+Align has a simple and consistent model for creating constraints. Start by selecting an **anchor** or a **collection of anchors** of a view (or of a layout guide). Then use anchor's methods to create constraints.
 
 An anchor (`Anchor<Type, Axis>`) corresponds to a layout attribute (`NSLayoutConstraint.Attribute`) of a view (`UIView`) or of a layout guide (`UILayoutGuide`).
 
@@ -123,7 +123,7 @@ Constraints(for: title, subtitle) { title, subtitle in
 }
 ```
 
-Yalta also provides convenient way to set `constants` and `multipliers`:
+Align also provides convenient way to set `constants` and `multipliers`:
 
 ```swift
 Constraints(for: title, subtitle) { title, subtitle in
@@ -142,7 +142,7 @@ Constraints(for: title, subtitle) { title, subtitle in
 
 #### Edge Anchors Only
 
-Edge anchors (`.top`, `.left`, etc) have a special family of methods which allow you to *pin* anchor to the containers. When you *pin* an anchor Yalta automatically converts a given `inset` to a proper `constant` to be used in a constraint.
+Edge anchors (`.top`, `.left`, etc) have a special family of methods which allow you to *pin* anchor to the containers. When you *pin* an anchor Align automatically converts a given `inset` to a proper `constant` to be used in a constraint.
 
 ```swift
 title.al.top.pinToSuperview()

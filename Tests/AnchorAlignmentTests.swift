@@ -3,7 +3,7 @@
 // Copyright (c) 2017-2019 Alexander Grebenyuk (github.com/kean).
 
 import XCTest
-import Yalta
+import Align
 
 /// Everything that applies for both edges and center
 class AnchorAlignmentTests: XCTestCase {

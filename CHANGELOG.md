@@ -1,43 +1,43 @@
 [Changelog](https://github.com/kean/Yale/releases) for all versions
 
-## Yalta 1.1
+## Align 1.1
 
 - Add Swift 5.0 support
 - Remove Swift 4.0 and Swift 4.1 support
 - Remove iOS 9, tvOS 9 support
 
-## Yalta 1.0
+## Align 1.0
 
 Updated to Swift 4.2 (required) and Xcode 10.
 
-## Yalta 0.6
+## Align 0.6
 
-A minor update to make Yalta a bit more ergonomic.
+A minor update to make Align a bit more ergonomic.
 
 - Add iOS 9 and tvOS 9 compatibility (used to require iOS 10 and tvOS 10).
 - Add operators for setting multipliers: `subtitle.height.match(title.height * 2)`.
 - Deprecated `align(with:)` and `match(:)` method that had `offset` and `multiplier` parameters. Operators are the preferred way to set those (more compact and more obvious what they mean).
 - Move phantom types (e.g. `AnchorAxisVertical`) into namespaces to reduce clutter in a global namespace.
 
-## Yalta 0.5.1
+## Align 0.5.1
 
 - Improve documentation
 - Improve some minor implementation details
 - Update project to Xcode 9.3 recommended settings
 
-## Yalta 0.5
+## Align 0.5
 
 - Remove Stacks and Spacers ([gist](https://gist.github.com/kean/e77bac3625124b1de559a241a72d1e09))
 - Remove Insets
 
-## Yalta 0.4
+## Align 0.4
 
 - `pinToSuperviewMargins` methods now use margin attributes (e.g. `.topMargin`) and not `layoutMarginsGuide` to workaround issues on iOS 10 where layout guides are unpredictable https://stackoverflow.com/questions/32694124/auto-layout-layoutmarginsguide
 - Add `pinToSafeArea(of:)` family of methods which use `safeAreaLayoutGuide` on iOS 11 and fall back to `topLayoutGuide` and `bottomLayoutGuide` on iOS 10
 - `addSubview` methods are no longer generic which allows for more extra flexibility when adding constraints (e.g. you can create and operate on an array of layout proxies)
 
 
-## Yalta 0.3.1
+## Align 0.3.1
 
 Small update that focuses on improving  `offsetting(by:)` method.
 
@@ -47,7 +47,7 @@ Small update that focuses on improving  `offsetting(by:)` method.
 - Split the project into two files
 
 
-## Yalta 0.3
+## Align 0.3
 
 -  With new `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents programmer errors (e.g. trying to add constraints to views not in view hierarchy).
 
@@ -71,18 +71,18 @@ This is a much simpler model which removes entire layer of standalone methods av
 - Make LayoutProxy's `base` public to enable adding custom extensions on top of it.
 
 
-## Yalta 0.2
+## Align 0.2
 
-- Redesigned Yalta API which now follow [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. Instead Yalta provides a fluent APIs that form grammatical phrases.
+- Redesigned Align API which now follow [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. Instead Align provides a fluent APIs that form grammatical phrases.
 - Full test coverage
-- Add a new comprehensive overview, [full guide](https://github.com/kean/Yalta/blob/master/Docs/YaltaGuide.md), and [installation guide](https://github.com/kean/Yalta/blob/master/Docs/InstallationGuide.md)
+- Add a new comprehensive overview, [full guide](https://github.com/kean/Align/blob/master/Docs/AlignGuide.md), and [installation guide](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md)
 
 
-## Yalta 0.1.1
+## Align 0.1.1
 
 - Revert to original `Spacer` design
 
 
-## Yalta 0.1
+## Align 0.1
 
 - Initial version

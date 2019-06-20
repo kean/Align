@@ -2,7 +2,7 @@
   
 import UIKit
 import PlaygroundSupport
-import Yalta
+import Align
 
 
 typealias Stack = UIStackView
@@ -43,14 +43,14 @@ class MyViewController : UIViewController {
             ]
         )
 
-        /// Here's code written using Yalta
+        /// Here's code written using Align
         view.addSubview(stack) {
             $0.center.alignWithSuperview()
             $0.edges(.left, .right).pinToSuperviewMargins(relation: .greaterThanOrEqual)
         }
 
         logo.text = "⛵️"
-        title.text = "Welcome to Yalta!"
+        title.text = "Welcome to Align!"
         subtitle.text = "An intuitive and powerful Auto Layout"
     }
 }

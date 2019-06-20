@@ -3,7 +3,7 @@
 // Copyright (c) 2017-2019 Alexander Grebenyuk (github.com/kean).
 
 import XCTest
-import Yalta
+import Align
 
 class AnchorCenterTests: XCTestCase {
     let container = UIView()

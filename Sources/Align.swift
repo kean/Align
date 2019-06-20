@@ -13,7 +13,7 @@ extension UILayoutGuide: LayoutItem {
     public var superview: UIView? { return self.owningView }
 }
 
-public extension LayoutItem { // Yalta methods are available via `LayoutProxy`
+public extension LayoutItem { // Align methods are available via `LayoutProxy`
     @nonobjc var al: LayoutProxy<Self> { return LayoutProxy(base: self) }
 
     func al(_ closure: (LayoutProxy<Self>) -> Void) {
@@ -279,7 +279,7 @@ public final class Constraints {
 
     /// Creates and automatically installs a constraint.
     internal static func constrain(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
-        precondition(Thread.isMainThread, "Yalta APIs can only be used from the main thread")
+        precondition(Thread.isMainThread, "Align APIs can only be used from the main thread")
         (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
         let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
         _install(constraint)

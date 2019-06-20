@@ -1,14 +1,14 @@
-# ⛵️ Yalta
+# ⛵️ Align
 
 An intuitive and powerful Auto Layout library.
 
 The entire library fits in a single file with less than 300 lines of code which you can just drag-n-drop into your app.
 
 - [Quick Overview](#quick-overview)
-- [Full Guide](https://github.com/kean/Yalta/blob/master/Docs/YaltaGuide.md)
-- [Installation Guide](https://github.com/kean/Yalta/blob/master/Docs/InstallationGuide.md)
+- [Full Guide](https://github.com/kean/Align/blob/master/Docs/AlignGuide.md)
+- [Installation Guide](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md)
 
-> Yalta strives for clarity and simplicity by following [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. Instead, Yalta has a fluent API that makes use sites form grammatical English phrases - that's what makes Swift code really stand out.
+> Align strives for clarity and simplicity by following [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. Instead, Align has a fluent API that makes use sites form grammatical English phrases - that's what makes Swift code really stand out.
 
 ## Anchors
 
@@ -64,22 +64,20 @@ view.addSubview(subview) {
 
 > With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents some programmer errors (e.g. trying to add constraints to views which are not in a view hierarchy).
 
-> Yalta has full test coverage. If you'd like to learn about which constraints (`NSLayoutConstraint`) Yalta creates each time you call one of its methods, test cases are a great place to start.
+> Align has full test coverage. If you'd like to learn about which constraints (`NSLayoutConstraint`) Align creates each time you call one of its methods, test cases are a great place to start.
 
 ## Requirements
 
-| Yalta            | Swift                 | Xcode                | Platforms              |
+| Align            | Swift                 | Xcode                | Platforms              |
 |------------------|-----------------------|----------------------|------------------------|
-| Yalta 1.1        | Swift 4.2 – 5.0       | Xcode 10.1 – 10.2    | iOS 10.0 / tvOS 10.0   |
-| Yalta 1.0        | Swift 4.0 – 4.2       | Xcode 9.2 – 10.1     | iOS 9.0 / tvOS 9.0     | 
+| Align 1.1        | Swift 4.2 – 5.0       | Xcode 10.1 – 10.2    | iOS 10.0 / tvOS 10.0   |
+| Align 1.0        | Swift 4.0 – 4.2       | Xcode 9.2 – 10.1     | iOS 9.0 / tvOS 9.0     | 
 
-## Why Yalta
+## Why Align
 
-Yalta is for someone who:
+Align is for someone who:
 
 - Prefers fluent API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)
 - [Doesn't want](http://chris.eidhof.nl/post/micro-autolayout-dsl/) to depend on big, complex libraries
 - Doesn't overuse operator overloads, prefers [fast compile times](https://github.com/robb/Cartography/issues/215)
 - Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wishes it had simpler, more fluent API which didn't require manually activating constraints
-
-> [Yalta](https://en.wikipedia.org/wiki/Yalta) is a beautiful port city on the Black Sea and a great name for *yet another layout tool* with *anchors*.

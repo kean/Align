@@ -30,9 +30,9 @@ The entire library fits in a single file with under 250 lines of code which you 
 $ gem install cocoapods
 ```
 
-> CocoaPods 1.1+ is required to build Yalta
+> CocoaPods 1.1+ is required to build Align
 
-To integrate Yalta into your Xcode project using CocoaPods, specify it in your `Podfile`:
+To integrate Align into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
@@ -40,7 +40,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target '<Your Target Name>' do
-    pod 'Yalta'
+    pod 'Align'
 end
 ```
 
@@ -61,28 +61,28 @@ $ brew update
 $ brew install carthage
 ```
 
-To integrate Yalta into your Xcode project using Carthage, specify it in your `Cartfile`:
+To integrate Align into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ogdl
-github "kean/Yalta"
+github "kean/Align"
 ```
 
-Run `carthage update` to build the framework and drag the built `Yalta.framework` into your Xcode project.
+Run `carthage update` to build the framework and drag the built `Align.framework` into your Xcode project.
 
 
 ### Swift Package Manager
 
-The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. It is in early development, but Yalta does support its use on supported platforms. 
+The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. It is in early development, but Align does support its use on supported platforms. 
 
-Once you have your Swift package set up, adding Yalta as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+Once you have your Swift package set up, adding Align as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/kean/Yalta.git", from: "0.2")
+    .package(url: "https://github.com/kean/Align.git", from: "0.2")
 ]
 ```
 
 
 ## License
 
-Yalta is available under the MIT license. See the LICENSE file for more info.
+Align is available under the MIT license. See the LICENSE file for more info.
