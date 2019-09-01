@@ -1,10 +1,10 @@
 # Installation Guide
 
-- [Installation](#installation)
+- [Installation](#installation)]
+  * [Swift Package Manager](#swift-package-manager)
   * [Manually](#manually)
   * [CocoaPods](#cocoapods)
   * [Carthage](#carthage)
-  * [Swift Package Manager](#swift-package-manager)
 - [License](#license)
 
 ## Requirements
@@ -16,6 +16,15 @@
 
 ## Installation
 
+### Swift Package Manager
+
+[Swift Package Manager](https://swift.org/package-manager/) is a dependency manager built into Xcode.
+
+If you are using Xcode 11 or higher, go to **File / Swift Packages / Add Package Dependency...** and enter package repository URL **https://github.com/kean/Nuke.git**, then follow the instructions.
+
+To remove the dependency, select the project and open **Swift Packages** (which is next to **Build Settings**). You can add and remove packages from this tab.
+
+> Swift Package Manager can also be used [from the command line](https://swift.org/package-manager/).
 
 ### Manually
 
@@ -68,20 +77,6 @@ github "kean/Align"
 ```
 
 Run `carthage update` to build the framework and drag the built `Align.framework` into your Xcode project.
-
-
-### Swift Package Manager
-
-The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. It is in early development, but Align does support its use on supported platforms. 
-
-Once you have your Swift package set up, adding Align as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
-
-```swift
-dependencies: [
-    .package(url: "https://github.com/kean/Align.git", from: "0.2")
-]
-```
-
 
 ## License
 
