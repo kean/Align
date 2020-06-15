@@ -10,11 +10,11 @@ public protocol LayoutItem { // `UIView`, `UILayoutGuide`
 
 extension UIView: LayoutItem {}
 extension UILayoutGuide: LayoutItem {
-    public var superview: UIView? { return self.owningView }
+    public var superview: UIView? { owningView }
 }
 
 public extension LayoutItem { // Align methods are available via `LayoutProxy`
-    @nonobjc var al: LayoutProxy<Self> { return LayoutProxy(base: self) }
+    @nonobjc var al: LayoutProxy<Self> { LayoutProxy(base: self) }
 
     func al(_ closure: (LayoutProxy<Self>) -> Void) {
         closure(LayoutProxy(base: self))
@@ -31,34 +31,33 @@ extension LayoutProxy where Base: LayoutItem {
 
     // MARK: Anchors
 
-    public var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { return Anchor(base, .top) }
-    public var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { return Anchor(base, .bottom) }
-    public var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { return Anchor(base, .left) }
-    public var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { return Anchor(base, .right) }
-    public var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { return Anchor(base, .leading) }
-    public var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { return Anchor(base, .trailing) }
+    public var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .top) }
+    public var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .bottom) }
+    public var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .left) }
+    public var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .right) }
+    public var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .leading) }
+    public var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .trailing) }
 
-    public var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { return Anchor(base, .centerX) }
-    public var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { return Anchor(base, .centerY) }
+    public var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(base, .centerX) }
+    public var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(base, .centerY) }
 
-    public var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { return Anchor(base, .firstBaseline) }
-    public var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { return Anchor(base, .lastBaseline) }
+    public var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .firstBaseline) }
+    public var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .lastBaseline) }
 
-    public var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { return Anchor(base, .width) }
-    public var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { return Anchor(base, .height) }
+    public var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(base, .width) }
+    public var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(base, .height) }
 
     // MARK: Anchor Collections
 
-    public func edges(_ edges: LayoutEdge...) -> AnchorCollectionEdges { return AnchorCollectionEdges(item: base, edges: edges) }
-    public var edges: AnchorCollectionEdges { return AnchorCollectionEdges(item: base, edges: [.left, .right, .bottom, .top]) }
-    public var center: AnchorCollectionCenter { return AnchorCollectionCenter(x: centerX, y: centerY) }
-    public var size: AnchorCollectionSize { return AnchorCollectionSize(width: width, height: height) }
+    public func edges(_ edges: LayoutEdge...) -> AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: edges) }
+    public var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: [.left, .right, .bottom, .top]) }
+    public var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
+    public var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }
 
 extension LayoutProxy where Base: UIView {
-    public var margins: LayoutProxy<UILayoutGuide> { return base.layoutMarginsGuide.al }
-
-    public var safeArea: LayoutProxy<UILayoutGuide> { return base.safeAreaLayoutGuide.al }
+    public var margins: LayoutProxy<UILayoutGuide> { base.layoutMarginsGuide.al }
+    public var safeArea: LayoutProxy<UILayoutGuide> { base.safeAreaLayoutGuide.al }
 }
 
 // MARK: - Anchors
@@ -92,25 +91,25 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
 
     /// Returns a new anchor offset by a given amount.
     internal func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
-        return Anchor<Type, Axis>(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
+        Anchor<Type, Axis>(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
     }
 
     /// Returns a new anchor with a given multiplier.
     internal func multiplied(by multiplier: CGFloat) -> Anchor<Type, Axis> {
-        return Anchor<Type, Axis>(item, attribute, offset: self.offset * multiplier, multiplier: self.multiplier * multiplier)
+        Anchor<Type, Axis>(item, attribute, offset: self.offset * multiplier, multiplier: self.multiplier * multiplier)
     }
 }
 
 public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
-    return anchor.offsetting(by: offset)
+    anchor.offsetting(by: offset)
 }
 
 public func - <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
-    return anchor.offsetting(by: -offset)
+    anchor.offsetting(by: -offset)
 }
 
 public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
-    return anchor.multiplied(by: multiplier)
+    anchor.multiplied(by: multiplier)
 }
 
 // MARK: - Anchors (AnchorType.Alignment)
@@ -118,7 +117,7 @@ public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> A
 extension Anchor where Type: AnchorType.Alignment {
     /// Aligns two anchors.
     @discardableResult public func align<Type: AnchorType.Alignment>(with anchor: Anchor<Type, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return Constraints.constrain(self, anchor, relation: relation)
+        Constraints.constrain(self, anchor, relation: relation)
     }
 }
 
@@ -127,37 +126,23 @@ extension Anchor where Type: AnchorType.Alignment {
 extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the same edge of the superview.
     @discardableResult public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return _pin(to: item.superview!, attribute: attribute, inset: inset, relation: relation)
+        _pin(to: item.superview!, attribute: attribute, inset: inset, relation: relation)
     }
 
     /// Pins the edge to the respected margin of the superview.
     @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return _pin(to: item.superview!, attribute: attribute.toMargin, inset: inset, relation: relation)
+        _pin(to: item.superview!, attribute: attribute.toMargin, inset: inset, relation: relation)
     }
 
     /// Pins the edge to the respected edges of the given container.
     @discardableResult public func pin(to container: LayoutItem, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return _pin(to: container, attribute: attribute, inset: inset, relation: relation)
+        _pin(to: container, attribute: attribute, inset: inset, relation: relation)
     }
 
     /// Pins the edge to the safe area of the view controller. Falls back to
     /// layout guides (`.topLayoutGuide` and `.bottomLayoutGuide` on iOS 10.
     @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        let item2: Any?, attr2: NSLayoutConstraint.Attribute
-        if #available(iOS 11, tvOS 11, *) {
-            // Pin to `safeAreaLayoutGuide` on iOS 11
-            (item2, attr2) = (vc.view.safeAreaLayoutGuide, self.attribute)
-        } else {
-            switch self.attribute {
-            // Fall back to .topLayoutGuide and pin to it's .bottom.
-            case .top: (item2, attr2) = (vc.topLayoutGuide, .bottom)
-            // Fall back to .bottomLayoutGuide and pin to it's .top.
-            case .bottom: (item2, attr2) = (vc.bottomLayoutGuide, .top)
-            // There are no layout guides for .left and .right, so just pin
-            // to the superview instead.
-            default: (item2, attr2) = (vc.view, self.attribute)
-            }
-        }
+        let (item2, attr2) = (vc.view.safeAreaLayoutGuide, self.attribute)
         return _pin(to: item2, attribute: attr2, inset: inset, relation: relation)
     }
 
@@ -175,7 +160,7 @@ extension Anchor where Type: AnchorType.Edge {
 extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
     @discardableResult public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return align(with: Anchor<Type, Axis>(self.item.superview!, self.attribute) + offset, relation: relation)
+        align(with: Anchor<Type, Axis>(self.item.superview!, self.attribute) + offset, relation: relation)
     }
 }
 
@@ -184,11 +169,11 @@ extension Anchor where Type: AnchorType.Center {
 extension Anchor where Type: AnchorType.Dimension {
     /// Sets the dimension to a specific size.
     @discardableResult public func set(_ constant: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return Constraints.constrain(item: item, attribute: attribute, relatedBy: relation, constant: constant)
+        Constraints.constrain(item: item, attribute: attribute, relatedBy: relation, constant: constant)
     }
 
     @discardableResult public func match<Axis>(_ anchor: Anchor<AnchorType.Dimension, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return Constraints.constrain(self, anchor, relation: relation)
+        Constraints.constrain(self, anchor, relation: relation)
     }
 }
 
@@ -202,25 +187,25 @@ public struct AnchorCollectionEdges {
     /// Pins the edges of the view to the edges of the superview so the the view
     /// fills the available space in a container.
     @discardableResult public func pinToSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        return anchors.map { $0.pinToSuperview(inset: insets.inset(for: $0.attribute), relation: relation) }
+        anchors.map { $0.pinToSuperview(inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
     /// Pins the edges of the view to the margins of the superview so the the view
     /// fills the available space in a container.
     @discardableResult public func pinToSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        return anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
+        anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
     /// Pins the edges of the view to the edges of the given view so the the
     /// view fills the available space in a container.
     @discardableResult public func pin(to item2: LayoutItem, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        return anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relation) }
+        anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
     /// Pins the edges to the safe area of the view controller.
     /// Falls back to layout guides on iOS 10.
     @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        return anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
+        anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 }
 
@@ -232,12 +217,12 @@ public struct AnchorCollectionCenter {
 
     /// Centers the view in the superview.
     @discardableResult public func alignWithSuperview() -> [NSLayoutConstraint] {
-        return [x.alignWithSuperview(), y.alignWithSuperview()]
+        [x.alignWithSuperview(), y.alignWithSuperview()]
     }
 
     /// Makes the axis equal to the other collection of axis.
     @discardableResult public func align(with anchors: AnchorCollectionCenter) -> [NSLayoutConstraint] {
-        return [x.align(with: anchors.x), y.align(with: anchors.y)]
+        [x.align(with: anchors.x), y.align(with: anchors.y)]
     }
 }
 
@@ -250,13 +235,13 @@ public struct AnchorCollectionSize {
 
     /// Set the size of item.
     @discardableResult public func set(_ size: CGSize, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        return [width.set(size.width, relation: relation), height.set(size.height, relation: relation)]
+        [width.set(size.width, relation: relation), height.set(size.height, relation: relation)]
     }
 
     /// Makes the size of the item equal to the size of the other item.
     @discardableResult public func match(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        return [width.match(anchors.width * multiplier - insets.width, relation: relation),
-                height.match(anchors.height * multiplier - insets.height, relation: relation)]
+        [width.match(anchors.width * multiplier - insets.width, relation: relation),
+         height.match(anchors.height * multiplier - insets.height, relation: relation)]
     }
 }
 
@@ -287,13 +272,13 @@ public final class Constraints {
 
     /// Creates and automatically installs a constraint between two anchors.
     internal static func constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: (multiplier / lhs.multiplier) * rhs.multiplier, constant: offset - lhs.offset + rhs.offset)
+        constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: (multiplier / lhs.multiplier) * rhs.multiplier, constant: offset - lhs.offset + rhs.offset)
     }
 
     /// Creates and automatically installs a constraint between an anchor and
     /// a given item.
     internal static func constrain<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: Any?, attribute attr2: NSLayoutConstraint.Attribute?, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: offset - lhs.offset)
+        constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: offset - lhs.offset)
     }
 
     private static var _stack = [Constraints]() // this is what enabled constraint auto-installing
