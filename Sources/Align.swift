@@ -246,7 +246,8 @@ public struct AnchorCollectionSize {
 // MARK: - Constraints
 
 public final class Constraints {
-    var constraints = [NSLayoutConstraint]()
+    /// Returns all of the created constraints.
+    public private(set) var constraints = [NSLayoutConstraint]()
 
     /// All of the constraints created in the given closure are automatically
     /// activated at the same time. This is more efficient then installing them
@@ -289,8 +290,6 @@ public final class Constraints {
         }
     }
 }
-
-// MARK: - Constraints (Arity)
 
 extension Constraints {
     @discardableResult public convenience init<A: LayoutItem>(for a: A, _ closure: (LayoutProxy<A>) -> Void) {
