@@ -1,5 +1,12 @@
 # Align
 
+<p align="left">
+<img src="https://img.shields.io/badge/platforms-iOS%2C%20tvOS-lightgrey.svg">
+<img src="https://img.shields.io/badge/supports-CocoaPods%2C%20Carthage%2C%20SwiftPM-green.svg">
+<a href="https://travis-ci.org/kean/Align"><img src="https://travis-ci.org/kean/Align.svg?branch=master"></a>
+<img src="https://img.shields.io/badge/test%20coverage-100%25-brightgreen.svg">
+</p>
+
 An intuitive and powerful Auto Layout library.
 
 The entire library fits in a single file with less than 300 lines of code which you can just drag-n-drop into your app.
