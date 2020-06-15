@@ -77,13 +77,23 @@ view.safeAreaLayoutGuide.al.top
 Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**. To create constraints, start by selecting an **anchor** or a **collection of anchors** of a view (or of a layout guide). Then use anchor's methods to create constraints.
 
 ```swift
-Constraints(for: view) { $0 in
+Constraints(for: view) {
     $0.top.pinToSuperview()
     $0.centerX.alignWithSuperview()
 }
 ```
 
-Every view that you manipulate using Align has `translatesAutoresizingMaskIntoConstraints` set to `false`. Align also automatically activates all of the created constraints. Constraints created using `Constraints` API are activated all of the same time when you exit from the closure. It gives you a chance to change `priority` of the constraints.
+Every view that you manipulate using Align has `translatesAutoresizingMaskIntoConstraints` set to `false`.
+
+Align also automatically activates all of the created constraints. Constraints created using `Constraints` API are activated all of the same time when you exit from the closure. It gives you a chance to change `priority` of the constraints.
+
+There is an option to disable automatic activation of constraints:
+
+```swift
+Constraints(for: view, activate: false) {
+    self.widthConstraint = $0.width.set(0)
+}
+```
 
 Anchors can be also be accessed using a convenience `.al` proxy:
 

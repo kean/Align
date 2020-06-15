@@ -253,11 +253,14 @@ public final class Constraints {
     /// activated at the same time. This is more efficient then installing them
     /// one-be-one. More importantly, it allows to make changes to the constraints
     /// before they are installed (e.g. change `priority`).
-    @discardableResult public init(_ closure: () -> Void) {
+    ///
+    /// - parameter activate: Set to `false` to disable automatic activation of
+    /// constraints.
+    @discardableResult public init(_ closure: () -> Void, activate: Bool = true) {
         Constraints._stack.append(self)
         closure() // create constraints
         Constraints._stack.removeLast()
-        NSLayoutConstraint.activate(constraints)
+        if activate { NSLayoutConstraint.activate(constraints) }
     }
 
     /// Creates and automatically installs a constraint.
