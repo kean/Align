@@ -195,7 +195,8 @@ The first one is `AnchorCollectionEdges` which allows to manipulate multiple edg
 ```swift
 view.addSubview(stack) {
     $0.edges.pinToSuperview() // pins the edges to fill the superview
-    $0.edges.pinToSuperview(insets: Insets(10)) // with insets
+    $0.edges.pinToSuperview(insets: EdgeInsets(top: 10, left: 20, bottom: 10, right: 20)) // with insets
+    $0.edges.pinToSuperview(insets: 16) // with insets
     $0.edges.pinToSuperviewMargins() // or margins
     $0.edges(.left, .right).pinToSuperview() // fill along horizontal axis
 }

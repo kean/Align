@@ -1,7 +1,7 @@
 <img width="500" alt="Screen Shot 2020-06-15 at 18 12 58" src="https://user-images.githubusercontent.com/1567433/84711259-e8136700-af33-11ea-823e-e10a2a8bb398.png">
 
 <p align="left">
-<img src="https://img.shields.io/badge/platforms-iOS%2C%20tvOS-lightgrey.svg">
+<img src="https://img.shields.io/badge/platforms-iOS%2C%20tvOS%2C%20macOS-lightgrey.svg">
 <img src="https://img.shields.io/badge/supports-CocoaPods%2C%20Carthage%2C%20SwiftPM-green.svg">
 <a href="https://travis-ci.org/kean/Align"><img src="https://travis-ci.org/kean/Align.svg?branch=master"></a>
 <img src="https://img.shields.io/badge/test%20coverage-100%25-brightgreen.svg">
@@ -30,7 +30,7 @@ Constraints(for: title, subtitle) { title, subtitle in
     title.centerX.alignWithSuperview()
 
     // Fill along the horizontal axis
-    title.edges.pinToSuperview()
+    title.edges.pinToSuperview(insets: 16)
 
     // Manipulate dimensions
     title.width.set(100)

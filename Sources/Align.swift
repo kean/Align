@@ -212,6 +212,18 @@ public struct AnchorCollectionEdges {
         anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
+    /// Pins the edges of the view to the edges of the superview so the the view
+    /// fills the available space in a container.
+    @discardableResult public func pinToSuperview(insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSuperview(inset: insets, relation: relation) }
+    }
+
+    /// Pins the edges of the view to the edges of the given view so the the
+    /// view fills the available space in a container.
+    @discardableResult public func pin(to item2: LayoutItem, insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pin(to: item2, inset: insets, relation: relation) }
+    }
+
     #if os(iOS) || os(tvOS)
     /// Pins the edges of the view to the margins of the superview so the the view
     /// fills the available space in a container.
@@ -223,6 +235,18 @@ public struct AnchorCollectionEdges {
     /// Falls back to layout guides on iOS 10.
     @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
         anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
+    }
+
+    /// Pins the edges of the view to the margins of the superview so the the view
+    /// fills the available space in a container.
+    @discardableResult public func pinToSuperviewMargins( insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSuperviewMargin(inset: insets, relation: relation) }
+    }
+
+    /// Pins the edges to the safe area of the view controller.
+    /// Falls back to layout guides on iOS 10.
+    @discardableResult public func pinToSafeArea(of vc: UIViewController,  insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSafeArea(of: vc, inset: insets, relation: relation) }
     }
     #endif
 }
@@ -337,15 +361,15 @@ extension Constraints {
 
 // MARK: - Misc
 
-public struct EdgeInsets {
-    public var top: CGFloat, leading: CGFloat, bottom: CGFloat, trailing: CGFloat
+#if os(iOS) || os(tvOS)
+public typealias EdgeInsets = UIEdgeInsets
+#elseif os(macOS)
+public typealias EdgeInsets = NSEdgeInsets
 
-    public init(top: CGFloat, leading: CGFloat, bottom: CGFloat, trailing: CGFloat) {
-        self.top = top; self.leading = leading; self.bottom = bottom; self.trailing = trailing
-    }
-
-    public static let zero = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+public extension NSEdgeInsets {
+    static let zero = NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 }
+#endif
 
 public enum LayoutEdge {
     case top, bottom, leading, trailing, left, right
@@ -387,8 +411,8 @@ extension EdgeInsets {
     func inset(for attribute: NSLayoutConstraint.Attribute) -> CGFloat {
         switch attribute {
         case .top: return top; case .bottom: return bottom
-        case .left, .leading: return leading
-        case .right, .trailing: return trailing
+        case .left, .leading: return left
+        case .right, .trailing: return right
         default: return 0
         }
     }

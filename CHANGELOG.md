@@ -8,6 +8,7 @@
 
 - Add `constraints` property to `Constraints` type to allow access to all of the constraints created using it
 - Add `activate` parameter to `Constraints` initiliazer to optionally disable automatic activation of constraints
+- Add a convenience `pinTo` family of methods to `AnchorCollectionEdges` that takes `CGFloat` as insets
 - Remove `addSubview` family of APIs
 - Migrate to Swift 5.1
 - Increase minimum required platform versions
