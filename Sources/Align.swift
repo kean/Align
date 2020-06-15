@@ -181,7 +181,7 @@ extension Anchor where Type: AnchorType.Dimension {
 public struct AnchorCollectionEdges {
     let item: LayoutItem
     let edges: [LayoutEdge]
-    private var anchors: [Anchor<AnchorType.Edge, Any>] { return edges.map { Anchor(item, $0.attribute) } }
+    private var anchors: [Anchor<AnchorType.Edge, Any>] { edges.map { Anchor(item, $0.attribute) } }
 
     /// Pins the edges of the view to the edges of the superview so the the view
     /// fills the available space in a container.
