@@ -1,4 +1,4 @@
-# Align
+<img width="517" alt="Screen Shot 2020-06-15 at 18 12 58" src="https://user-images.githubusercontent.com/1567433/84711259-e8136700-af33-11ea-823e-e10a2a8bb398.png">
 
 <p align="left">
 <img src="https://img.shields.io/badge/platforms-iOS%2C%20tvOS-lightgrey.svg">
