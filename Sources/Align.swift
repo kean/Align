@@ -231,12 +231,6 @@ public struct AnchorCollectionEdges {
         anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
-    /// Pins the edges to the safe area of the view controller.
-    /// Falls back to layout guides on iOS 10.
-    @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-
     /// Pins the edges of the view to the margins of the superview so the the view
     /// fills the available space in a container.
     @discardableResult public func pinToSuperviewMargins( insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
@@ -245,7 +239,13 @@ public struct AnchorCollectionEdges {
 
     /// Pins the edges to the safe area of the view controller.
     /// Falls back to layout guides on iOS 10.
-    @discardableResult public func pinToSafeArea(of vc: UIViewController,  insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
+    }
+
+    /// Pins the edges to the safe area of the view controller.
+    /// Falls back to layout guides on iOS 10.
+    @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
         anchors.map { $0.pinToSafeArea(of: vc, inset: insets, relation: relation) }
     }
     #endif
