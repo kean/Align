@@ -1,10 +1,18 @@
 [Changelog](https://github.com/kean/Align/releases) for all versions
 
+# Align 2
+
 ## Align 2.0.0
+
+*June 15, 2020*
 
 - Add `constraints` property to `Constraints` type to allow access to all of the constraints created using it
 - Add `activate` parameter to `Constraints` initiliazer to optionally disable automatic activation of constraints
 - Remove `addSubview` family of APIs
+- Migrate to Swift 5.1
+- Increase minimum required platform versions
+
+# Align 1
 
 ## Align 1.2.1
 
