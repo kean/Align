@@ -225,7 +225,6 @@ public struct AnchorCollectionCenter {
     }
 }
 
-
 // MARK: - AnchorCollectionSize
 
 public struct AnchorCollectionSize {
@@ -283,11 +282,10 @@ public final class Constraints {
     private static var _stack = [Constraints]() // this is what enabled constraint auto-installing
 
     private static func _install(_ constraint: NSLayoutConstraint) {
-        if _stack.isEmpty { // not creating a group of constraints
-            constraint.isActive = true
-        } else { // remember which constaints to install when group is completed
-            let group = _stack.last!
+        if let group = _stack.last {
             group.constraints.append(constraint)
+        } else {
+            constraint.isActive = true
         }
     }
 }
