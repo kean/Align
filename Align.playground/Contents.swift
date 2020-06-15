@@ -43,11 +43,12 @@ class MyViewController : UIViewController {
             ]
         )
 
+        view.addSubview(stack)
+
         /// Here's code written using Align
-        view.addSubview(stack) {
-            $0.center.alignWithSuperview()
-            $0.edges(.left, .right).pinToSuperviewMargins(relation: .greaterThanOrEqual)
-        }
+
+        stack.al.center.alignWithSuperview()
+        stack.al.edges(.left, .right).pinToSuperviewMargins(relation: .greaterThanOrEqual)
 
         logo.text = "⛵️"
         title.text = "Welcome to Align!"

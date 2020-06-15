@@ -1,5 +1,9 @@
 [Changelog](https://github.com/kean/Align/releases) for all versions
 
+## Align 2.0.0
+
+- Remove `addSubview` family of APIs
+
 ## Align 1.2.1
 
 - Add support for Swift Package Manager 5.0

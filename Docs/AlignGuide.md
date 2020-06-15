@@ -12,6 +12,8 @@
   * [AnchorCollectionEdges](#anchorcollectionedges)
   * [AnchorCollectionCenter](#anchorcollectioncenter)
   * [AnchorCollectionSize](#anchorcollectionsize)
+- [Extensions](#extensions)
+  * [Add Subviews](#add-subviews)
 
 ## Introduction
 
@@ -72,31 +74,21 @@ view.safeAreaLayoutGuide.al.top
 
 ### Accessing Anchors
 
-The best way to access anchors is by using a special `addSubview(_:constraints:)` method (supports up to 4 views):
-
-```swift
-view.addSubview(stack) {
-    $0.edges(.left, .right).pinToSuperview() // fill along horizontal axis
-    $0.centerY.alignWithSuperview() // center along vertical axis
-}
-```
-
-With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents programmer errors (e.g. trying to add constraints to views not in view hierarchy). 
-
-As an alternativey you can asso access anchors via `.al` proxy, but it's better to stick to a single approach:
-
-```swift
-stack.al.edges.pinToSuperview()
-```
-
-In addition to `addSubview(_:constraints:)` method there is a `Constraints` 
-type which allows you to operate on an existing view hierarchy:
+Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**. To create constraints, start by selecting an **anchor** or a **collection of anchors** of a view (or of a layout guide). Then use anchor's methods to create constraints.
 
 ```swift
 Constraints(for: view) { $0 in
     $0.top.pinToSuperview()
     $0.centerX.alignWithSuperview()
 }
+```
+
+Every view that you manipulate using Align has `translatesAutoresizingMaskIntoConstraints` set to `false`. Align also automatically activates all of the created constraints. Constraints created using `Constraints` API are activated all of the same time when you exit from the closure. It gives you a chance to change `priority` of the constraints.
+
+Anchors can be also be accessed using a convenience `.al` proxy:
+
+```swift
+title.al.top.pinToSuperview()
 ```
 
 ### Creating Constraints Using Anchors
@@ -218,5 +210,48 @@ The third is `AnchorCollectionSize` which allows you to manipulate size:
 Constraints(for: view, container) { view, container in
     view.size.set(CGSize(width: 44, height: 44))
     view.size.match(container.size)
+}
+```
+
+## Extensions
+
+You can extend Align by adding the code samples from this section in your project.
+
+### Add Subviews
+
+The best way to access anchors is by using a special `addSubview(_:constraints:)` method (supports up to 4 views):
+
+```swift
+view.addSubview(stack) {
+    $0.edges(.left, .right).pinToSuperview() // fill along horizontal axis
+    $0.centerY.alignWithSuperview() // center along vertical axis
+}
+```
+
+With `addSubview(_:constraints:)` method you define a view hierarchy and layout views at the same time. It encourages splitting layout code into logical blocks and prevents programmer errors (e.g. trying to add constraints to views not in view hierarchy). 
+
+```swift
+// MARK: - UIView + Constraints
+
+public extension UIView {
+    @discardableResult @nonobjc func addSubview(_ a: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
+        addSubview(a)
+        return Constraints(for: a, constraints)
+    }
+
+    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+        [a, b].forEach(addSubview)
+        return Constraints(for: a, b, constraints)
+    }
+
+    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+        [a, b, c].forEach(addSubview)
+        return Constraints(for: a, b, c, constraints)
+    }
+
+    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+        [a, b, c, d].forEach(addSubview)
+        return Constraints(for: a, b, c, d, constraints)
+    }
 }
 ```
