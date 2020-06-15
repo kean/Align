@@ -29,32 +29,32 @@ There are four types of anchors:
 
 ```swift
 var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical>
-var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical>
-var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal>
-var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal>
-var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal>
-var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal>
+var bottom: Anchor<Edge, Vertical>
+var left: Anchor<Edge, Horizontal>
+var right: Anchor<Edge, Horizontal>
+var leading: Anchor<Edge, Horizontal>
+var trailing: Anchor<Edge, Horizontal>
 ```
 
 **AnchorType.Center:**
 
 ```swift
-var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
-var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical>
+var centerX: Anchor<Center, Horizontal>
+var centerY: Anchor<Center, Vertical>
 ```
 
 **AnchorType.Baseline:**
 
 ```swift
-var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical>
-var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical>
+var firstBaseline: Anchor<Baseline, Vertical>
+var lastBaseline: Anchor<Baseline, Vertical>
 ```
 
 **AnchorType.Dimension:**
 
 ```swift
-var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
-var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
+var width: Anchor<Dimension, Horizontal>
+var height: Anchor<Dimension, Vertical>
 ```
 
 To get access to margins and safe area use `margins` or `safeArea` layout guides (`UILayoutGuide`) respectively:
