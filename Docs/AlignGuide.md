@@ -1,25 +1,27 @@
 # Align Guide
 
+- [Introduction](#introduction)
 - [Anchors](#anchors)
-  * [Type of Anchors](#type-of-anchors)
   * [Accessing Anchors](#accessing-anchors)
   * [Creating Constraints Using Anchors](#creating-constraints-using-anchors)
     + [Alignment Anchors (Edge, Center, Baseline)](#alignment-anchors--edge--center--baseline-)
     + [Edge Anchors Only](#edge-anchors-only)
     + [Center Anchors Only](#center-anchors-only)
     + [Dimension Anchors Only](#dimension-anchors-only)
-  * [Anchors Collections](#anchors-collections)
-    + [AnchorCollectionEdges](#anchorcollectionedges)
-    + [AnchorCollectionCenter](#anchorcollectioncenter)
-    + [AnchorCollectionSize](#anchorcollectionsize)
+- [Anchor Collections](#anchor-collections)
+  * [AnchorCollectionEdges](#anchorcollectionedges)
+  * [AnchorCollectionCenter](#anchorcollectioncenter)
+  * [AnchorCollectionSize](#anchorcollectionsize)
+
+## Introduction
+
+Align has a simple and consistent model for creating constraints. Start by selecting an [**anchor**](#anchors) or a [**collection of anchors**](#anchor-collections) of a view (or of a layout guide). Then use anchor's methods to create constraints.
+
+Anchors are type-safe, they prevent you from creating invalid constraints, and help you avoid typicaly Auto Layour pitfalls such as forgetting to set `translatesAutoresizingMaskIntoConstraints` to `false`.
 
 ## Anchors
 
-Align has a simple and consistent model for creating constraints. Start by selecting an **anchor** or a **collection of anchors** of a view (or of a layout guide). Then use anchor's methods to create constraints.
-
 An anchor (`Anchor<Type, Axis>`) corresponds to a layout attribute (`NSLayoutConstraint.Attribute`) of a view (`UIView`) or of a layout guide (`UILayoutGuide`).
-
-### Type of Anchors
 
 There are four types of anchors:
 
@@ -68,7 +70,6 @@ view.layoutMarginsGuide.al.top
 view.safeAreaLayoutGuide.al.top
 ```
 
-
 ### Accessing Anchors
 
 The best way to access anchors is by using a special `addSubview(_:constraints:)` method (supports up to 4 views):
@@ -97,7 +98,6 @@ Constraints(for: view) { $0 in
     $0.centerX.alignWithSuperview()
 }
 ```
-
 
 ### Creating Constraints Using Anchors
 
@@ -182,11 +182,11 @@ title.al.width.match(title.al.height)
 title.al.width.match(title.al.height * 2) // aspect ratio
 ```
 
-### Anchor Collections
+## Anchor Collections
 
 There are three types anchors collections which allow you to manipulate multiple anchors at the same time.
 
-#### AnchorCollectionEdges
+### AnchorCollectionEdges
 
 The first one is `AnchorCollectionEdges` which allows to manipulate multiple edges of a view at the same time:
 
@@ -199,7 +199,7 @@ view.addSubview(stack) {
 }
 ```
 
-#### AnchorCollectionCenter
+### AnchorCollectionCenter
 
 The second is `AnchorCollectionCenter` which allow to align centers of the views:
 
@@ -210,7 +210,7 @@ Constraints(for: title) {
 }
 ```
 
-#### AnchorCollectionSize
+### AnchorCollectionSize
 
 The third is `AnchorCollectionSize` which allows you to manipulate size:
 
