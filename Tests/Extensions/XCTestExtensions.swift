@@ -20,15 +20,9 @@ public func XCTAssertEqualConstraints(_ expected: [NSLayoutConstraint], _ receiv
 
     var received = received
     for c in expected {
-        #if swift(>=5.0)
         let idx = received.firstIndex(where: {
             Constraint($0) == Constraint(c)
         })
-        #else
-        let idx = received.index(where: {
-            Constraint($0) == Constraint(c)
-        })
-        #endif
         XCTAssertNotNil(idx, "Failed to find constraints: \(c)\n\nExpected: \(expected)\n\nReceived: \(received)", file: file, line: line)
         if let idx = idx {
             received.remove(at: idx)
@@ -94,7 +88,6 @@ private struct Constraint: Equatable {
 // MARK: Helpers
 
 extension NSLayoutConstraint.Attribute {
-    #if swift(>=5.0)
     var toString: String {
         switch self {
         case .width: return "width"
@@ -121,31 +114,4 @@ extension NSLayoutConstraint.Attribute {
         @unknown default: return "unexpacted"
         }
     }
-    #else
-    var toString: String {
-        switch self {
-        case .width: return "width"
-        case .height: return "height"
-        case .bottom: return "bottom"
-        case .bottomMargin: return "bottomMargin"
-        case .top: return "top"
-        case .topMargin: return "topMargin"
-        case .left: return "left"
-        case .leftMargin: return "leftMargin"
-        case .right: return "right"
-        case .rightMargin: return "rightMargin"
-        case .leading: return "leading"
-        case .leadingMargin: return "leadingMargin"
-        case .trailing: return "trailing"
-        case .trailingMargin: return "trailingMargin"
-        case .centerX: return "centerX"
-        case .centerXWithinMargins: return "centerXWithinMargins"
-        case .centerY: return "centerY"
-        case .centerYWithinMargins: return "centerYWithinMargins"
-        case .lastBaseline: return "lastBaseline"
-        case .firstBaseline: return "firstBaseline"
-        case .notAnAttribute: return "notAnAttribute"
-        }
-    }
-    #endif
 }

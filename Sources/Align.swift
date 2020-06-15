@@ -58,7 +58,6 @@ extension LayoutProxy where Base: LayoutItem {
 extension LayoutProxy where Base: UIView {
     public var margins: LayoutProxy<UILayoutGuide> { return base.layoutMarginsGuide.al }
 
-    @available(iOS 11.0, tvOS 11.0, *)
     public var safeArea: LayoutProxy<UILayoutGuide> { return base.safeAreaLayoutGuide.al }
 }
 
@@ -380,20 +379,12 @@ internal extension NSLayoutConstraint.Attribute {
 
 internal extension NSLayoutConstraint.Relation {
     var inverted: NSLayoutConstraint.Relation {
-        #if swift(>=5.0)
         switch self {
         case .greaterThanOrEqual: return .lessThanOrEqual
         case .lessThanOrEqual: return .greaterThanOrEqual
         case .equal: return self
         @unknown default: return self
         }
-        #else
-        switch self {
-        case .greaterThanOrEqual: return .lessThanOrEqual
-        case .lessThanOrEqual: return .greaterThanOrEqual
-        case .equal: return self
-        }
-        #endif
     }
 }
 

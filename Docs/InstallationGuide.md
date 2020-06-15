@@ -10,8 +10,8 @@
 ## Requirements
 
 - iOS 10 / tvOS 10
-- Xcode 9
-- Swift 4
+- Xcode 10
+- Swift 5
 
 
 ## Installation
