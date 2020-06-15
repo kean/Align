@@ -2,6 +2,7 @@
 //
 // Copyright (c) 2017-2019 Alexander Grebenyuk (github.com/kean).
 
+#if os(iOS) || os(tvOS)
 import UIKit
 
 public protocol LayoutItem { // `UIView`, `UILayoutGuide`
@@ -12,6 +13,18 @@ extension UIView: LayoutItem {}
 extension UILayoutGuide: LayoutItem {
     public var superview: UIView? { owningView }
 }
+#elseif os(macOS)
+import AppKit
+
+public protocol LayoutItem { // `NSView`, `NSLayoutGuide`
+    var superview: NSView? { get }
+}
+
+extension NSView: LayoutItem {}
+extension NSLayoutGuide: LayoutItem {
+    public var superview: NSView? { owningView }
+}
+#endif
 
 public extension LayoutItem { // Align methods are available via `LayoutProxy`
     @nonobjc var al: LayoutProxy<Self> { LayoutProxy(base: self) }
@@ -55,10 +68,12 @@ extension LayoutProxy where Base: LayoutItem {
     public var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }
 
+#if os(iOS) || os(tvOS)
 extension LayoutProxy where Base: UIView {
     public var margins: LayoutProxy<UILayoutGuide> { base.layoutMarginsGuide.al }
     public var safeArea: LayoutProxy<UILayoutGuide> { base.safeAreaLayoutGuide.al }
 }
+#endif
 
 // MARK: - Anchors
 
@@ -129,14 +144,15 @@ extension Anchor where Type: AnchorType.Edge {
         _pin(to: item.superview!, attribute: attribute, inset: inset, relation: relation)
     }
 
-    /// Pins the edge to the respected margin of the superview.
-    @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        _pin(to: item.superview!, attribute: attribute.toMargin, inset: inset, relation: relation)
-    }
-
     /// Pins the edge to the respected edges of the given container.
     @discardableResult public func pin(to container: LayoutItem, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         _pin(to: container, attribute: attribute, inset: inset, relation: relation)
+    }
+
+    #if os(iOS) || os(tvOS)
+    /// Pins the edge to the respected margin of the superview.
+    @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        _pin(to: item.superview!, attribute: attribute.toMargin, inset: inset, relation: relation)
     }
 
     /// Pins the edge to the safe area of the view controller.
@@ -144,6 +160,7 @@ extension Anchor where Type: AnchorType.Edge {
         let (item2, attr2) = (vc.view.safeAreaLayoutGuide, self.attribute)
         return _pin(to: item2, attribute: attr2, inset: inset, relation: relation)
     }
+    #endif
 
     // Pin the anchor to another layout item.
     private func _pin(to item2: Any?, attribute attr2: NSLayoutConstraint.Attribute, inset: CGFloat, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
@@ -185,20 +202,21 @@ public struct AnchorCollectionEdges {
 
     /// Pins the edges of the view to the edges of the superview so the the view
     /// fills the available space in a container.
-    @discardableResult public func pinToSuperview(insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func pinToSuperview(insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
         anchors.map { $0.pinToSuperview(inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-
-    /// Pins the edges of the view to the margins of the superview so the the view
-    /// fills the available space in a container.
-    @discardableResult public func pinToSuperviewMargins(insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
     /// Pins the edges of the view to the edges of the given view so the the
     /// view fills the available space in a container.
-    @discardableResult public func pin(to item2: LayoutItem, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+    @discardableResult public func pin(to item2: LayoutItem, insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
         anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relation) }
+    }
+
+    #if os(iOS) || os(tvOS)
+    /// Pins the edges of the view to the margins of the superview so the the view
+    /// fills the available space in a container.
+    @discardableResult public func pinToSuperviewMargins(insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
     /// Pins the edges to the safe area of the view controller.
@@ -206,6 +224,7 @@ public struct AnchorCollectionEdges {
     @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
         anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
     }
+    #endif
 }
 
 // MARK: - AnchorCollectionCenter
@@ -266,7 +285,11 @@ public final class Constraints {
     /// Creates and automatically installs a constraint.
     static func constrain(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
         precondition(Thread.isMainThread, "Align APIs can only be used from the main thread")
+        #if os(iOS) || os(tvOS)
         (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
+        #elseif os(macOS)
+        (item1 as? NSView)?.translatesAutoresizingMaskIntoConstraints = false
+        #endif
         let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
         _install(constraint)
         return constraint
@@ -314,6 +337,16 @@ extension Constraints {
 
 // MARK: - Misc
 
+public struct EdgeInsets {
+    public var top: CGFloat, leading: CGFloat, bottom: CGFloat, trailing: CGFloat
+
+    public init(top: CGFloat, leading: CGFloat, bottom: CGFloat, trailing: CGFloat) {
+        self.top = top; self.leading = leading; self.bottom = bottom; self.trailing = trailing
+    }
+
+    public static let zero = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+}
+
 public enum LayoutEdge {
     case top, bottom, leading, trailing, left, right
 
@@ -326,6 +359,7 @@ public enum LayoutEdge {
     }
 }
 
+#if os(iOS) || os(tvOS)
 extension NSLayoutConstraint.Attribute {
     var toMargin: NSLayoutConstraint.Attribute {
         switch self {
@@ -336,6 +370,7 @@ extension NSLayoutConstraint.Attribute {
         }
     }
 }
+#endif
 
 extension NSLayoutConstraint.Relation {
     var inverted: NSLayoutConstraint.Relation {
@@ -348,12 +383,12 @@ extension NSLayoutConstraint.Relation {
     }
 }
 
-extension UIEdgeInsets {
+extension EdgeInsets {
     func inset(for attribute: NSLayoutConstraint.Attribute) -> CGFloat {
         switch attribute {
         case .top: return top; case .bottom: return bottom
-        case .left, .leading: return left
-        case .right, .trailing: return right
+        case .left, .leading: return leading
+        case .right, .trailing: return trailing
         default: return 0
         }
     }
