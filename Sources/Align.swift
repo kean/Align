@@ -139,8 +139,7 @@ extension Anchor where Type: AnchorType.Edge {
         _pin(to: container, attribute: attribute, inset: inset, relation: relation)
     }
 
-    /// Pins the edge to the safe area of the view controller. Falls back to
-    /// layout guides (`.topLayoutGuide` and `.bottomLayoutGuide` on iOS 10.
+    /// Pins the edge to the safe area of the view controller.
     @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let (item2, attr2) = (vc.view.safeAreaLayoutGuide, self.attribute)
         return _pin(to: item2, attribute: attr2, inset: inset, relation: relation)
