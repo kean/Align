@@ -80,22 +80,22 @@ public enum AnchorType {
 /// An anchor represents one of the view's layout attributes (e.g. `left`,
 /// `centerX`, `width`, etc). Use the anchor’s methods to construct constraints.
 public struct Anchor<Type, Axis> { // type and axis are phantom types
-    internal let item: LayoutItem
-    internal let attribute: NSLayoutConstraint.Attribute
-    internal let offset: CGFloat
-    internal let multiplier: CGFloat
+    let item: LayoutItem
+    let attribute: NSLayoutConstraint.Attribute
+    let offset: CGFloat
+    let multiplier: CGFloat
 
     init(_ item: LayoutItem, _ attribute: NSLayoutConstraint.Attribute, offset: CGFloat = 0, multiplier: CGFloat = 1) {
         self.item = item; self.attribute = attribute; self.offset = offset; self.multiplier = multiplier
     }
 
     /// Returns a new anchor offset by a given amount.
-    internal func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
+    func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
         Anchor<Type, Axis>(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
     }
 
     /// Returns a new anchor with a given multiplier.
-    internal func multiplied(by multiplier: CGFloat) -> Anchor<Type, Axis> {
+    func multiplied(by multiplier: CGFloat) -> Anchor<Type, Axis> {
         Anchor<Type, Axis>(item, attribute, offset: self.offset * multiplier, multiplier: self.multiplier * multiplier)
     }
 }
@@ -180,8 +180,8 @@ extension Anchor where Type: AnchorType.Dimension {
 // MARK: - AnchorCollectionEdges
 
 public struct AnchorCollectionEdges {
-    internal let item: LayoutItem
-    internal let edges: [LayoutEdge]
+    let item: LayoutItem
+    let edges: [LayoutEdge]
     private var anchors: [Anchor<AnchorType.Edge, Any>] { return edges.map { Anchor(item, $0.attribute) } }
 
     /// Pins the edges of the view to the edges of the superview so the the view
@@ -212,8 +212,8 @@ public struct AnchorCollectionEdges {
 // MARK: - AnchorCollectionCenter
 
 public struct AnchorCollectionCenter {
-    internal let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
-    internal let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
+    let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
+    let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
 
     /// Centers the view in the superview.
     @discardableResult public func alignWithSuperview() -> [NSLayoutConstraint] {
@@ -230,8 +230,8 @@ public struct AnchorCollectionCenter {
 // MARK: - AnchorCollectionSize
 
 public struct AnchorCollectionSize {
-    internal let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
-    internal let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
+    let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
+    let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
 
     /// Set the size of item.
     @discardableResult public func set(_ size: CGSize, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
@@ -262,7 +262,7 @@ public final class Constraints {
     }
 
     /// Creates and automatically installs a constraint.
-    internal static func constrain(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
+    static func constrain(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
         precondition(Thread.isMainThread, "Align APIs can only be used from the main thread")
         (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
         let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
@@ -271,13 +271,13 @@ public final class Constraints {
     }
 
     /// Creates and automatically installs a constraint between two anchors.
-    internal static func constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+    static func constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: (multiplier / lhs.multiplier) * rhs.multiplier, constant: offset - lhs.offset + rhs.offset)
     }
 
     /// Creates and automatically installs a constraint between an anchor and
     /// a given item.
-    internal static func constrain<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: Any?, attribute attr2: NSLayoutConstraint.Attribute?, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+    static func constrain<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: Any?, attribute attr2: NSLayoutConstraint.Attribute?, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: offset - lhs.offset)
     }
 
@@ -342,7 +342,7 @@ extension Constraints {
 public enum LayoutEdge {
     case top, bottom, leading, trailing, left, right
 
-    internal var attribute: NSLayoutConstraint.Attribute {
+    var attribute: NSLayoutConstraint.Attribute {
         switch self {
         case .top: return .top;          case .bottom: return .bottom
         case .leading: return .leading;  case .trailing: return .trailing
@@ -351,7 +351,7 @@ public enum LayoutEdge {
     }
 }
 
-internal extension NSLayoutConstraint.Attribute {
+extension NSLayoutConstraint.Attribute {
     var toMargin: NSLayoutConstraint.Attribute {
         switch self {
         case .top: return .topMargin;           case .bottom: return .bottomMargin
@@ -362,7 +362,7 @@ internal extension NSLayoutConstraint.Attribute {
     }
 }
 
-internal extension NSLayoutConstraint.Relation {
+extension NSLayoutConstraint.Relation {
     var inverted: NSLayoutConstraint.Relation {
         switch self {
         case .greaterThanOrEqual: return .lessThanOrEqual
@@ -373,7 +373,7 @@ internal extension NSLayoutConstraint.Relation {
     }
 }
 
-internal extension UIEdgeInsets {
+extension UIEdgeInsets {
     func inset(for attribute: NSLayoutConstraint.Attribute) -> CGFloat {
         switch attribute {
         case .top: return top; case .bottom: return bottom
