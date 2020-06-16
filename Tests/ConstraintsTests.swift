@@ -18,7 +18,7 @@ class ConstraintsTests: XCTestCase {
 
     func testCanChangePriorityInsideInit() {
         Constraints {
-            let c = view.al.top.pinToSuperview()
+            let c = view.anchors.top.pinToSuperview()
             XCTAssertEqual(c.priority.rawValue, 1000)
             c.priority = LayoutPriority(999)
             XCTAssertEqual(c.priority.rawValue, 999)
@@ -30,12 +30,12 @@ class ConstraintsTests: XCTestCase {
     func testCallsCanBeNested() { // no arguments
         Constraints() {
             XCTAssertEqualConstraints(
-                view.al.top.pinToSuperview(),
+                view.anchors.top.pinToSuperview(),
                 NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top)
             )
             Constraints() {
                 XCTAssertEqualConstraints(
-                    view.al.bottom.pinToSuperview(),
+                    view.anchors.bottom.pinToSuperview(),
                     NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom)
                 )
             }

@@ -48,10 +48,10 @@ Constraints(for: title, subtitle) { title, subtitle in
 
 Every view that you manipulate using Align has `translatesAutoresizingMaskIntoConstraints` set to `false`. Align also automatically activates all of the created constraints. Constraints created using `Constraints` API are activated all of the same time when you exit from the closure. It gives you a chance to change `priority` of the constraints.
 
-Anchors can be also be accessed using a convenience `.al` proxy:
+Anchors can be also be accessed using a convenience `.anchors` proxy:
 
 ```swift
-title.al.top.pinToSuperview()
+title.anchors.top.pinToSuperview()
 ```
 
 There are a variety of APIs in Align that you can use to create constraints. All of them are easily discoverable using code completion in Xcode. For a complete list, you can always refer to [**Align Programming Guide**](https://github.com/kean/Align/blob/master/Docs/AlignGuide.md).

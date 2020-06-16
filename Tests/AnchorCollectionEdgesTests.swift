@@ -17,7 +17,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
 
     func testPinToSuperview() {
         XCTAssertEqualConstraints(
-            view.al.edges.pinToSuperview(),
+            view.anchors.edges.pinToSuperview(),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom),
@@ -28,7 +28,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
     func testPinToSuperviewWithInsets() {
         let insets = EdgeInsets(top: 1, left: 2, bottom: 3, right: 4)
         XCTAssertEqualConstraints(
-            view.al.edges.pinToSuperview(insets: insets),
+            view.anchors.edges.pinToSuperview(insets: insets),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 1),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left, constant: 2),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom, constant: -3),
@@ -38,7 +38,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
 
     func testPinToSuperviewWithInsetsFloat() {
         XCTAssertEqualConstraints(
-            view.al.edges.pinToSuperview(insets: 4),
+            view.anchors.edges.pinToSuperview(insets: 4),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 4),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left, constant: 4),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom, constant: -4),
@@ -48,7 +48,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
 
     func testPinToSuperviewLessThanOrEqual() {
         XCTAssertEqualConstraints(
-            view.al.edges.pinToSuperview(relation: .greaterThanOrEqual),
+            view.anchors.edges.pinToSuperview(relation: .greaterThanOrEqual),
             [NSLayoutConstraint(item: view, attribute: .top, relation: .greaterThanOrEqual, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, relation: .greaterThanOrEqual,toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, relation: .lessThanOrEqual, toItem: container, attribute: .bottom),
@@ -58,7 +58,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
 
     func testPinToSuperviewGreaterThanOrEqual() { // doens't make sense in practice really
         XCTAssertEqualConstraints(
-            view.al.edges.pinToSuperview(relation: .lessThanOrEqual),
+            view.anchors.edges.pinToSuperview(relation: .lessThanOrEqual),
             [NSLayoutConstraint(item: view, attribute: .top, relation: .lessThanOrEqual, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, relation: .lessThanOrEqual,toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, relation: .greaterThanOrEqual, toItem: container, attribute: .bottom),
@@ -68,12 +68,12 @@ class AnchorCollectionEdgesTests: XCTestCase {
 
     func testPinToSuperviewAlongAxis() {
         XCTAssertEqualConstraints(
-            view.al.edges(.top, .bottom).pinToSuperview(),
+            view.anchors.edges(.top, .bottom).pinToSuperview(),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom)]
         )
         XCTAssertEqualConstraints(
-            view.al.edges(.left, .right).pinToSuperview(),
+            view.anchors.edges(.left, .right).pinToSuperview(),
             [NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right)]
         )
@@ -82,7 +82,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
 #if os(iOS) || os(tvOS)
     func testPinToSuperviewLayoutGuide() {
         XCTAssertEqualConstraints(
-            view.al.edges.pin(to: container.layoutMarginsGuide),
+            view.anchors.edges.pin(to: container.layoutMarginsGuide),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container.layoutMarginsGuide, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container.layoutMarginsGuide, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container.layoutMarginsGuide, attribute: .bottom),
@@ -92,7 +92,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
 
     func testPinToSuperviewMargins() {
         XCTAssertEqualConstraints(
-            view.al.edges.pinToSuperviewMargins(),
+            view.anchors.edges.pinToSuperviewMargins(),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .topMargin),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .leftMargin),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottomMargin),

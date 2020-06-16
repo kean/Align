@@ -91,7 +91,7 @@ view.addSubview(stack) {
 
 This is a much simpler model which removes entire layer of standalone methods available on `LayoutItems`. Now you always select either an `anchor` or `collections of anchors`, then use their methods to add constraints. Much simpler.
 
-- Make LayoutProxy's `base` public to enable adding custom extensions on top of it.
+- Make LayoutAnchors's `base` public to enable adding custom extensions on top of it.
 
 
 ## Align 0.2

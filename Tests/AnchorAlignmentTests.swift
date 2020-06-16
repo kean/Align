@@ -20,22 +20,22 @@ class AnchorAlignmentTests: XCTestCase {
 
     func testTopAlignWith() {
         test("align top with the same edge") {
-            let c = view.al.top.align(with: container.al.top)
+            let c = view.anchors.top.align(with: container.anchors.top)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top))
         }
 
         test("align top with the other edge") {
-            let c = view.al.top.align(with: container.al.bottom)
+            let c = view.anchors.top.align(with: container.anchors.bottom)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .bottom))
         }
 
         test("align top with the center") {
-            let c = view.al.top.align(with: container.al.centerY)
+            let c = view.anchors.top.align(with: container.anchors.centerY)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .centerY))
         }
 
         test("align top with offset, relation, multiplier") {
-            let c = view.al.top.align(with: container.al.top * 2 + 10, relation: .greaterThanOrEqual)
+            let c = view.anchors.top.align(with: container.anchors.top * 2 + 10, relation: .greaterThanOrEqual)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(
                 item: view,
                 attribute: .top,
@@ -50,40 +50,40 @@ class AnchorAlignmentTests: XCTestCase {
 
     func testAlignDifferentAnchors() {
         test("align bottom") {
-            let c = view.al.bottom.align(with: container.al.bottom)
+            let c = view.anchors.bottom.align(with: container.anchors.bottom)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom))
         }
 
         test("align leading") {
-            let c = view.al.leading.align(with: container.al.leading)
+            let c = view.anchors.leading.align(with: container.anchors.leading)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .leading, toItem: container, attribute: .leading))
         }
 
         test("align trailing") {
-            let c = view.al.trailing.align(with: container.al.trailing)
+            let c = view.anchors.trailing.align(with: container.anchors.trailing)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .trailing, toItem: container, attribute: .trailing))
         }
 
         test("align left with left") {
-            let c = view.al.left.align(with: container.al.left)
+            let c = view.anchors.left.align(with: container.anchors.left)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left))
         }
 
         test("align right with left") {
-            let c = view.al.right.align(with: container.al.left)
+            let c = view.anchors.right.align(with: container.anchors.left)
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .left))
         }
 
         test("align firstBaseline with firstBaseline") {
             XCTAssertEqualConstraints(
-                view.al.firstBaseline.align(with: container.al.firstBaseline),
+                view.anchors.firstBaseline.align(with: container.anchors.firstBaseline),
                 NSLayoutConstraint(item: view, attribute: .firstBaseline, toItem: container, attribute: .firstBaseline)
             )
         }
 
         test("align lastBaseline with top") {
             XCTAssertEqualConstraints(
-                view.al.lastBaseline.align(with: container.al.top),
+                view.anchors.lastBaseline.align(with: container.anchors.top),
                 NSLayoutConstraint(item: view, attribute: .lastBaseline, toItem: container, attribute: .top)
             )
         }

@@ -64,12 +64,12 @@ To get access to margins and safe area use `margins` or `safeArea` layout guides
 ```swift
 let view = UIView()
 
-view.al.margins.top
-view.al.safeArea.top
+view.anchors.margins.top
+view.anchors.safeArea.top
 
 // Alternative syntax:
-view.layoutMarginsGuide.al.top
-view.safeAreaLayoutGuide.al.top
+view.layoutMarginsGuide.anchors.top
+view.safeAreaLayoutGuide.anchors.top
 ```
 
 ### Accessing Anchors
@@ -98,7 +98,7 @@ Constraints(for: view, activate: false) {
 Anchors can be also be accessed using a convenience `.al` proxy:
 
 ```swift
-title.al.top.pinToSuperview()
+title.anchors.top.pinToSuperview()
 ```
 
 ### Creating Constraints Using Anchors
@@ -147,15 +147,15 @@ Constraints(for: title, subtitle) { title, subtitle in
 Edge anchors (`.top`, `.left`, etc) have a special family of methods which allow you to *pin* anchor to the containers. When you *pin* an anchor Align automatically converts a given `inset` to a proper `constant` to be used in a constraint.
 
 ```swift
-title.al.top.pinToSuperview()
-title.al.top.pinToSuperview(inset: 10)
-title.al.top.pinToSuperviewMargin()
-title.al.right.pin(to: view.layoutMarginsGuide, inset: 10)
+title.anchors.top.pinToSuperview()
+title.anchors.top.pinToSuperview(inset: 10)
+title.anchors.top.pinToSuperviewMargin()
+title.anchors.right.pin(to: view.layoutMarginsGuide, inset: 10)
 
-title.al.right.pinToSuperview(inset: 10)
+title.anchors.right.pinToSuperview(inset: 10)
 // NSLayoutConstraint(item: title, attribute: .right, toItem: title.superview!, attribute: .right, constant: -10)
 
-title.al.right.pinToSuperview(inset: 10, relation: .greaterThanOrEqual)
+title.anchors.right.pinToSuperview(inset: 10, relation: .greaterThanOrEqual)
 // NSLayoutConstraint(item: title, attribute: .right, relation: .greaterThanOrEqual toItem: title.superview!, attribute: .right, constant: -10)
 ```
 
@@ -164,8 +164,8 @@ title.al.right.pinToSuperview(inset: 10, relation: .greaterThanOrEqual)
 Center anchors (`.centerX`, `.centerY`) apart from being allowed to aligned with other anchors (see `Alignment Anchors`) can also be aligned with a superview:
 
 ```swift
-title.al.centerY.alignWithSuperview()
-title.al.centerY.alignWithSuperview(offset: 10)
+title.anchors.centerY.alignWithSuperview()
+title.anchors.centerY.alignWithSuperview(offset: 10)
 ```
 
 #### Dimension Anchors Only
@@ -173,15 +173,15 @@ title.al.centerY.alignWithSuperview(offset: 10)
 Dimension anchors (`width` and `height`) have two special methods. The first one allows to set a size of a dimension to a specific value (`CGFloat`):
 
 ```swift
-title.al.width.set(44)
-title.al.width.set(44, relation: .lessThanOrEqual)
+title.anchors.width.set(44)
+title.anchors.width.set(44, relation: .lessThanOrEqual)
 ```
 
 And the second one allows to `match` the size of one dimension with another:
 
 ```swift
-title.al.width.match(title.al.height)
-title.al.width.match(title.al.height * 2) // aspect ratio
+title.anchors.width.match(title.anchors.height)
+title.anchors.width.match(title.anchors.height * 2) // aspect ratio
 ```
 
 ## Anchor Collections
@@ -209,7 +209,7 @@ The second is `AnchorCollectionCenter` which allow to align centers of the views
 ```swift
 Constraints(for: title) {
     $0.center.alignWithSuperview() // centers in a superview
-    $0.center.align(with: view.al.center)
+    $0.center.align(with: view.anchors.center)
 }
 ```
 
@@ -245,22 +245,22 @@ With `addSubview(_:constraints:)` method you define a view hierarchy and layout 
 // MARK: - UIView + Constraints
 
 public extension UIView {
-    @discardableResult @nonobjc func addSubview(_ a: UIView, constraints: (LayoutProxy<UIView>) -> Void) -> Constraints {
+    @discardableResult @nonobjc func addSubview(_ a: UIView, constraints: (LayoutAnchors<UIView>) -> Void) -> Constraints {
         addSubview(a)
         return Constraints(for: a, constraints)
     }
 
-    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, constraints: (LayoutAnchors<UIView>, LayoutAnchors<UIView>) -> Void) -> Constraints {
         [a, b].forEach(addSubview)
         return Constraints(for: a, b, constraints)
     }
 
-    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutAnchors<UIView>, LayoutAnchors<UIView>, LayoutAnchors<UIView>) -> Void) -> Constraints {
         [a, b, c].forEach(addSubview)
         return Constraints(for: a, b, c, constraints)
     }
 
-    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>, LayoutProxy<UIView>) -> Void) -> Constraints {
+    @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutAnchors<UIView>, LayoutAnchors<UIView>, LayoutAnchors<UIView>, LayoutAnchors<UIView>) -> Void) -> Constraints {
         [a, b, c, d].forEach(addSubview)
         return Constraints(for: a, b, c, d, constraints)
     }

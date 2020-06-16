@@ -26,21 +26,25 @@ extension NSLayoutGuide: LayoutItem {
 }
 #endif
 
-public extension LayoutItem { // Align methods are available via `LayoutProxy`
-    @nonobjc var al: LayoutProxy<Self> { LayoutProxy(base: self) }
+public extension LayoutItem { // Align methods are available via `LayoutAnchors`
+    @nonobjc var anchors: LayoutAnchors<Self> { LayoutAnchors(base: self) }
 
-    func al(_ closure: (LayoutProxy<Self>) -> Void) {
-        closure(LayoutProxy(base: self))
+    @available(*, deprecated, message: "Renamed to `anchors`")
+    @nonobjc var al: LayoutAnchors<Self> { LayoutAnchors(base: self) }
+
+    #warning("TODO: rename this")
+    func al(_ closure: (LayoutAnchors<Self>) -> Void) {
+        closure(LayoutAnchors(base: self))
     }
 }
 
-// MARK: - LayoutProxy
+// MARK: - LayoutAnchors
 
-public struct LayoutProxy<Base> {
+public struct LayoutAnchors<Base> {
     public let base: Base
 }
 
-extension LayoutProxy where Base: LayoutItem {
+extension LayoutAnchors where Base: LayoutItem {
 
     // MARK: Anchors
 
@@ -69,9 +73,9 @@ extension LayoutProxy where Base: LayoutItem {
 }
 
 #if os(iOS) || os(tvOS)
-extension LayoutProxy where Base: UIView {
-    public var margins: LayoutProxy<UILayoutGuide> { base.layoutMarginsGuide.al }
-    public var safeArea: LayoutProxy<UILayoutGuide> { base.safeAreaLayoutGuide.al }
+extension LayoutAnchors where Base: UIView {
+    public var margins: LayoutAnchors<UILayoutGuide> { base.layoutMarginsGuide.anchors }
+    public var safeArea: LayoutAnchors<UILayoutGuide> { base.safeAreaLayoutGuide.anchors }
 }
 #endif
 
@@ -342,20 +346,20 @@ public final class Constraints {
 }
 
 extension Constraints {
-    @discardableResult public convenience init<A: LayoutItem>(for a: A, _ closure: (LayoutProxy<A>) -> Void) {
-        self.init { closure(a.al) }
+    @discardableResult public convenience init<A: LayoutItem>(for a: A, _ closure: (LayoutAnchors<A>) -> Void) {
+        self.init { closure(a.anchors) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem>(for a: A, _ b: B, _ closure: (LayoutProxy<A>, LayoutProxy<B>) -> Void) {
-        self.init { closure(a.al, b.al) }
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem>(for a: A, _ b: B, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>) -> Void) {
+        self.init { closure(a.anchors, b.anchors) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem>(for a: A, _ b: B, _ c: C, _ closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>) -> Void) {
-        self.init { closure(a.al, b.al, c.al) }
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem>(for a: A, _ b: B, _ c: C, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>, LayoutAnchors<C>) -> Void) {
+        self.init { closure(a.anchors, b.anchors, c.anchors) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ closure: (LayoutProxy<A>, LayoutProxy<B>, LayoutProxy<C>, LayoutProxy<D>) -> Void) {
-        self.init { closure(a.al, b.al, c.al, d.al) }
+    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>, LayoutAnchors<C>, LayoutAnchors<D>) -> Void) {
+        self.init { closure(a.anchors, b.anchors, c.anchors, d.anchors) }
     }
 }
 
