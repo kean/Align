@@ -1,4 +1,6 @@
-<img width="503" alt="Screen Shot 2020-06-15 at 22 57 30" src="https://user-images.githubusercontent.com/1567433/84726790-a4345800-af5b-11ea-9931-811ba55244b7.png">
+<img width="500" alt="Screen Shot 2020-06-15 at 23 00 49" src="https://user-images.githubusercontent.com/1567433/84727079-4ce2b780-af5c-11ea-9d8b-52624818b879.png">
+
+Layout Anchors. Reimagined.
 
 <p align="left">
 <img src="https://img.shields.io/badge/platforms-iOS%2C%20tvOS%2C%20macOS-lightgrey.svg">
@@ -6,6 +8,8 @@
 <a href="https://travis-ci.org/kean/Align"><img src="https://travis-ci.org/kean/Align.svg?branch=master"></a>
 <img src="https://img.shields.io/badge/test%20coverage-100%25-brightgreen.svg">
 </p>
+
+<hr/>
 
 Align introduces a better alternative to Auto Layout [anchors](https://developer.apple.com/documentation/uikit/nslayoutanchor).
 
