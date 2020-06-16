@@ -31,11 +31,6 @@ public extension LayoutItem { // Align methods are available via `LayoutAnchors`
 
     @available(*, deprecated, message: "Renamed to `anchors`")
     @nonobjc var al: LayoutAnchors<Self> { LayoutAnchors(base: self) }
-
-    #warning("TODO: rename this")
-    func al(_ closure: (LayoutAnchors<Self>) -> Void) {
-        closure(LayoutAnchors(base: self))
-    }
 }
 
 // MARK: - LayoutAnchors

@@ -10,6 +10,7 @@
 - Add `activate` parameter to `Constraints` initiliazer to optionally disable automatic activation of constraints
 - Add a convenience `pinTo` family of methods to `AnchorCollectionEdges` that takes `CGFloat` as insets
 - Rename uncler `.al` to `.anchors`
+- Remove `.al` version accepting closure
 - Remove `addSubview` family of APIs
 - Migrate to Swift 5.1
 - Increase minimum required platform versions
