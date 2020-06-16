@@ -156,8 +156,12 @@ extension Anchor where Type: AnchorType.Edge {
 
     /// Pins the edge to the safe area of the view controller.
     @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        let (item2, attr2) = (vc.view.safeAreaLayoutGuide, self.attribute)
-        return _pin(to: item2, attribute: attr2, inset: inset, relation: relation)
+        return _pin(to: vc.view.safeAreaLayoutGuide, attribute: attribute, inset: inset, relation: relation)
+    }
+
+    /// Pins the edge to the safe area of the view controller.
+    @discardableResult public func pinToSafeArea(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        return _pin(to: item.superview!.safeAreaLayoutGuide, attribute: attribute, inset: inset, relation: relation)
     }
     #endif
 
@@ -175,7 +179,7 @@ extension Anchor where Type: AnchorType.Edge {
 extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
     @discardableResult public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        align(with: Anchor<Type, Axis>(self.item.superview!, self.attribute) + offset, relation: relation)
+        align(with: Anchor<Type, Axis>(item.superview!, attribute) + offset, relation: relation)
     }
 }
 
@@ -237,15 +241,23 @@ public struct AnchorCollectionEdges {
     }
 
     /// Pins the edges to the safe area of the view controller.
-    /// Falls back to layout guides on iOS 10.
     @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
         anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
     /// Pins the edges to the safe area of the view controller.
-    /// Falls back to layout guides on iOS 10.
     @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
         anchors.map { $0.pinToSafeArea(of: vc, inset: insets, relation: relation) }
+    }
+
+    /// Pins the edges to the safe area of the view controller.
+    @discardableResult public func pinToSafeArea(insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSafeArea(inset: insets.inset(for: $0.attribute), relation: relation) }
+    }
+
+    /// Pins the edges to the safe area of the view controller.
+    @discardableResult public func pinToSafeArea(insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSafeArea(inset: insets, relation: relation) }
     }
     #endif
 }
