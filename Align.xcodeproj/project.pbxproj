@@ -21,6 +21,7 @@
 		0C8FD79D1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C8FD79C1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift */; };
 		0CC3A06C1D7476A700754E59 /* Align.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE361181C86077B00EA70CF /* Align.framework */; };
 		0CF93195249834DB00E1016A /* Align+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF93193249834DB00E1016A /* Align+Extensions.swift */; };
+		0CF931972499039500E1016A /* AnchorAPIsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CF931962499039500E1016A /* AnchorAPIsTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		0CE361181C86077B00EA70CF /* Align.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Align.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CE361241C8607BB00EA70CF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Supporting/Info.plist; sourceTree = "<group>"; };
 		0CF93193249834DB00E1016A /* Align+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Align+Extensions.swift"; sourceTree = "<group>"; };
+		0CF931962499039500E1016A /* AnchorAPIsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorAPIsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 			children = (
 				0CC3A0751D7476B300754E59 /* Info.plist */,
 				0C8FD7811FB85F5600A20E3D /* AnchorTests.swift */,
+				0CF931962499039500E1016A /* AnchorAPIsTests.swift */,
 				0C8FD78D1FB88B9B00A20E3D /* AnchorAlignmentTests.swift */,
 				0C8FD7901FB88BC300A20E3D /* AnchorEdgeTests.swift */,
 				0C8FD7931FB88BED00A20E3D /* AnchorCenterTests.swift */,
@@ -282,6 +285,7 @@
 				0C683A111FBA462D002ACEB9 /* AnchorCollectionEdgesTests.swift in Sources */,
 				0C8FD7791FB85E8B00A20E3D /* XCTestExtensions.swift in Sources */,
 				0C8FD78E1FB88B9B00A20E3D /* AnchorAlignmentTests.swift in Sources */,
+				0CF931972499039500E1016A /* AnchorAPIsTests.swift in Sources */,
 				0CF93195249834DB00E1016A /* Align+Extensions.swift in Sources */,
 				0C8FD7911FB88BC300A20E3D /* AnchorEdgeTests.swift in Sources */,
 				0C8FD7821FB85F5600A20E3D /* AnchorTests.swift in Sources */,
