@@ -11,6 +11,7 @@
 - Add a convenience `pinTo` family of methods to `AnchorCollectionEdges` that takes `CGFloat` as insets
 - Rename uncler `.al` to `.anchors`
 - Remove `addSubview` family of APIs
+- Remove `relation` parameter from `pin` methods
 - Migrate to Swift 5.1
 - Increase minimum required platform versions
 
