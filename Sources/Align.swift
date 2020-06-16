@@ -299,7 +299,7 @@ public final class Constraints {
     ///
     /// - parameter activate: Set to `false` to disable automatic activation of
     /// constraints.
-    @discardableResult public init(_ closure: () -> Void, activate: Bool = true) {
+    @discardableResult public init(activate: Bool = true, _ closure: () -> Void) {
         Constraints._stack.append(self)
         closure() // create constraints
         Constraints._stack.removeLast()
