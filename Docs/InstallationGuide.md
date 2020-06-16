@@ -9,10 +9,11 @@
 
 ## Requirements
 
-- iOS 10 / tvOS 10
-- Xcode 10
-- Swift 5
-
+| Align            | Swift                 | Xcode                | Platforms              |
+|------------------|-----------------------|----------------------|------------------------|
+| Align 2.0      | Swift 5.1       | Xcode 11.0      | iOS 11.0 / tvOS 11.0 / macOS 10.13 |
+| Align 1.1-1.2    | Swift 4.2 – 5.0       | Xcode 10.1 – 10.2    | iOS 10.0 / tvOS 10.0   |
+| Align 1.0        | Swift 4.0 – 4.2       | Xcode 9.2 – 10.1     | iOS 9.0 / tvOS 9.0     | 
 
 ## Installation
 
@@ -45,7 +46,7 @@ To integrate Align into your Xcode project using CocoaPods, specify it in your `
 
 ```ruby
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '10.0'
+platform :ios, '11.0'
 use_frameworks!
 
 target '<Your Target Name>' do
