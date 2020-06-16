@@ -2,6 +2,8 @@
 //
 // Copyright (c) 2017-2019 Alexander Grebenyuk (github.com/kean).
 
+#if os(iOS) || os(tvOS)
+
 import Align
 import UIKit
 
@@ -28,3 +30,5 @@ public extension UIView {
         return Constraints(for: a, b, c, d, constraints)
     }
 }
+
+#endif

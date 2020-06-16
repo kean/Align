@@ -11,13 +11,17 @@ branches:
   only:
   - master
 
-
 jobs:
   include:
     - stage: test
       name: Run Unit Tests (iOS, Xcode 11.3)
       osx_image: xcode11.3
       script: Scripts/test.sh -d "OS=13.3,name=iPhone 11" -d "OS=12.4,name=iPhone X" -d "OS=11.4,name=iPhone SE"
+
+    - stage: test
+      name: Run Unit Tests (macOS, Xcode 11.3)
+      osx_image: xcode11.3
+      script: Scripts/test.sh -d "arch=x86_64"
 
     - stage: test
       name: Run Unit Tests (tvOS, Xcode 11.3)
@@ -28,3 +32,8 @@ jobs:
       name: Run Unit Tests (iOS, Xcode 11)
       osx_image: xcode11
       script: Scripts/test.sh -d "OS=13.0,name=iPhone 11"
+
+    - stage: test
+      name: Swift Build (Swift Package Manager)
+      osx_image: xcode11.3
+      script: swift build

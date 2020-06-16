@@ -7,8 +7,8 @@ import Align
 
 
 class ConstraintsTests: XCTestCase {
-    let container = UIView()
-    let view = UIView()
+    let container = View()
+    let view = View()
 
     override func setUp() {
         super.setUp()
@@ -20,7 +20,7 @@ class ConstraintsTests: XCTestCase {
         Constraints {
             let c = view.al.top.pinToSuperview()
             XCTAssertEqual(c.priority.rawValue, 1000)
-            c.priority = UILayoutPriority(999)
+            c.priority = LayoutPriority(999)
             XCTAssertEqual(c.priority.rawValue, 999)
         }
     }
@@ -44,11 +44,11 @@ class ConstraintsTests: XCTestCase {
 }
 
 class ConstraintsArityTests: XCTestCase {
-    let container = UIView()
-    let a = UIView()
-    let b = UIView()
-    let c = UIView()
-    let d = UIView()
+    let container = View()
+    let a = View()
+    let b = View()
+    let c = View()
+    let d = View()
 
     override func setUp() {
         super.setUp()
@@ -78,7 +78,7 @@ class ConstraintsArityTests: XCTestCase {
         Constraints(for: a) {
             let cons = $0.top.pinToSuperview()
             XCTAssertEqual(cons.priority.rawValue, 1000)
-            cons.priority = UILayoutPriority(999)
+            cons.priority = LayoutPriority(999)
             XCTAssertEqual(cons.priority.rawValue, 999)
         }
     }
@@ -132,12 +132,13 @@ class ConstraintsArityTests: XCTestCase {
     }
 }
 
+#if os(iOS) || os(tvOS)
 class AddingSubviewsTests: XCTestCase {
-    let container = UIView()
-    let a = UIView()
-    let b = UIView()
-    let c = UIView()
-    let d = UIView()
+    let container = View()
+    let a = View()
+    let b = View()
+    let c = View()
+    let d = View()
 
     func testOne() {
         container.addSubview(a) {
@@ -180,3 +181,4 @@ class AddingSubviewsTests: XCTestCase {
         }
     }
 }
+#endif

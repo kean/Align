@@ -4,10 +4,9 @@
 import XCTest
 import Align
 
-
 class AnchorEdgeTests: XCTestCase {
-    let container = UIView()
-    let view = UIView()
+    let container = View()
+    let view = View()
 
     override func setUp() {
         super.setUp()
@@ -58,6 +57,7 @@ class AnchorEdgeTests: XCTestCase {
         }
     }
 
+#if os(iOS) || os(tvOS)
     func testPinToSuperviewMargin() {
         test("pin top to superview margin") {
             let c = view.al.top.pinToSuperviewMargin()
@@ -98,4 +98,5 @@ class AnchorEdgeTests: XCTestCase {
             XCTAssertEqualConstraints(c, NSLayoutConstraint(item: view, attribute: .right, relation: .lessThanOrEqual, toItem: container, attribute: .rightMargin, constant: -10))
         }
     }
+#endif
 }

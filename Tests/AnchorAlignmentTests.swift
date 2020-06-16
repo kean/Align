@@ -7,8 +7,8 @@ import Align
 
 /// Everything that applies for both edges and center
 class AnchorAlignmentTests: XCTestCase {
-    let container = UIView()
-    let view = UIView()
+    let container = View()
+    let view = View()
 
     override func setUp() {
         super.setUp()

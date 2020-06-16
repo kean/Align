@@ -4,7 +4,6 @@
 
 import XCTest
 
-
 func test(_ title: String? = nil, _ closure: () -> Void) {
     closure()
 }
@@ -44,7 +43,7 @@ private func XCTAssertEqualConstraints<T: Equatable>(_ expected: T, _ received: 
 extension NSLayoutConstraint {
     @nonobjc convenience init(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: Float? = nil, id: String? = nil) {
         self.init(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
-        if let priority = priority { self.priority = UILayoutPriority(priority) }
+        if let priority = priority { self.priority = LayoutPriority(priority) }
         if let id = id { self.identifier = id }
     }
 }
@@ -57,7 +56,7 @@ private struct Constraint: Equatable {
     let relation: NSLayoutConstraint.Relation.RawValue
     let multiplier: CGFloat
     let constant: CGFloat
-    let priority: UILayoutPriority.RawValue
+    let priority: LayoutPriority.RawValue
     let identifier: String?
 
     init(_ c: NSLayoutConstraint) {
@@ -93,25 +92,35 @@ extension NSLayoutConstraint.Attribute {
         case .width: return "width"
         case .height: return "height"
         case .bottom: return "bottom"
-        case .bottomMargin: return "bottomMargin"
         case .top: return "top"
-        case .topMargin: return "topMargin"
         case .left: return "left"
-        case .leftMargin: return "leftMargin"
         case .right: return "right"
-        case .rightMargin: return "rightMargin"
         case .leading: return "leading"
-        case .leadingMargin: return "leadingMargin"
         case .trailing: return "trailing"
-        case .trailingMargin: return "trailingMargin"
         case .centerX: return "centerX"
-        case .centerXWithinMargins: return "centerXWithinMargins"
         case .centerY: return "centerY"
-        case .centerYWithinMargins: return "centerYWithinMargins"
         case .lastBaseline: return "lastBaseline"
         case .firstBaseline: return "firstBaseline"
         case .notAnAttribute: return "notAnAttribute"
+#if os(iOS) || os(tvOS)
+        case .bottomMargin: return "bottomMargin"
+        case .topMargin: return "topMargin"
+        case .leftMargin: return "leftMargin"
+        case .rightMargin: return "rightMargin"
+        case .leadingMargin: return "leadingMargin"
+        case .trailingMargin: return "trailingMargin"
+        case .centerXWithinMargins: return "centerXWithinMargins"
+        case .centerYWithinMargins: return "centerYWithinMargins"
+#endif
         @unknown default: return "unexpacted"
         }
     }
 }
+
+#if os(iOS) || os(tvOS)
+typealias View = UIView
+typealias LayoutPriority = UILayoutPriority
+#elseif os(macOS)
+typealias View = NSView
+typealias LayoutPriority = NSLayoutConstraint.Priority
+#endif

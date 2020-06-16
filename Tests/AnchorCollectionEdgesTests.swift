@@ -5,10 +5,9 @@
 import XCTest
 import Align
 
-
 class AnchorCollectionEdgesTests: XCTestCase {
-    let container = UIView()
-    let view = UIView()
+    let container = View()
+    let view = View()
 
     override func setUp() {
         super.setUp()
@@ -27,7 +26,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
     }
 
     func testPinToSuperviewWithInsets() {
-        let insets = UIEdgeInsets(top: 1, left: 2, bottom: 3, right: 4)
+        let insets = EdgeInsets(top: 1, left: 2, bottom: 3, right: 4)
         XCTAssertEqualConstraints(
             view.al.edges.pinToSuperview(insets: insets),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 1),
@@ -67,16 +66,6 @@ class AnchorCollectionEdgesTests: XCTestCase {
         )
     }
 
-    func testPinToSuperviewMargins() {
-        XCTAssertEqualConstraints(
-            view.al.edges.pinToSuperviewMargins(),
-            [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .topMargin),
-             NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .leftMargin),
-             NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottomMargin),
-             NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .rightMargin)]
-        )
-    }
-
     func testPinToSuperviewAlongAxis() {
         XCTAssertEqualConstraints(
             view.al.edges(.top, .bottom).pinToSuperview(),
@@ -90,6 +79,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
         )
     }
 
+#if os(iOS) || os(tvOS)
     func testPinToSuperviewLayoutGuide() {
         XCTAssertEqualConstraints(
             view.al.edges.pin(to: container.layoutMarginsGuide),
@@ -99,5 +89,16 @@ class AnchorCollectionEdgesTests: XCTestCase {
              NSLayoutConstraint(item: view, attribute: .right, toItem: container.layoutMarginsGuide, attribute: .right)]
         )
     }
+
+    func testPinToSuperviewMargins() {
+        XCTAssertEqualConstraints(
+            view.al.edges.pinToSuperviewMargins(),
+            [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .topMargin),
+             NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .leftMargin),
+             NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottomMargin),
+             NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .rightMargin)]
+        )
+    }
+#endif
 }
 

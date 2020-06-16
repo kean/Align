@@ -7,8 +7,8 @@ import Align
 
 
 class AnchorCollectionCenterTests: XCTestCase {
-    let container = UIView()
-    let view = UIView()
+    let container = View()
+    let view = View()
 
     override func setUp() {
         super.setUp()
