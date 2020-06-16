@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017-2019 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2017-2020 Alexander Grebenyuk (github.com/kean).
 
 import XCTest
 import Align
