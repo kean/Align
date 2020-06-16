@@ -26,6 +26,7 @@ class AnchorAPITests: XCTestCase {
         view.anchors.left.pinToSuperview()
         view.anchors.left.pin(to: container)
         view.anchors.left.pinToSuperview(inset: 10)
+        view.anchors.left.pinToSuperview(inset: 10, relation: .greaterThanOrEqual)
 
         // Dimension
         view.anchors.width.set(10)

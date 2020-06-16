@@ -12,7 +12,6 @@
 - Rename uncler `.al` to `.anchors`
 - Remove `.al` version accepting closure
 - Remove `addSubview` family of APIs
-- Remove `relation` parameter from `pin` methods
 - Migrate to Swift 5.1
 - Increase minimum required platform versions
 
