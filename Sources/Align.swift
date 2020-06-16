@@ -232,7 +232,7 @@ public struct AnchorCollectionEdges {
 
     /// Pins the edges of the view to the margins of the superview so the the view
     /// fills the available space in a container.
-    @discardableResult public func pinToSuperviewMargins( insets: CGFloat) -> [NSLayoutConstraint] {
+    @discardableResult public func pinToSuperviewMargins(insets: CGFloat) -> [NSLayoutConstraint] {
         anchors.map { $0.pinToSuperviewMargin(inset: insets) }
     }
 
