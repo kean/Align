@@ -38,6 +38,7 @@
 		0C2EE5C3225A700E00743F47 /* Yalta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Yalta.xcconfig; path = Supporting/Yalta.xcconfig; sourceTree = "<group>"; };
 		0C62A9A81FD28B5900C6EA6E /* Align.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Align.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0C683A0F1FBA4624002ACEB9 /* AnchorCollectionEdgesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCollectionEdgesTests.swift; sourceTree = "<group>"; };
+		0C72B1CB249AB71D006DCEDA /* MigrationGuide2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = MigrationGuide2.md; path = Docs/MigrationGuide2.md; sourceTree = "<group>"; };
 		0C81ABB61C889C100036DFD4 /* Align.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Align.swift; sourceTree = "<group>"; };
 		0C8FD7781FB85E8B00A20E3D /* XCTestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCTestExtensions.swift; sourceTree = "<group>"; };
 		0C8FD77E1FB85EA500A20E3D /* Diff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diff.swift; sourceTree = "<group>"; };
@@ -120,6 +121,7 @@
 				0CD220BF22BBED040095AD2A /* README.md */,
 				0CD220C022BBED0A0095AD2A /* Package.swift */,
 				0CD220C122BBED1C0095AD2A /* AlignGuide.md */,
+				0C72B1CB249AB71D006DCEDA /* MigrationGuide2.md */,
 				0CD220C222BBED1C0095AD2A /* InstallationGuide.md */,
 				0CD220C322BBED250095AD2A /* LICENSE */,
 				0CD220C422BBED2C0095AD2A /* CHANGELOG.md */,

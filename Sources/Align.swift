@@ -28,9 +28,6 @@ extension NSLayoutGuide: LayoutItem {
 
 public extension LayoutItem { // Align methods are available via `LayoutAnchors`
     @nonobjc var anchors: LayoutAnchors<Self> { LayoutAnchors(base: self) }
-
-    @available(*, deprecated, message: "Renamed to `anchors`")
-    @nonobjc var al: LayoutAnchors<Self> { LayoutAnchors(base: self) }
 }
 
 // MARK: - LayoutAnchors
@@ -39,39 +36,37 @@ public struct LayoutAnchors<Base> {
     public let base: Base
 }
 
-extension LayoutAnchors where Base: LayoutItem {
+public extension LayoutAnchors where Base: LayoutItem {
 
     // MARK: Anchors
 
-    public var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .top) }
-    public var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .bottom) }
-    public var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .left) }
-    public var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .right) }
-    public var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .leading) }
-    public var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .trailing) }
+    var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .top) }
+    var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .bottom) }
+    var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .left) }
+    var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .right) }
+    var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .leading) }
+    var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .trailing) }
 
-    public var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(base, .centerX) }
-    public var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(base, .centerY) }
+    var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(base, .centerX) }
+    var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(base, .centerY) }
 
-    public var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .firstBaseline) }
-    public var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .lastBaseline) }
+    var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .firstBaseline) }
+    var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .lastBaseline) }
 
-    public var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(base, .width) }
-    public var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(base, .height) }
+    var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(base, .width) }
+    var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(base, .height) }
 
     // MARK: Anchor Collections
 
-    public func edges(_ edges: LayoutEdge...) -> AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: edges) }
-    public func edges(_ axis: NSLayoutConstraint.Axis) -> AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: [.leading, .trailing, .bottom, .top], axis: axis) }
-    public var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: [.left, .right, .bottom, .top]) }
-    public var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
-    public var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
+    var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: [.left, .right, .bottom, .top]) }
+    var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
+    var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }
 
 #if os(iOS) || os(tvOS)
-extension LayoutAnchors where Base: UIView {
-    public var margins: LayoutAnchors<UILayoutGuide> { base.layoutMarginsGuide.anchors }
-    public var safeArea: LayoutAnchors<UILayoutGuide> { base.safeAreaLayoutGuide.anchors }
+public extension LayoutAnchors where Base: UIView {
+    var margins: LayoutAnchors<UILayoutGuide> { base.layoutMarginsGuide.anchors }
+    var safeArea: LayoutAnchors<UILayoutGuide> { base.safeAreaLayoutGuide.anchors }
 }
 #endif
 
@@ -150,6 +145,8 @@ extension Anchor where Type: AnchorType.Edge {
     }
 
     #if os(iOS) || os(tvOS)
+    #warning("TODO: some of these methods need to be deprecated")
+
     /// Pins the edge to the respected margin of the superview.
     @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         _pin(to: item.superview!, attribute: attribute.toMargin, inset: inset, relation: relation)
@@ -163,8 +160,6 @@ extension Anchor where Type: AnchorType.Edge {
 
     // Pin the anchor to another layout item.
     private func _pin(to item2: Any?, attribute attr2: NSLayoutConstraint.Attribute, inset: CGFloat, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
-        // Invert attribute and relation in certain cases. The `pin` semantics
-        // are inspired by https://github.com/PureLayout/PureLayout
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
         return Constraints.constrain(self, toItem: item2, attribute: attr2, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
     }
@@ -210,48 +205,40 @@ public struct Alignmment {
     }
 
     public static let fill = Alignmment(horizontal: .fill, vertical: .fill)
-}
-
-private struct EdgeRelations {
-    let top, leading, bottom, trailing: NSLayoutConstraint.Relation
-
-    init(alignment: Alignmment) {
-        switch alignment.horizontal {
-        case .fill: leading = .equal; trailing = .equal
-        case .center: leading = .greaterThanOrEqual; trailing = .lessThanOrEqual
-        case .leading: leading = .equal; trailing = .lessThanOrEqual
-        case .trailing: leading = .greaterThanOrEqual; trailing = .equal
-        }
-        switch alignment.vertical {
-        case .fill: top = .equal; bottom = .equal
-        case .center: top = .greaterThanOrEqual; bottom = .lessThanOrEqual
-        case .top: top = .equal; bottom = .lessThanOrEqual
-        case .bottom: top = .greaterThanOrEqual; bottom = .equal
-        }
-    }
-
-    func relation(for attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint.Relation {
-        switch attribute {
-        case .bottom: return bottom
-        case .top: return top
-        case .leading, .left: return leading
-        case .trailing, .right: return trailing
-        default: fatalError("Invalid attribute: \(attribute)")
-        }
-    }
+    public static let center = Alignmment(horizontal: .center, vertical: .center)
+    public static let topLeading = Alignmment(horizontal: .leading, vertical: .top)
+    public static let leading = Alignmment(horizontal: .leading, vertical: .fill)
+    public static let bottomLeading = Alignmment(horizontal: .leading, vertical: .bottom)
+    public static let bottom = Alignmment(horizontal: .fill, vertical: .bottom)
+    public static let bottomTrailing = Alignmment(horizontal: .trailing, vertical: .bottom)
+    public static let trailing = Alignmment(horizontal: .trailing, vertical: .fill)
+    public static let topTrailing = Alignmment(horizontal: .trailing, vertical: .top)
+    public static let top = Alignmment(horizontal: .fill, vertical: .top)
 }
 
 public struct AnchorCollectionEdges {
     let item: LayoutItem
     let edges: [LayoutEdge]
-    var axis: NSLayoutConstraint.Axis? = nil
+
     private var anchors: [Anchor<AnchorType.Edge, Any>] { edges.map { Anchor(item, $0.attribute) } }
 
-    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
+    @discardableResult public func pin(to item2: LayoutItem? = nil, axis: NSLayoutConstraint.Axis? = nil, insets: EdgeInsets = .zero, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
         let relations = EdgeRelations(alignment: alignment)
         let item2 = item2 ?? item.superview!
         var constraints = [NSLayoutConstraint]()
-        constraints += anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relations.relation(for: $0.attribute)) }
+        let attributes: [NSLayoutConstraint.Attribute]
+        #warning("TODO: which attributes to use? leading by default?")
+        switch axis {
+        case .horizontal?: attributes = [.left, .right]
+        case .vertical?: attributes = [.top, .bottom]
+        default: attributes = [.left, .bottom, .right, .top]
+        }
+        constraints += attributes.map {
+            #warning("TODO: rework inteverted")
+            let isInverted = [.trailing, .right, .bottom].contains($0)
+            let inset = insets.inset(for: $0)
+            return Constraints.constrain(item: item, attribute: $0, relatedBy: relations.relation(for: $0), toItem: item2, attribute: $0, multiplier: 1, constant: (isInverted ? -inset : inset))
+        }
         if alignment.horizontal == .center && (axis == nil || axis == .horizontal) {
             constraints.append(Constraints.constrain(item: item, attribute: .centerX, relatedBy: .equal, toItem: item2, attribute: .centerX, multiplier: 1, constant: 0))
         }
@@ -260,31 +247,6 @@ public struct AnchorCollectionEdges {
         }
         return constraints
     }
-
-    /// Pins the edges of the view to the edges of the superview so the the view
-    /// fills the available space in a container.
-    @discardableResult public func pinToSuperview(insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSuperview(inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-
-    /// Pins the edges of the view to the edges of the given view so the the
-    /// view fills the available space in a container.
-    @discardableResult public func pin(to item2: LayoutItem, insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-
-    #if os(iOS) || os(tvOS)
-    /// Pins the edges of the view to the margins of the superview so the the view
-    /// fills the available space in a container.
-    @discardableResult public func pinToSuperviewMargins(insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-
-    /// Pins the edges to the safe area of the view controller.
-    @discardableResult public func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-    #endif
 }
 
 // MARK: - AnchorCollectionCenter
@@ -452,4 +414,69 @@ extension EdgeInsets {
         default: return 0
         }
     }
+}
+
+private struct EdgeRelations {
+    let top, leading, bottom, trailing: NSLayoutConstraint.Relation
+
+    init(alignment: Alignmment) {
+        switch alignment.horizontal {
+        case .fill: leading = .equal; trailing = .equal
+        case .center: leading = .greaterThanOrEqual; trailing = .lessThanOrEqual
+        case .leading: leading = .equal; trailing = .lessThanOrEqual
+        case .trailing: leading = .greaterThanOrEqual; trailing = .equal
+        }
+        switch alignment.vertical {
+        case .fill: top = .equal; bottom = .equal
+        case .center: top = .greaterThanOrEqual; bottom = .lessThanOrEqual
+        case .top: top = .equal; bottom = .lessThanOrEqual
+        case .bottom: top = .greaterThanOrEqual; bottom = .equal
+        }
+    }
+
+    func relation(for attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint.Relation {
+        switch attribute {
+        case .bottom: return bottom
+        case .top: return top
+        case .leading, .left: return leading
+        case .trailing, .right: return trailing
+        default: fatalError("Invalid attribute: \(attribute)")
+        }
+    }
+}
+
+// MARK: - Deprecated
+
+public extension LayoutItem {
+    @available(*, deprecated, message: "Renamed to `anchors`")
+    @nonobjc var al: LayoutAnchors<Self> { LayoutAnchors(base: self) }
+}
+
+public extension LayoutAnchors where Base: LayoutItem {
+    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
+    func edges(_ edges: LayoutEdge...) -> AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: edges) }
+}
+
+public extension AnchorCollectionEdges {
+    /// Pins the edges of the view to the edges of the superview so the the view
+    /// fills the available space in a container.
+    @available(*, deprecated, message: "Please use `pin()` instead. `relation` was replaced with a new `alignment` option. See README.md for more information.")
+    @discardableResult func pinToSuperview(insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSuperview(inset: insets.inset(for: $0.attribute), relation: relation) }
+    }
+
+    #if os(iOS) || os(tvOS)
+    /// Pins the edges of the view to the margins of the superview so the the view
+    /// fills the available space in a container.
+    @available(*, deprecated, message: "Please use `pin(to: superview.layoutMarginsGuide)` instead. `relation` was replaced with a new `alignment` option. See README.md for more information.")
+    @discardableResult func pinToSuperviewMargins(insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
+    }
+
+    /// Pins the edges to the safe area of the view controller.
+    @available(*, deprecated, message: "Please use `pin(to: vc.view.safeAreaLayoutGuide)` instead. `relation` was replaced with a new `alignment` option. See README.md for more information.")
+    @discardableResult func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
+    }
+    #endif
 }

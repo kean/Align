@@ -58,6 +58,67 @@ There are a variety of APIs in Align that you can use to create constraints. All
 
 > Align has full test coverage. If you'd like to learn about which constraints (`NSLayoutConstraint`) Align creates each time you call one of its methods, test cases are a great place to start.
 
+## Edges
+
+You can manipulate multiple edges at the same time. This is probably the most powerful and flexible API in Align.
+
+```swift
+view.anchors.edges.pin(insets: 20)
+
+// Same as the following:
+view.anchors.edges.pin(
+    insets: EdgeInsets(top: 20, left: 20, bottom: 20, trailing: 20),
+    alignment: .fill
+)
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/84931360-b10e9400-b0a0-11ea-937b-eb4fbb97a6f7.png" alt="pin edges" width="400px"/>
+
+There are variety of other alignments available.
+
+```swift
+view.anchors.edges.pin(insets: 20, alignment: .center)
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/84931836-5cb7e400-b0a1-11ea-8342-ce76b151fcad.png" alt="pin edges with center alignmnet" width="400px"/>
+
+You can create constraint along the given axis.
+
+```swift
+view.anchors.edges.pin(insets: 20, axis: .horizontal, alignment: .center)
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/84932039-af919b80-b0a1-11ea-9798-43a944f4b681.png" alt="pin edges with center alignmnet for horizontal axis" width="400px"/>
+
+
+Or pin the view to to a corner.
+
+```swift
+view.anchors.edges.pin(insets: 20, alignment: .topLeading)
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/84932173-e36cc100-b0a1-11ea-9a5d-b6381cde2df7.png" alt="pin edges with center alignmnet for horizontal axis" width="400px"/>
+
+You can create custom alignments (see `Alignment` type) by providing a vertical and horizontal component.
+
+```swift
+anchors.edges.pin(insets: 20, alignment: Alignment(vertical: .center, horizontal: .leading))
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/84932264-0b5c2480-b0a2-11ea-9574-d32a6de77fb7.png" alt="pin edges with center alignmnet for horizontal axis" width="400px"/>
+
+
+
+
+
+
+## Center
+
+
+## Size
+
+
+
 ## Requirements
 
 | Align            | Swift                 | Xcode                | Platforms              |

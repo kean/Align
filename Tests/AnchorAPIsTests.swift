@@ -33,10 +33,10 @@ class AnchorAPITests: XCTestCase {
         view.anchors.width.match(container.anchors.width)
 
         // AnchorCollectionEdges
-        view.anchors.edges.pinToSuperview()
-        view.anchors.edges.pinToSuperview(insets: EdgeInsets(top: 10, left: 20, bottom: 10, right: 20))
+        view.anchors.edges.pin()
+        view.anchors.edges.pin(insets: EdgeInsets(top: 10, left: 20, bottom: 10, right: 20))
         view.anchors.edges.pin(to: container)
-        view.anchors.edges(.left, .right).pin(to: container)
+        view.anchors.edges.pin(axis: .horizontal)
 
         // AnchorCollectionCenter
         view.anchors.center.alignWithSuperview()

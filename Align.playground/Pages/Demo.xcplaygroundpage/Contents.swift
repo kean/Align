@@ -4,7 +4,6 @@ import UIKit
 import PlaygroundSupport
 import Align
 
-
 typealias Stack = UIStackView
 
 extension Stack {
@@ -20,7 +19,6 @@ extension UILabel {
         style.forEach { $0(self) }
     }
 }
-
 
 class MyViewController : UIViewController {
     override func viewDidLoad() {
