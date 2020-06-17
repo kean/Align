@@ -229,25 +229,28 @@ public struct AnchorCollectionEdges {
     private var anchors: [Anchor<AnchorType.Edge, Any>] { edges.map { Anchor(item, $0.attribute) } }
 
     @discardableResult public func pin(to item2: LayoutItem? = nil, axis: NSLayoutConstraint.Axis? = nil, insets: EdgeInsets = .zero, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
-        let relations = EdgeRelations(alignment: alignment)
         let item2 = item2 ?? item.superview!
-        var constraints = [NSLayoutConstraint]()
-        let attributes: [NSLayoutConstraint.Attribute]
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing
-        switch axis {
-        case .horizontal?: attributes = [left, right]
-        case .vertical?: attributes = [.top, .bottom]
-        default: attributes = [left, .bottom, right, .top]
+        var constraints = [NSLayoutConstraint]()
+
+        func constrain(attribute: NSLayoutConstraint.Attribute, relation: NSLayoutConstraint.Relation, constant: CGFloat) {
+            constraints.append(Constraints.constrain(item: item, attribute: attribute, relatedBy: relation, toItem: item2, attribute: attribute, multiplier: 1, constant: constant))
         }
-        constraints += attributes.map {
-            Constraints.constrain(item: item, attribute: $0, relatedBy: relations.relation(for: $0), toItem: item2, attribute: $0, multiplier: 1, constant: insets.inset(for: $0, edge: true))
+
+        if axis == nil || axis == .horizontal {
+            constrain(attribute: left, relation: alignment.horizontal == .fill || alignment.horizontal == .leading ? .equal : .greaterThanOrEqual, constant: insets.left)
+            constrain(attribute: right, relation: alignment.horizontal == .fill || alignment.horizontal == .trailing ? .equal : .lessThanOrEqual, constant: -insets.right)
+            if alignment.horizontal == .center {
+                constrain(attribute: .centerX, relation: .equal, constant: 0)
+            }
         }
-        if alignment.horizontal == .center && (axis == nil || axis == .horizontal) {
-            constraints.append(Constraints.constrain(item: item, attribute: .centerX, relatedBy: .equal, toItem: item2, attribute: .centerX, multiplier: 1, constant: 0))
-        }
-        if alignment.vertical == .center && (axis == nil || axis == .vertical) {
-            constraints.append(Constraints.constrain(item: item, attribute: .centerY, relatedBy: .equal, toItem: item2, attribute: .centerY, multiplier: 1, constant: 0))
+        if axis == nil || axis == .vertical {
+            constrain(attribute: .top, relation: alignment.vertical == .fill || alignment.vertical == .top ? .equal : .greaterThanOrEqual, constant: insets.top)
+            constrain(attribute: .bottom, relation: alignment.vertical == .fill || alignment.vertical == .bottom ? .equal : .lessThanOrEqual, constant: -insets.bottom)
+            if alignment.vertical == .center {
+                constrain(attribute: .centerY, relation: .equal, constant: 0)
+            }
         }
         return constraints
     }
@@ -416,35 +419,6 @@ extension EdgeInsets {
         case .left, .leading: return left
         case .right, .trailing: return edge ? -right : right
         default: return 0
-        }
-    }
-}
-
-private struct EdgeRelations {
-    let top, leading, bottom, trailing: NSLayoutConstraint.Relation
-
-    init(alignment: Alignmment) {
-        switch alignment.horizontal {
-        case .fill: leading = .equal; trailing = .equal
-        case .center: leading = .greaterThanOrEqual; trailing = .lessThanOrEqual
-        case .leading: leading = .equal; trailing = .lessThanOrEqual
-        case .trailing: leading = .greaterThanOrEqual; trailing = .equal
-        }
-        switch alignment.vertical {
-        case .fill: top = .equal; bottom = .equal
-        case .center: top = .greaterThanOrEqual; bottom = .lessThanOrEqual
-        case .top: top = .equal; bottom = .lessThanOrEqual
-        case .bottom: top = .greaterThanOrEqual; bottom = .equal
-        }
-    }
-
-    func relation(for attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint.Relation {
-        switch attribute {
-        case .bottom: return bottom
-        case .top: return top
-        case .leading, .left: return leading
-        case .trailing, .right: return trailing
-        default: fatalError("Invalid attribute: \(attribute)")
         }
     }
 }
