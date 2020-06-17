@@ -9,10 +9,10 @@
 
 Align introduces a better alternative to Auto Layout [anchors](https://developer.apple.com/documentation/uikit/nslayoutanchor).
 
-**POWERFUL**. Create multiple constraints with a single line by manipulating collections of anchors.  
-**TYPE SAFE**. Makes in impossible to create invalid constraints, at compile time.  
-**FLUENT**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
-**SIMPLE**. Stop worrying about managing `translatesAutoresizingMaskIntoConstraints` and manually activating constraints.  
+- **POWERFUL**. Create multiple constraints with a single line by manipulating collections of anchors.  
+- **TYPE SAFE**. Makes in impossible to create invalid constraints, at compile time.  
+- **FLUENT**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
+- **SIMPLE**. Stop worrying about managing `translatesAutoresizingMaskIntoConstraints` and manually activating constraints.  
 
 ## Getting Started
 

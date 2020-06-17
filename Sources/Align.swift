@@ -129,6 +129,14 @@ extension Anchor where Type: AnchorType.Alignment {
     @discardableResult public func align<Type: AnchorType.Alignment>(with anchor: Anchor<Type, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         Constraints.constrain(self, anchor, relation: relation)
     }
+
+    /// Adds spacing between the current anchors.
+    @discardableResult public func spacing<Type: AnchorType.Alignment>(_ spacing: CGFloat, to anchor: Anchor<Type, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        let isInverted = (attribute == .bottom && anchor.attribute == .top) ||
+            (attribute == .right && anchor.attribute == .left) ||
+            (attribute == .trailing && anchor.attribute == .leading)
+        return Constraints.constrain(self, anchor, offset: isInverted ? -spacing : spacing, relation: isInverted ? relation.inverted : relation)
+    }
 }
 
 // MARK: - Anchors (AnchorType.Edge)
