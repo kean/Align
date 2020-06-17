@@ -274,18 +274,6 @@ public struct AnchorCollectionEdges {
         anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
-    /// Pins the edges of the view to the edges of the superview so the the view
-    /// fills the available space in a container.
-    @discardableResult public func pinToSuperview(insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSuperview(inset: insets, relation: relation) }
-    }
-
-    /// Pins the edges of the view to the edges of the given view so the the
-    /// view fills the available space in a container.
-    @discardableResult public func pin(to item2: LayoutItem, insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pin(to: item2, inset: insets, relation: relation) }
-    }
-
     #if os(iOS) || os(tvOS)
     /// Pins the edges of the view to the margins of the superview so the the view
     /// fills the available space in a container.
@@ -293,20 +281,9 @@ public struct AnchorCollectionEdges {
         anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
     }
 
-    /// Pins the edges of the view to the margins of the superview so the the view
-    /// fills the available space in a container.
-    @discardableResult public func pinToSuperviewMargins(insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSuperviewMargin(inset: insets, relation: relation) }
-    }
-
     /// Pins the edges to the safe area of the view controller.
     @discardableResult public func pinToSafeArea(insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
         anchors.map { $0.pinToSafeArea(inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-
-    /// Pins the edges to the safe area of the view controller.
-    @discardableResult public func pinToSafeArea(insets: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSafeArea(inset: insets, relation: relation) }
     }
     #endif
 }

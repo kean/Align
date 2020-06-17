@@ -36,16 +36,6 @@ class AnchorCollectionEdgesTests: XCTestCase {
         )
     }
 
-    func testPinToSuperviewWithInsetsFloat() {
-        XCTAssertEqualConstraints(
-            view.anchors.edges.pinToSuperview(insets: 4),
-            [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 4),
-             NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left, constant: 4),
-             NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom, constant: -4),
-             NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right, constant: -4)]
-        )
-    }
-
     func testPinToSuperviewLessThanOrEqual() {
         XCTAssertEqualConstraints(
             view.anchors.edges.pinToSuperview(relation: .greaterThanOrEqual),

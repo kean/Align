@@ -35,7 +35,6 @@ class AnchorAPITests: XCTestCase {
         // AnchorCollectionEdges
         view.anchors.edges.pinToSuperview()
         view.anchors.edges.pinToSuperview(insets: EdgeInsets(top: 10, left: 20, bottom: 10, right: 20))
-        view.anchors.edges.pinToSuperview(insets: 20)
         view.anchors.edges.pin(to: container)
         view.anchors.edges(.left, .right).pin(to: container)
 
