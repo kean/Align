@@ -35,7 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0C2EE5C3225A700E00743F47 /* Yalta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Yalta.xcconfig; path = Supporting/Yalta.xcconfig; sourceTree = "<group>"; };
+		0C2EE5C3225A700E00743F47 /* Align.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Align.xcconfig; path = Supporting/Align.xcconfig; sourceTree = "<group>"; };
 		0C62A9A81FD28B5900C6EA6E /* Align.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Align.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0C683A0F1FBA4624002ACEB9 /* AnchorCollectionEdgesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCollectionEdgesTests.swift; sourceTree = "<group>"; };
 		0C72B1CB249AB71D006DCEDA /* MigrationGuide2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = MigrationGuide2.md; path = Docs/MigrationGuide2.md; sourceTree = "<group>"; };
@@ -155,7 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				0CE361241C8607BB00EA70CF /* Info.plist */,
-				0C2EE5C3225A700E00743F47 /* Yalta.xcconfig */,
+				0C2EE5C3225A700E00743F47 /* Align.xcconfig */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -346,7 +346,7 @@
 		};
 		0CE3611E1C86077B00EA70CF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C2EE5C3225A700E00743F47 /* Yalta.xcconfig */;
+			baseConfigurationReference = 0C2EE5C3225A700E00743F47 /* Align.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -402,7 +402,7 @@
 		};
 		0CE3611F1C86077B00EA70CF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C2EE5C3225A700E00743F47 /* Yalta.xcconfig */;
+			baseConfigurationReference = 0C2EE5C3225A700E00743F47 /* Align.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
