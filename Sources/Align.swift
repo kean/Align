@@ -193,10 +193,74 @@ extension Anchor where Type: AnchorType.Dimension {
 
 // MARK: - AnchorCollectionEdges
 
+public struct Alignmment {
+    public enum Horizontal {
+        case fill, center, leading, trailing
+    }
+    public enum Vertical {
+        case fill, center, top, bottom
+    }
+
+    public let horizontal: Horizontal
+    public let vertical: Vertical
+
+    public init(horizontal: Horizontal, vertical: Vertical) {
+        (self.horizontal, self.vertical) = (horizontal, vertical)
+    }
+
+    public static let fill = Alignmment(horizontal: .fill, vertical: .fill)
+}
+
 public struct AnchorCollectionEdges {
     let item: LayoutItem
     let edges: [LayoutEdge]
     private var anchors: [Anchor<AnchorType.Edge, Any>] { edges.map { Anchor(item, $0.attribute) } }
+
+    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
+        struct Relations {
+            let top, leading, bottom, trailing: NSLayoutConstraint.Relation
+
+            init(alignment: Alignmment) {
+                switch alignment.horizontal {
+                case .fill: leading = .equal; trailing = .equal
+                case .center: leading = .greaterThanOrEqual; trailing = .lessThanOrEqual
+                case .leading: leading = .equal; trailing = .lessThanOrEqual
+                case .trailing: leading = .greaterThanOrEqual; trailing = .equal
+                }
+                switch alignment.vertical {
+                case .fill: top = .equal; bottom = .equal
+                case .center: top = .greaterThanOrEqual; bottom = .lessThanOrEqual
+                case .top: top = .equal; bottom = .lessThanOrEqual
+                case .bottom: top = .greaterThanOrEqual; bottom = .equal
+                }
+            }
+
+            func relation(for attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint.Relation {
+                switch attribute {
+                case .bottom: return bottom
+                case .top: return top
+                case .leading, .left: return leading
+                case .trailing, .right: return trailing
+                default: fatalError("Invalid attribute: \(attribute)")
+                }
+            }
+        }
+
+        #warning("TODO: how should edges come into play?")
+        #warning("TODO: add edges .vertical instead of individual edges")
+
+        let relations = Relations(alignment: alignment)
+        let item2 = item2 ?? item.superview!
+        var constraints = [NSLayoutConstraint]()
+        constraints += anchors.map { $0.pin(to: item2, inset: insets.inset(for: $0.attribute), relation: relations.relation(for: $0.attribute)) }
+        if alignment.horizontal == .center {
+            // TODO: add centering constraints
+        }
+        if alignment.vertical == .center {
+            // TODO: add centering constraints
+        }
+        return constraints
+    }
 
     /// Pins the edges of the view to the edges of the superview so the the view
     /// fills the available space in a container.
