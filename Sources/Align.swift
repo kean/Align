@@ -135,8 +135,8 @@ extension Anchor where Type: AnchorType.Alignment {
 
 extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the respected edges of the given container.
-    @discardableResult public func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        _pin(to: container ?? item.superview!, attribute: attribute, inset: inset, relation: relation)
+    @discardableResult public func pin(to container: LayoutItem? = nil, inset: CGFloat = 0) -> NSLayoutConstraint {
+        _pin(to: container ?? item.superview!, attribute: attribute, inset: inset, relation: .equal)
     }
 
     // Pin the anchor to another layout item.
@@ -417,6 +417,10 @@ public extension LayoutAnchors where Base: LayoutItem {
 }
 
 extension Anchor where Type: AnchorType.Edge {
+    @discardableResult public func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
+        _pin(to: container ?? item.superview!, attribute: attribute, inset: inset, relation: relation)
+    }
+
     /// Pins the edge to the same edge of the superview.
      @discardableResult public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
          _pin(to: item.superview!, attribute: attribute, inset: inset, relation: relation)
