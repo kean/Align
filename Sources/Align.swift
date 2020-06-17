@@ -134,29 +134,10 @@ extension Anchor where Type: AnchorType.Alignment {
 // MARK: - Anchors (AnchorType.Edge)
 
 extension Anchor where Type: AnchorType.Edge {
-    /// Pins the edge to the same edge of the superview.
-    @discardableResult public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        _pin(to: item.superview!, attribute: attribute, inset: inset, relation: relation)
-    }
-
     /// Pins the edge to the respected edges of the given container.
-    @discardableResult public func pin(to container: LayoutItem, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        _pin(to: container, attribute: attribute, inset: inset, relation: relation)
+    @discardableResult public func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        _pin(to: container ?? item.superview!, attribute: attribute, inset: inset, relation: relation)
     }
-
-    #if os(iOS) || os(tvOS)
-    #warning("TODO: some of these methods need to be deprecated")
-
-    /// Pins the edge to the respected margin of the superview.
-    @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        _pin(to: item.superview!, attribute: attribute.toMargin, inset: inset, relation: relation)
-    }
-
-    /// Pins the edge to the safe area of the view controller.
-    @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return _pin(to: vc.view.safeAreaLayoutGuide, attribute: attribute, inset: inset, relation: relation)
-    }
-    #endif
 
     // Pin the anchor to another layout item.
     private func _pin(to item2: Any?, attribute attr2: NSLayoutConstraint.Attribute, inset: CGFloat, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
@@ -433,6 +414,25 @@ public extension LayoutItem {
 public extension LayoutAnchors where Base: LayoutItem {
     @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
     func edges(_ edges: LayoutEdge...) -> AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: edges) }
+}
+
+extension Anchor where Type: AnchorType.Edge {
+    /// Pins the edge to the same edge of the superview.
+     @discardableResult public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+         _pin(to: item.superview!, attribute: attribute, inset: inset, relation: relation)
+     }
+
+    #if os(iOS) || os(tvOS)
+    /// Pins the edge to the respected margin of the superview.
+    @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        _pin(to: item.superview!, attribute: attribute.toMargin, inset: inset, relation: relation)
+    }
+
+    /// Pins the edge to the safe area of the view controller.
+    @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        return _pin(to: vc.view.safeAreaLayoutGuide, attribute: attribute, inset: inset, relation: relation)
+    }
+    #endif
 }
 
 public extension AnchorCollectionEdges {
