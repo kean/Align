@@ -219,6 +219,12 @@ public struct Alignmment {
 public struct AnchorCollectionEdges {
     let item: LayoutItem
     let edges: [LayoutEdge]
+    var isAbsolute = false
+
+    // By default, edges use locale-specific `.leading` and `.trailing`
+    public func absolute() -> AnchorCollectionEdges {
+        AnchorCollectionEdges(item: item, edges: edges, isAbsolute: true)
+    }
 
     private var anchors: [Anchor<AnchorType.Edge, Any>] { edges.map { Anchor(item, $0.attribute) } }
 
@@ -227,17 +233,15 @@ public struct AnchorCollectionEdges {
         let item2 = item2 ?? item.superview!
         var constraints = [NSLayoutConstraint]()
         let attributes: [NSLayoutConstraint.Attribute]
-        #warning("TODO: which attributes to use? leading by default?")
+        let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
+        let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing
         switch axis {
-        case .horizontal?: attributes = [.left, .right]
+        case .horizontal?: attributes = [left, right]
         case .vertical?: attributes = [.top, .bottom]
-        default: attributes = [.left, .bottom, .right, .top]
+        default: attributes = [left, .bottom, right, .top]
         }
         constraints += attributes.map {
-            #warning("TODO: rework inteverted")
-            let isInverted = [.trailing, .right, .bottom].contains($0)
-            let inset = insets.inset(for: $0)
-            return Constraints.constrain(item: item, attribute: $0, relatedBy: relations.relation(for: $0), toItem: item2, attribute: $0, multiplier: 1, constant: (isInverted ? -inset : inset))
+            Constraints.constrain(item: item, attribute: $0, relatedBy: relations.relation(for: $0), toItem: item2, attribute: $0, multiplier: 1, constant: insets.inset(for: $0, edge: true))
         }
         if alignment.horizontal == .center && (axis == nil || axis == .horizontal) {
             constraints.append(Constraints.constrain(item: item, attribute: .centerX, relatedBy: .equal, toItem: item2, attribute: .centerX, multiplier: 1, constant: 0))
@@ -406,11 +410,11 @@ extension NSLayoutConstraint.Relation {
 }
 
 extension EdgeInsets {
-    func inset(for attribute: NSLayoutConstraint.Attribute) -> CGFloat {
+    func inset(for attribute: NSLayoutConstraint.Attribute, edge: Bool = false) -> CGFloat {
         switch attribute {
-        case .top: return top; case .bottom: return bottom
+        case .top: return top; case .bottom: return edge ? -bottom : bottom
         case .left, .leading: return left
-        case .right, .trailing: return right
+        case .right, .trailing: return edge ? -right : right
         default: return 0
         }
     }

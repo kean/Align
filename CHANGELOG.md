@@ -11,6 +11,7 @@
 - Rename uncler `.al` to `.anchors`
 - Deprecated `func edges(_ edges: LayoutEdge...)`, use `pin(axis:)` instead
 - Remove `.al` version accepting closure
+- `pin()` methods now use `.leading` and `.trailing` anchors intead of absolute `.left` and `.right` anchors. To switch to absolute anchors, use `absolute()`: `view.anchors.edges.absolute()`
 - Remove `addSubview` family of APIs
 - Migrate to Swift 5.1
 - Increase minimum required platform versions

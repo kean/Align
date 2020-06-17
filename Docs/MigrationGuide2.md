@@ -88,6 +88,15 @@ view.anchors.edges.pinToSafeArea(of: self)
 view.anchors.edges.pin(to: view.safeAreaLayoutGuide)
 ```
 
+## `leading` instead of `left`, etc
+
+`pin()` methods now use `.leading` and `.trailing` anchors intead of absolute `.left` and `.right` anchors. To switch to absolute anchors, use `absolute()`:
+
+```swift
+// Align 2
+view.anchors.edges.absolute()
+```
+
 ## `func edges(_ edges: LayoutEdge...)` deprecated
 
 ```swift

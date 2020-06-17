@@ -19,6 +19,16 @@ class AnchorCollectionEdgesTests: XCTestCase {
         XCTAssertEqualConstraints(
             view.anchors.edges.pin(),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top),
+             NSLayoutConstraint(item: view, attribute: .leading, toItem: container, attribute: .leading),
+             NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom),
+             NSLayoutConstraint(item: view, attribute: .trailing, toItem: container, attribute: .trailing)]
+        )
+    }
+
+    func testPinToSuperviewAbsolute() {
+        XCTAssertEqualConstraints(
+            view.anchors.edges.absolute().pin(),
+            [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom),
              NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right)]
@@ -41,9 +51,9 @@ class AnchorCollectionEdgesTests: XCTestCase {
         XCTAssertEqualConstraints(
             view.anchors.edges.pin(insets: insets),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 1),
-             NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left, constant: 2),
+             NSLayoutConstraint(item: view, attribute: .leading, toItem: container, attribute: .leading, constant: 2),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom, constant: -3),
-             NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right, constant: -4)]
+             NSLayoutConstraint(item: view, attribute: .trailing, toItem: container, attribute: .trailing, constant: -4)]
         )
     }
 
@@ -63,9 +73,9 @@ class AnchorCollectionEdgesTests: XCTestCase {
         XCTAssertEqualConstraints(
             view.anchors.edges.pin(alignment: .center),
             [NSLayoutConstraint(item: view, attribute: .top, relation: .greaterThanOrEqual, toItem: container, attribute: .top),
-             NSLayoutConstraint(item: view, attribute: .left, relation: .greaterThanOrEqual,toItem: container, attribute: .left),
+             NSLayoutConstraint(item: view, attribute: .leading, relation: .greaterThanOrEqual,toItem: container, attribute: .leading),
              NSLayoutConstraint(item: view, attribute: .bottom, relation: .lessThanOrEqual, toItem: container, attribute: .bottom),
-             NSLayoutConstraint(item: view, attribute: .right, relation: .lessThanOrEqual, toItem: container, attribute: .right),
+             NSLayoutConstraint(item: view, attribute: .trailing, relation: .lessThanOrEqual, toItem: container, attribute: .trailing),
              NSLayoutConstraint(item: view, attribute: .centerX, relation: .equal, toItem: container, attribute: .centerX),
              NSLayoutConstraint(item: view, attribute: .centerY, relation: .equal, toItem: container, attribute: .centerY)]
         )
@@ -101,8 +111,8 @@ class AnchorCollectionEdgesTests: XCTestCase {
          )
          XCTAssertEqualConstraints(
              view.anchors.edges.pin(axis: .horizontal),
-             [NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left),
-              NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right)]
+             [NSLayoutConstraint(item: view, attribute: .leading, toItem: container, attribute: .leading),
+              NSLayoutConstraint(item: view, attribute: .trailing, toItem: container, attribute: .trailing)]
          )
      }
 
@@ -125,9 +135,9 @@ class AnchorCollectionEdgesTests: XCTestCase {
         XCTAssertEqualConstraints(
             view.anchors.edges.pin(to: container.layoutMarginsGuide),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container.layoutMarginsGuide, attribute: .top),
-             NSLayoutConstraint(item: view, attribute: .left, toItem: container.layoutMarginsGuide, attribute: .left),
+             NSLayoutConstraint(item: view, attribute: .leading, toItem: container.layoutMarginsGuide, attribute: .leading),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container.layoutMarginsGuide, attribute: .bottom),
-             NSLayoutConstraint(item: view, attribute: .right, toItem: container.layoutMarginsGuide, attribute: .right)]
+             NSLayoutConstraint(item: view, attribute: .trailing, toItem: container.layoutMarginsGuide, attribute: .trailing)]
         )
     }
 
