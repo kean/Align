@@ -37,11 +37,7 @@ Anchors represent layout attributes of a view including **edges**, **dimensions*
 
 There are four types of APIs available in Align and they fit in the following quadrant.
 
-|                   | Core API                                                                                                                                                  | Semantic API                                                                              |
-|------------------ |---------------------------------------------------------------------------------------------------------------------------------------------------------- |------------------------------------------------------------------------------------------ |
-| **Single Anchor**     | - `equal(_:constant)`<br>- `greaterThanOrEqual(_:constant:)`<br>- `lessThanOrEqual(_:constant:)`<br>- `offsetting(by:) or +`<br>- `multiplied(by:) or *`  | - `pin(to:inset)` (Edge)<br>- `spacing(_:to:)` (Edge)<br>- `align(offset:)` (Center)  |
-| **Multiple Anchors**  | - `equal(_:constant)`<br>- `greaterThanOrEqual(_:constant:)`<br>- `lessThanOrEqual(_:constant:)`                                                          | - `pin(to:insets:axis:alignment:)`<br> (Edges)<br>- `align(with:)`<br> (Center)           |
-<!-- Table generated using https://www.tablesgenerator.com/markdown_tables -->
+<img src="https://user-images.githubusercontent.com/1567433/85031709-00120300-b14d-11ea-9b59-a274e61af23b.png" width="600px">
 
 Both APIs are useful in different contexts, but all are designed to be easily discoverable using Xcode code completions.
 
