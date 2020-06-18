@@ -305,16 +305,16 @@ public struct AnchorCollectionSize {
     }
 
     /// Makes the size of the item equal to the size of the other item.
-    @discardableResult public func equal(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1) -> [NSLayoutConstraint] {
-        [width.equal(anchors.width * multiplier - insets.width), height.equal(anchors.height * multiplier - insets.height)]
+    @discardableResult public func equal<Item: LayoutItem>(_ item: Item, insets: CGSize = .zero, multiplier: CGFloat = 1) -> [NSLayoutConstraint] {
+        [width.equal(item.anchors.width * multiplier - insets.width), height.equal(item.anchors.height * multiplier - insets.height)]
     }
 
-    @discardableResult public func greaterThanOrEqual(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1) -> [NSLayoutConstraint] {
-        [width.greaterThanOrEqual(anchors.width * multiplier - insets.width), height.greaterThanOrEqual(anchors.height * multiplier - insets.height)]
+    @discardableResult public func greaterThanOrEqual<Item: LayoutItem>(_ item: Item, insets: CGSize = .zero, multiplier: CGFloat = 1) -> [NSLayoutConstraint] {
+        [width.greaterThanOrEqual(item.anchors.width * multiplier - insets.width), height.greaterThanOrEqual(item.anchors.height * multiplier - insets.height)]
     }
 
-    @discardableResult public func lessThanOrEqual(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1) -> [NSLayoutConstraint] {
-        [width.lessThanOrEqual(anchors.width * multiplier - insets.width), height.lessThanOrEqual(anchors.height * multiplier - insets.height)]
+    @discardableResult public func lessThanOrEqual<Item: LayoutItem>(_ item: Item, insets: CGSize = .zero, multiplier: CGFloat = 1) -> [NSLayoutConstraint] {
+        [width.lessThanOrEqual(item.anchors.width * multiplier - insets.width), height.lessThanOrEqual(item.anchors.height * multiplier - insets.height)]
     }
 }
 

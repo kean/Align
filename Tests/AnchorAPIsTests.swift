@@ -46,6 +46,6 @@ class AnchorAPITests: XCTestCase {
         view.anchors.center.align(with: container.anchors.center)
 
         // AnchorCollectionSize
-        view.anchors.size.equal(container.anchors.size)
+        view.anchors.size.equal(container)
     }
 }
