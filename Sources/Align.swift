@@ -99,12 +99,16 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
     }
 
     /// Returns a new anchor offset by a given amount.
-    func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
+    ///
+    /// - note: Consider using a convenience operator instead: `view.anchors.top + 10`.
+    public func offsetting(by offset: CGFloat) -> Anchor<Type, Axis> {
         Anchor<Type, Axis>(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
     }
 
     /// Returns a new anchor with a given multiplier.
-    func multiplied(by multiplier: CGFloat) -> Anchor<Type, Axis> {
+    ///
+    /// - note: Consider using a convenience operator instead: `view.anchors.height * 2`.
+    public func multiplied(by multiplier: CGFloat) -> Anchor<Type, Axis> {
         Anchor<Type, Axis>(item, attribute, offset: self.offset * multiplier, multiplier: self.multiplier * multiplier)
     }
 }
