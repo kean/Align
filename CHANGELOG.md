@@ -8,6 +8,7 @@
 
 - Add `constraints` property to `Constraints` type to allow access to all of the constraints created using it
 - Add `activate` parameter to `Constraints` initiliazer to optionally disable automatic activation of constraints
+- Add `spacing()` method for alignments
 - Rename uncler `.al` to `.anchors`
 - Deprecated `func edges(_ edges: LayoutEdge...)`, use `pin(axis:)` instead
 - Remove `.al` version accepting closure

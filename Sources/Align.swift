@@ -170,6 +170,14 @@ extension Anchor where Type: AnchorType.Edge {
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
         return Constraints.constrain(self, toItem: item2, attribute: attr2, constant: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
     }
+
+    /// Adds spacing between the current anchors.
+    @discardableResult public func spacing<Type: AnchorType.Edge>(_ spacing: CGFloat, to anchor: Anchor<Type, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        let isInverted = (attribute == .bottom && anchor.attribute == .top) ||
+            (attribute == .right && anchor.attribute == .left) ||
+            (attribute == .trailing && anchor.attribute == .leading)
+        return Constraints.constrain(self, anchor, constant: isInverted ? -spacing : spacing, relation: isInverted ? relation.inverted : relation)
+    }
 }
 
 // MARK: - Anchors (AnchorType.Center)

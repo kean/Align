@@ -9,11 +9,15 @@ import Align
 class AnchorAlignmentTests: XCTestCase {
     let container = View()
     let view = View()
+    let a = View()
+    let b = View()
 
     override func setUp() {
         super.setUp()
 
         container.addSubview(view)
+        container.addSubview(a)
+        container.addSubview(b)
     }
 
     // MARK: Alignments
@@ -158,6 +162,74 @@ class AnchorAlignmentTests: XCTestCase {
             XCTAssertEqualConstraints(
                 view.anchors.lastBaseline.align(with: container.anchors.top),
                 NSLayoutConstraint(item: view, attribute: .lastBaseline, toItem: container, attribute: .top)
+            )
+        }
+    }
+
+    func testSpacing() {
+        test("bottom to top") {
+            XCTAssertEqualConstraints(
+                a.anchors.bottom.spacing(10, to: b.anchors.top),
+                NSLayoutConstraint(item: a, attribute: .bottom, toItem: b, attribute: .top, constant: -10)
+            )
+            XCTAssertEqualConstraints(
+                a.anchors.bottom.spacing(10, to: b.anchors.top, relation: .greaterThanOrEqual),
+                NSLayoutConstraint(item: a, attribute: .bottom, relation: .lessThanOrEqual, toItem: b, attribute: .top, constant: -10)
+            )
+            XCTAssertEqualConstraints(
+                b.anchors.top.spacing(10, to: a.anchors.bottom),
+                NSLayoutConstraint(item: b, attribute: .top, toItem: a, attribute: .bottom, constant: 10)
+            )
+            XCTAssertEqualConstraints(
+                b.anchors.top.spacing(10, to: a.anchors.bottom, relation: .greaterThanOrEqual),
+                NSLayoutConstraint(item: b, attribute: .top, relation: .greaterThanOrEqual, toItem: a, attribute: .bottom, constant: 10)
+            )
+        }
+
+        test("top to top") {
+            XCTAssertEqualConstraints(
+                a.anchors.top.spacing(10, to: b.anchors.top),
+                NSLayoutConstraint(item: a, attribute: .top, toItem: b, attribute: .top, constant: 10)
+            )
+            XCTAssertEqualConstraints(
+                a.anchors.top.spacing(10, to: b.anchors.top, relation: .greaterThanOrEqual),
+                NSLayoutConstraint(item: a, attribute: .top, relation: .greaterThanOrEqual, toItem: b, attribute: .top, constant: 10)
+            )
+            XCTAssertEqualConstraints(
+                b.anchors.top.spacing(10, to: a.anchors.top),
+                NSLayoutConstraint(item: b, attribute: .top, toItem: a, attribute: .top, constant: 10)
+            )
+            XCTAssertEqualConstraints(
+                b.anchors.top.spacing(10, to: a.anchors.top, relation: .greaterThanOrEqual),
+                NSLayoutConstraint(item: b, attribute: .top, relation: .greaterThanOrEqual, toItem: a, attribute: .top, constant: 10)
+            )
+        }
+
+        // [a] [b]
+        test("right to left") {
+            XCTAssertEqualConstraints(
+                a.anchors.right.spacing(10, to: b.anchors.left),
+                NSLayoutConstraint(item: a, attribute: .right, toItem: b, attribute: .left, constant: -10)
+            )
+            XCTAssertEqualConstraints(
+                a.anchors.right.spacing(10, to: b.anchors.left, relation: .greaterThanOrEqual),
+                NSLayoutConstraint(item: a, attribute: .right, relation: .lessThanOrEqual, toItem: b, attribute: .left, constant: -10)
+            )
+            XCTAssertEqualConstraints(
+                a.anchors.right.spacing(10, to: b.anchors.left, relation: .lessThanOrEqual),
+                NSLayoutConstraint(item: a, attribute: .right, relation: .greaterThanOrEqual, toItem: b, attribute: .left, constant: -10)
+            )
+            XCTAssertEqualConstraints(
+                b.anchors.left.spacing(10, to: a.anchors.right),
+                NSLayoutConstraint(item: b, attribute: .left, toItem: a, attribute: .right, constant: 10)
+            )
+            XCTAssertEqualConstraints(
+                b.anchors.left.spacing(10, to: a.anchors.right, relation: .greaterThanOrEqual),
+                NSLayoutConstraint(item: b, attribute: .left, relation: .greaterThanOrEqual, toItem: a, attribute: .right, constant: 10)
+            )
+            XCTAssertEqualConstraints(
+                b.anchors.left.spacing(10, to: a.anchors.right, relation: .lessThanOrEqual),
+                NSLayoutConstraint(item: b, attribute: .left, relation: .lessThanOrEqual, toItem: a, attribute: .right, constant: 10)
             )
         }
     }
