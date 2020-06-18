@@ -6,6 +6,8 @@
 
 *June 17, 2020*
 
+> Use [Migraiton Guide](https://github.com/kean/Align/blob/master/Docs/MigrationGuide2.md) included in the repo to ease migration.
+
 - Add `macOS support`
 - Add new low-level APIs: `equal`, `greaterThanOrEqual`, `lessThatOrEqual`
 - Add `spacing()` method for alignments
