@@ -279,6 +279,10 @@ public struct AnchorCollectionEdges {
 
     // MARK: Semantic
 
+    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: CGFloat, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
+        pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: axis, alignment: alignment)
+    }
+
     @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
         let item2 = item2 ?? item.superview!
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading

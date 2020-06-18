@@ -2,6 +2,13 @@
 
 # Align 2
 
+## Align 2.2.1
+
+*June 18, 2020*
+
+- Add a missing version of `pin()` that works with `CGFloat` as insets 
+
+
 ## Align 2.2.0
 
 *June 18, 2020*
