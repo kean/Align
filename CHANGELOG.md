@@ -2,6 +2,14 @@
 
 # Align 2
 
+## Align 2.1.0
+
+*June 17, 2020*
+
+> Use [Migraiton Guide](https://github.com/kean/Align/blob/master/Docs/MigrationGuide2.md) included in the repo to ease migration.
+
+- Remove all deprecated APIs. If you are migrating from the previous version, consider migrating to version 2.0.0 first. It is going to guide you throught the migration.
+
 ## Align 2.0.0
 
 *June 17, 2020*
