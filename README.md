@@ -79,7 +79,7 @@ b.anchors.height.equal(a.anchors.width * 2)
 // Set spacing between two views
 a.anchors.bottom.spacing(20, to: b.anchors.top)
 
-// Pin of the edges of the view to the superview
+// Pin an edge to the superview
 a.anchors.trailing.pin(inset: 20)
 ```
 
