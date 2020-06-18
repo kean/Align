@@ -58,7 +58,7 @@ public extension LayoutAnchors where Base: LayoutItem {
 
     // MARK: Anchor Collections
 
-    var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: [.left, .right, .bottom, .top]) }
+    var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: base) }
     var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
     var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }
@@ -157,18 +157,29 @@ public extension Anchor where Type: AnchorType.Dimension {
     }
 }
 
+// MARK: - Anchors (AnchorType.Dimension)
+
+extension Anchor where Type: AnchorType.Dimension {
+    @discardableResult public func equal(_ constant: CGFloat) -> NSLayoutConstraint {
+        Constraints.constrain(item: item, attribute: attribute, relatedBy: .equal, constant: constant)
+    }
+
+    @discardableResult public func greaterThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
+        Constraints.constrain(item: item, attribute: attribute, relatedBy: .greaterThanOrEqual, constant: constant)
+    }
+
+    @discardableResult public func lessThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
+        Constraints.constrain(item: item, attribute: attribute, relatedBy: .lessThanOrEqual, constant: constant)
+    }
+}
+
 // MARK: - Anchors (AnchorType.Edge)
 
 extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the respected edges of the given container.
     @discardableResult public func pin(to container: LayoutItem? = nil, inset: CGFloat = 0) -> NSLayoutConstraint {
-        _pin(to: container ?? item.superview!, attribute: attribute, inset: inset, relation: .equal)
-    }
-
-    // Pin the anchor to another layout item.
-    private func _pin(to item2: Any?, attribute attr2: NSLayoutConstraint.Attribute, inset: CGFloat, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
-        return Constraints.constrain(self, toItem: item2, attribute: attr2, constant: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+        return Constraints.constrain(self, toItem: container ?? item.superview!, attribute: attribute, constant: (isInverted ? -inset : inset))
     }
 
     /// Adds spacing between the current anchors.
@@ -186,22 +197,6 @@ extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
     @discardableResult public func align(offset: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.constrain(self, toItem: item.superview!, attribute: attribute, constant: offset)
-    }
-}
-
-// MARK: - Anchors (AnchorType.Dimension)
-
-extension Anchor where Type: AnchorType.Dimension {
-    @discardableResult public func equal(_ constant: CGFloat) -> NSLayoutConstraint {
-        Constraints.constrain(item: item, attribute: attribute, relatedBy: .equal, constant: constant)
-    }
-
-    @discardableResult public func greaterThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
-        Constraints.constrain(item: item, attribute: attribute, relatedBy: .greaterThanOrEqual, constant: constant)
-    }
-
-    @discardableResult public func lessThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
-        Constraints.constrain(item: item, attribute: attribute, relatedBy: .lessThanOrEqual, constant: constant)
     }
 }
 
@@ -236,12 +231,11 @@ public struct Alignmment {
 
 public struct AnchorCollectionEdges {
     let item: LayoutItem
-    let edges: [LayoutEdge]
     var isAbsolute = false
 
     // By default, edges use locale-specific `.leading` and `.trailing`
     public func absolute() -> AnchorCollectionEdges {
-        AnchorCollectionEdges(item: item, edges: edges, isAbsolute: true)
+        AnchorCollectionEdges(item: item, isAbsolute: true)
     }
 
     #if os(iOS) || os(tvOS)
@@ -415,31 +409,6 @@ public extension NSEdgeInsets {
 }
 #endif
 
-public enum LayoutEdge {
-    case top, bottom, leading, trailing, left, right
-
-    var attribute: NSLayoutConstraint.Attribute {
-        switch self {
-        case .top: return .top;          case .bottom: return .bottom
-        case .leading: return .leading;  case .trailing: return .trailing
-        case .left: return .left;        case .right: return .right
-        }
-    }
-}
-
-#if os(iOS) || os(tvOS)
-extension NSLayoutConstraint.Attribute {
-    var toMargin: NSLayoutConstraint.Attribute {
-        switch self {
-        case .top: return .topMargin;           case .bottom: return .bottomMargin
-        case .leading: return .leadingMargin;   case .trailing: return .trailingMargin
-        case .left: return .leftMargin          case .right: return .rightMargin
-        default: return self
-        }
-    }
-}
-#endif
-
 extension NSLayoutConstraint.Relation {
     var inverted: NSLayoutConstraint.Relation {
         switch self {
@@ -459,120 +428,5 @@ extension EdgeInsets {
         case .right, .trailing: return edge ? -right : right
         default: return 0
         }
-    }
-}
-
-// MARK: - Deprecated
-
-public extension LayoutItem {
-    @available(*, deprecated, message: "Renamed to `anchors`")
-    @nonobjc var al: LayoutAnchors<Self> { LayoutAnchors(base: self) }
-}
-
-public extension LayoutAnchors where Base: LayoutItem {
-    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
-    func edges(_ edges: LayoutEdge...) -> AnchorCollectionEdges { AnchorCollectionEdges(item: base, edges: edges) }
-}
-
-extension Anchor where Type: AnchorType.Edge {
-    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
-    @discardableResult public func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
-        _pin(to: container ?? item.superview!, attribute: attribute, inset: inset, relation: relation)
-    }
-
-    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
-     @discardableResult public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-         _pin(to: item.superview!, attribute: attribute, inset: inset, relation: relation)
-     }
-
-    #if os(iOS) || os(tvOS)
-    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
-    @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        _pin(to: item.superview!, attribute: attribute.toMargin, inset: inset, relation: relation)
-    }
-
-    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
-    @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        return _pin(to: vc.view.safeAreaLayoutGuide, attribute: attribute, inset: inset, relation: relation)
-    }
-    #endif
-}
-
-public extension AnchorCollectionEdges {
-    private var anchors: [Anchor<AnchorType.Edge, Any>] { edges.map { Anchor(item, $0.attribute) } }
-
-    /// Pins the edges of the view to the edges of the superview so the the view
-    /// fills the available space in a container.
-    @available(*, deprecated, message: "Please use `pin()` instead. `relation` was replaced with a new `alignment` option. See README.md for more information.")
-    @discardableResult func pinToSuperview(insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSuperview(inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-
-    #if os(iOS) || os(tvOS)
-    /// Pins the edges of the view to the margins of the superview so the the view
-    /// fills the available space in a container.
-    @available(*, deprecated, message: "Please use `pin(to: superview.layoutMarginsGuide)` instead. `relation` was replaced with a new `alignment` option. See README.md for more information.")
-    @discardableResult func pinToSuperviewMargins(insets: EdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSuperviewMargin(inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-
-    /// Pins the edges to the safe area of the view controller.
-    @available(*, deprecated, message: "Please use `pin(to: vc.view.safeAreaLayoutGuide)` instead. `relation` was replaced with a new `alignment` option. See README.md for more information.")
-    @discardableResult func pinToSafeArea(of vc: UIViewController, insets: UIEdgeInsets = .zero, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
-    }
-    #endif
-}
-
-extension Anchor where Type: AnchorType.Alignment {
-    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
-    @discardableResult public func align<Type: AnchorType.Alignment>(with anchor: Anchor<Type, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        Constraints.constrain(self, anchor, relation: relation)
-    }
-}
-
-public extension Anchor where Type: AnchorType.Center {
-    @available(*, deprecated, message: "Please use `align`.")
-    @discardableResult func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        Constraints.constrain(self, toItem: item.superview!, attribute: attribute, constant: offset, relation: relation)
-    }
-}
-
-public extension Anchor where Type: AnchorType.Dimension {
-    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
-    @discardableResult func set(_ constant: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        Constraints.constrain(item: item, attribute: attribute, relatedBy: relation, constant: constant)
-    }
-
-    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
-    @discardableResult func match<Axis>(_ anchor: Anchor<AnchorType.Dimension, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        Constraints.constrain(self, anchor, relation: relation)
-    }
-}
-
-// MARK: - AnchorCollectionSize
-
-public extension AnchorCollectionSize {
-    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
-    @discardableResult func set(_ size: CGSize, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        [width.set(size.width, relation: relation), height.set(size.height, relation: relation)]
-    }
-
-    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
-    @discardableResult func match(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        [width.match(anchors.width * multiplier - insets.width, relation: relation),
-         height.match(anchors.height * multiplier - insets.height, relation: relation)]
-    }
-}
-
-public extension AnchorCollectionCenter {
-    @available(*, deprecated, message: "Please use `align` instead")
-    @discardableResult func alignWithSuperview() -> [NSLayoutConstraint] {
-        [x.align(), y.align()]
-    }
-
-    @available(*, deprecated, message: "Please use `align` instead")
-    @discardableResult func align(with anchors: AnchorCollectionCenter) -> [NSLayoutConstraint] {
-        [x.equal(anchors.x), y.equal(anchors.y)]
     }
 }

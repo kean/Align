@@ -45,8 +45,8 @@ class MyViewController : UIViewController {
 
         /// Here's code written using Align
 
-        stack.anchors.center.alignWithSuperview()
-        stack.anchors.edges(.left, .right).pinToSuperviewMargins(relation: .greaterThanOrEqual)
+        stack.anchors.centerY.align()
+        stack.anchors.edges.pin(to: view.layoutMarginsGuide, axis: .horizontal, alignment: .center)
 
         logo.text = "⛵️"
         title.text = "Welcome to Align!"
