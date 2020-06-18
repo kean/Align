@@ -181,7 +181,7 @@ a.anchors.size.equal(b)
 
 ## Advanced
 
-By default, Align automatically activates created constraints. Using `Constraints` API, constraints are activated all of the same time when you exit from the closure. It gives you a chance to change `priority` of the constraints.
+By default, Align automatically activates created constraints. Using `Constraints` API, constraints are activated all of the same time when you exit from the closure. It gives you a chance to change the `priority` of the constraints.
 
 ```swift
 Constraints(for: title, subtitle) { title, subtitle in
@@ -196,7 +196,7 @@ Constraints(for: title, subtitle) { title, subtitle in
 }
 ```
 
-`Constraints` also give you an easy access to Align anchors (notice, there is no `.anchors` call in the example). And if you want Align to not activate constraints, there is an option for that:
+`Constraints` also give you easy access to Align anchors (notice, there is no `.anchors` call in the example). And if you want to not activate the constraints, there is an option for that:
 
 ```swift
 Constraints(activate: false) {
