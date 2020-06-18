@@ -67,7 +67,7 @@ Align allows you to offset and multiple anchors.
 // Offset one of the anchors, creating a "virtual" anchor
 b.anchors.leading.equal(a.anchors.trailng + 20)
 
-// Set aspect ration for a view
+// Set aspect ratio for a view
 b.anchors.height.equal(a.anchors.width * 2)
 ```
 
