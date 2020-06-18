@@ -244,7 +244,13 @@ public struct AnchorCollectionEdges {
         AnchorCollectionEdges(item: item, edges: edges, isAbsolute: true)
     }
 
-    @discardableResult public func pin(to item2: LayoutItem? = nil, axis: NSLayoutConstraint.Axis? = nil, insets: EdgeInsets = .zero, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
+    #if os(iOS) || os(tvOS)
+    public typealias Axis = NSLayoutConstraint.Axis
+    #else
+    public typealias Axis = NSLayoutConstraint.Orientation
+    #endif
+
+    @discardableResult public func pin(to item2: LayoutItem? = nil, axis: Axis? = nil, insets: EdgeInsets = .zero, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
         let item2 = item2 ?? item.superview!
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing

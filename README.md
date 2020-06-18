@@ -38,8 +38,8 @@ Anchors represent layout attributes of a view including **edges**, **dimensions*
 
 There are two types of APIs for creating constrains in Align:
 
-- **Low-level** APIs: `equal()`, `greaterThanOrEqual()`, `lessThanOrEqual()`
-- **Semantic** APIs: `pin()`, `spacing()`, `align()`
+- **Low-level APIs**: `equal()`, `greaterThanOrEqual()`, `lessThanOrEqual()`
+- **Semantic APIs**: `pin()`, `spacing()`, `align()`
 
 Both APIs are useful in different contexts, but all are designed to be easily discoverable using Xcode code completions.
 

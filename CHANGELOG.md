@@ -4,7 +4,7 @@
 
 ## Align 2.0.0
 
-*June 15, 2020*
+*June 17, 2020*
 
 - Add `macOS support`
 - Add new low-level APIs: `equal`, `greaterThanOrEqual`, `lessThatOrEqual`
