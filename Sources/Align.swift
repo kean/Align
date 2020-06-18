@@ -168,8 +168,8 @@ extension Anchor where Type: AnchorType.Edge {
 
 extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
-    @discardableResult public func align(offset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        Constraints.constrain(self, toItem: item.superview!, attribute: attribute, constant: offset, relation: relation)
+    @discardableResult public func align(offset: CGFloat = 0) -> NSLayoutConstraint {
+        Constraints.constrain(self, toItem: item.superview!, attribute: attribute, constant: offset)
     }
 }
 
