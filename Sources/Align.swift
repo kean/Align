@@ -236,8 +236,6 @@ public struct AnchorCollectionEdges {
         AnchorCollectionEdges(item: item, edges: edges, isAbsolute: true)
     }
 
-    private var anchors: [Anchor<AnchorType.Edge, Any>] { edges.map { Anchor(item, $0.attribute) } }
-
     @discardableResult public func pin(to item2: LayoutItem? = nil, axis: NSLayoutConstraint.Axis? = nil, insets: EdgeInsets = .zero, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
         let item2 = item2 ?? item.superview!
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
@@ -278,8 +276,8 @@ public struct AnchorCollectionCenter {
     }
 
     /// Makes the axis equal to the other collection of axis.
-    @discardableResult public func align(with anchors: AnchorCollectionCenter) -> [NSLayoutConstraint] {
-        [x.equal(anchors.x), y.equal(anchors.y)]
+    @discardableResult public func align<Item: LayoutItem>(with item: Item) -> [NSLayoutConstraint] {
+        [x.equal(item.anchors.centerX), y.equal(item.anchors.centerY)]
     }
 }
 
@@ -487,6 +485,8 @@ extension Anchor where Type: AnchorType.Edge {
 }
 
 public extension AnchorCollectionEdges {
+    private var anchors: [Anchor<AnchorType.Edge, Any>] { edges.map { Anchor(item, $0.attribute) } }
+
     /// Pins the edges of the view to the edges of the superview so the the view
     /// fills the available space in a container.
     @available(*, deprecated, message: "Please use `pin()` instead. `relation` was replaced with a new `alignment` option. See README.md for more information.")
@@ -555,5 +555,10 @@ public extension AnchorCollectionCenter {
     @available(*, deprecated, message: "Please use `align` instead")
     @discardableResult func alignWithSuperview() -> [NSLayoutConstraint] {
         [x.align(), y.align()]
+    }
+
+    @available(*, deprecated, message: "Please use `align` instead")
+    @discardableResult func align(with anchors: AnchorCollectionCenter) -> [NSLayoutConstraint] {
+        [x.equal(anchors.x), y.equal(anchors.y)]
     }
 }
