@@ -27,7 +27,7 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 
 The entire library fits in a single file with less than 300 lines of code. You can simply drag-n-drop it into your app if you'd like. For more installation options, see [**Installation Guide**](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md).
 
-- [**Anchors**](#anchors) ‣ [Low-Level APIs](#low-level-apis) · [Semantic APIs](#semantic-apis)
+- [**Anchors**](#anchors) ‣ [Core APIs](#core-apis) · [Semantic APIs](#semantic-apis)
 - [**Anchor Collections**](#anchor-collections) ‣ [Edges](#edges) · [Center](#center) · [Size](#size)
 - [**Advanced**](#advanced) · [**Requirements**](#requirements) · [**Why Align**](#why-align)
 
@@ -35,14 +35,17 @@ The entire library fits in a single file with less than 300 lines of code. You c
 
 Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**. To create constraints, start by selecting an anchor of a view (or of a layout guide). Then use anchor's methods to create constraints.
 
-There are two types of APIs for creating constrains in Align:
+There are four types of APIs available in Align and they fit in the following quadrant.
 
-- **Low-level APIs**: `equal()`, `greaterThanOrEqual()`, `lessThanOrEqual()`
-- **Semantic APIs**: `pin()`, `spacing()`, `align()`
+|                   | Core API                                                                                                                                                  | Semantic API                                                                              |
+|------------------ |---------------------------------------------------------------------------------------------------------------------------------------------------------- |------------------------------------------------------------------------------------------ |
+| **Single Anchor**     | - `equal(_:constant)`<br>- `greaterThanOrEqual(_:constant:)`<br>- `lessThanOrEqual(_:constant:)`<br>- `offsetting(by:) or +`<br>- `multiplied(by:) or *`  | - `pin(to:inset)` (Edge)<br>- `spacing(_:to:)` (Edge)<br>- `align(offset:)` (Center)  |
+| **Multiple Anchors**  | - `equal(_:constant)`<br>- `greaterThanOrEqual(_:constant:)`<br>- `lessThanOrEqual(_:constant:)`                                                          | - `pin(to:insets:axis:alignment:)`<br> (Edges)<br>- `align(with:)`<br> (Center)           |
+<!-- Table generated using https://www.tablesgenerator.com/markdown_tables -->
 
 Both APIs are useful in different contexts, but all are designed to be easily discoverable using Xcode code completions.
 
-### Low-Level APIs
+### Core APIs
 
 ```swift
 // Align two views along one of the edges
@@ -215,7 +218,7 @@ Constraints(activate: false) {
 
 ## Why Align
 
-Align strives for clarity and simplicity by following [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible. Instead, Align has a fluent API that makes use sites form grammatical English phrases - that's what makes Swift code really stand out.
+Align strives for clarity and simplicity by following [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible.
 
 Align is for someone who:
 

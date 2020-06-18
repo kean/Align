@@ -229,9 +229,36 @@ public struct Alignmment {
     public static let top = Alignmment(horizontal: .fill, vertical: .top)
 }
 
+public protocol AnchorCollection {
+    associatedtype AnchorType
+
+    func anchors() -> Anchor<AnchorType, Any>
+}
+
+public extension AnchorCollection {
+    @discardableResult func equal<Anchors: AnchorCollection>(_ collection: Anchors, constant: CGFloat = 0) -> NSLayoutConstraint where Anchors.AnchorType == AnchorType {
+        fatalError()
+    }
+
+    @discardableResult func greaterThanOrEqual<Anchors: AnchorCollection>(_ collection: Anchors, constant: CGFloat = 0) -> NSLayoutConstraint where Anchors.AnchorType == AnchorType {
+        fatalError()
+    }
+
+    @discardableResult func lessThanOrEqual<Anchors: AnchorCollection>(_ collection: Anchors, constant: CGFloat = 0) -> NSLayoutConstraint  where Anchors.AnchorType == AnchorType {
+        fatalError()
+    }
+}
+
 public struct AnchorCollectionEdges {
     let item: LayoutItem
     var isAbsolute = false
+
+    private var anchors: [Anchor<AnchorType.Edge, Any>] {
+        let attributes = isAbsolute ?
+            [NSLayoutConstraint.Attribute.left, .bottom, .right, .top] :
+            [NSLayoutConstraint.Attribute.leading, .bottom, .trailing, .top]
+        return attributes.map { Anchor(item, $0) }
+    }
 
     // By default, edges use locale-specific `.leading` and `.trailing`
     public func absolute() -> AnchorCollectionEdges {
@@ -243,6 +270,14 @@ public struct AnchorCollectionEdges {
     #else
     public typealias Axis = NSLayoutConstraint.Orientation
     #endif
+
+    // MARK: Core
+
+    @discardableResult public func equal(_ collection: AnchorCollectionEdges, insets: EdgeInsets) -> [NSLayoutConstraint] {
+        zip(anchors, collection.anchors).map { $0.equal($1, constant: insets.inset(for: $0.attribute, edge: true)) }
+    }
+
+    // MARK: Semantic
 
     @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
         let item2 = item2 ?? item.superview!
@@ -278,6 +313,26 @@ public struct AnchorCollectionCenter {
     let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
     let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
 
+    // MARK: Core
+
+    private var anchors: [Anchor<AnchorType.Edge, Any>] {
+        [NSLayoutConstraint.Attribute.centerX, .centerY].map { Anchor(x.item, $0) }
+    }
+
+    @discardableResult public func equal(_ collection: AnchorCollectionCenter, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
+        zip(anchors, collection.anchors).map { $0.equal($1, constant: offset.offset(for: $0.attribute)) }
+    }
+
+    @discardableResult public func greaterThanOrEqual(_ collection: AnchorCollectionCenter, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
+        zip(anchors, collection.anchors).map { $0.greaterThanOrEqual($1, constant: offset.offset(for: $0.attribute)) }
+    }
+
+    @discardableResult public func lessThanOrEqual(_ collection: AnchorCollectionCenter, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
+        zip(anchors, collection.anchors).map { $0.greaterThanOrEqual($1, constant: offset.offset(for: $0.attribute)) }
+    }
+
+    // MARK: Semantic
+
     /// Centers the view in the superview.
     @discardableResult public func align() -> [NSLayoutConstraint] {
         [x.align(), y.align()]
@@ -294,6 +349,8 @@ public struct AnchorCollectionCenter {
 public struct AnchorCollectionSize {
     let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
     let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
+
+    // MARK: Core
 
     /// Set the size of item.
     @discardableResult public func equal(_ size: CGSize) -> [NSLayoutConstraint] {
@@ -426,6 +483,15 @@ extension EdgeInsets {
         case .top: return top; case .bottom: return edge ? -bottom : bottom
         case .left, .leading: return left
         case .right, .trailing: return edge ? -right : right
+        default: return 0
+        }
+    }
+}
+
+extension CGPoint {
+    func offset(for attributes: NSLayoutConstraint.Attribute) -> CGFloat {
+        switch attributes {
+        case .centerX: return x; case .centerY: return y
         default: return 0
         }
     }

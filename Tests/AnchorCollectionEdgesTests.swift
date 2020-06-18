@@ -70,28 +70,5 @@ class AnchorCollectionEdgesTests: XCTestCase {
               NSLayoutConstraint(item: view, attribute: .trailing, toItem: container, attribute: .trailing)]
          )
      }
-
-#if os(iOS) || os(tvOS)
-    func testPinToSuperviewLayoutGuide() {
-        XCTAssertEqualConstraints(
-            view.anchors.edges.pin(to: container.layoutMarginsGuide),
-            [NSLayoutConstraint(item: view, attribute: .top, toItem: container.layoutMarginsGuide, attribute: .top),
-             NSLayoutConstraint(item: view, attribute: .leading, toItem: container.layoutMarginsGuide, attribute: .leading),
-             NSLayoutConstraint(item: view, attribute: .bottom, toItem: container.layoutMarginsGuide, attribute: .bottom),
-             NSLayoutConstraint(item: view, attribute: .trailing, toItem: container.layoutMarginsGuide, attribute: .trailing)]
-        )
-    }
-
-    @available(*, deprecated)
-    func testPinToSuperviewMargins() {
-        XCTAssertEqualConstraints(
-            view.anchors.edges.pinToSuperviewMargins(),
-            [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .topMargin),
-             NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .leftMargin),
-             NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottomMargin),
-             NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .rightMargin)]
-        )
-    }
-#endif
 }
 
