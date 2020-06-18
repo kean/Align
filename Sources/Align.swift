@@ -253,13 +253,6 @@ public struct AnchorCollectionEdges {
     let item: LayoutItem
     var isAbsolute = false
 
-    private var anchors: [Anchor<AnchorType.Edge, Any>] {
-        let attributes = isAbsolute ?
-            [NSLayoutConstraint.Attribute.left, .bottom, .right, .top] :
-            [NSLayoutConstraint.Attribute.leading, .bottom, .trailing, .top]
-        return attributes.map { Anchor(item, $0) }
-    }
-
     // By default, edges use locale-specific `.leading` and `.trailing`
     public func absolute() -> AnchorCollectionEdges {
         AnchorCollectionEdges(item: item, isAbsolute: true)
@@ -272,6 +265,13 @@ public struct AnchorCollectionEdges {
     #endif
 
     // MARK: Core
+
+    private var anchors: [Anchor<AnchorType.Edge, Any>] {
+        let attributes = isAbsolute ?
+            [NSLayoutConstraint.Attribute.left, .bottom, .right, .top] :
+            [NSLayoutConstraint.Attribute.leading, .bottom, .trailing, .top]
+        return attributes.map { Anchor(item, $0) }
+    }
 
     @discardableResult public func equal(_ collection: AnchorCollectionEdges, insets: EdgeInsets) -> [NSLayoutConstraint] {
         zip(anchors, collection.anchors).map { $0.equal($1, constant: insets.inset(for: $0.attribute, edge: true)) }
