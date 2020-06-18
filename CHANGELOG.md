@@ -2,6 +2,12 @@
 
 # Align 2
 
+## Align 2.2.0
+
+*June 18, 2020*
+
+- Add missing Core APIs for collections 
+
 ## Align 2.1.0
 
 *June 17, 2020*
