@@ -9,13 +9,13 @@
 
 Align introduces a better alternative to Auto Layout [anchors](https://developer.apple.com/documentation/uikit/nslayoutanchor).
 
-- **SEMANTIC**. Align APIs are focus on your goals, not math behind constraints.
-- **POWERFUL**. Create multiple constraints with a single line by manipulating collections of anchors.  
-- **TYPE SAFE**. Makes in impossible to create invalid constraints, at compile time.  
-- **FLUENT**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
-- **SIMPLE**. Stop worrying about `translatesAutoresizingMaskIntoConstraints` and manually activating constraints.  
+- **Semantic**. Align APIs are focus on your goals, not math behind constraints.
+- **Powerful**. Create multiple constraints with a single line by manipulating collections of anchors.  
+- **Type Safe**. Makes in impossible to create invalid constraints, at compile time.  
+- **Fluent**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
+- **Simple**. Stop worrying about `translatesAutoresizingMaskIntoConstraints` and manually activating constraints.  
 
-To give you a taste, of what *semantic* Align APIs look like, here is an example:
+To give you a taste of what *semantic* Align APIs look like, here is an example:
 
 ```swift
 view.anchors.edges.pin(insets: 20, alignment: .center)
@@ -26,6 +26,11 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 ## Getting Started
 
 The entire library fits in a single file with less than 300 lines of code. You can simply drag-n-drop it into your app if you'd like. For more installation options, see [**Installation Guide**](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md).
+
+- [Getting Started](#getting-started)
+- [**Anchors**](#anchors) ‣ [Low-Level APIs](#low-level-apis) · [Semantic APIs](#semantic-apis)
+- [**Anchor Collections**](#anchor-collections) ‣ [Edges](#edges) · [Center](#center) · [Size](#size)
+- [**Advanced**](#advanced) · [**Requirements**](#requirements) · [**Why Align**](#why-align)
 
 ## Anchors
 
