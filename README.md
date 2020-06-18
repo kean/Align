@@ -27,7 +27,6 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 
 The entire library fits in a single file with less than 300 lines of code. You can simply drag-n-drop it into your app if you'd like. For more installation options, see [**Installation Guide**](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md).
 
-- [Getting Started](#getting-started)
 - [**Anchors**](#anchors) ‣ [Low-Level APIs](#low-level-apis) · [Semantic APIs](#semantic-apis)
 - [**Anchor Collections**](#anchor-collections) ‣ [Edges](#edges) · [Center](#center) · [Size](#size)
 - [**Advanced**](#advanced) · [**Requirements**](#requirements) · [**Why Align**](#why-align)
