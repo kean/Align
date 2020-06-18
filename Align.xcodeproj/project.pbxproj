@@ -55,7 +55,6 @@
 		0CD220BC22BBECE70095AD2A /* Align.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Align.podspec; sourceTree = "<group>"; };
 		0CD220BF22BBED040095AD2A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		0CD220C022BBED0A0095AD2A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		0CD220C122BBED1C0095AD2A /* AlignGuide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = AlignGuide.md; path = Docs/AlignGuide.md; sourceTree = "<group>"; };
 		0CD220C222BBED1C0095AD2A /* InstallationGuide.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = InstallationGuide.md; path = Docs/InstallationGuide.md; sourceTree = "<group>"; };
 		0CD220C322BBED250095AD2A /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		0CD220C422BBED2C0095AD2A /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
@@ -120,7 +119,6 @@
 				0CD220BC22BBECE70095AD2A /* Align.podspec */,
 				0CD220BF22BBED040095AD2A /* README.md */,
 				0CD220C022BBED0A0095AD2A /* Package.swift */,
-				0CD220C122BBED1C0095AD2A /* AlignGuide.md */,
 				0C72B1CB249AB71D006DCEDA /* MigrationGuide2.md */,
 				0CD220C222BBED1C0095AD2A /* InstallationGuide.md */,
 				0CD220C322BBED250095AD2A /* LICENSE */,
