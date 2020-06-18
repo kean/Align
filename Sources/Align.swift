@@ -121,30 +121,34 @@ public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> A
     anchor.multiplied(by: multiplier)
 }
 
-// MARK: - Anchors
+// MARK: - Anchors (AnchorType.Alignment)
 
-extension Anchor {
-    @discardableResult public func equal<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+public extension Anchor where Type: AnchorType.Alignment {
+    @discardableResult func equal<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.constrain(self, anchor, constant: constant, relation: .equal)
     }
 
-    @discardableResult public func greaterThanOrEqual<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+    @discardableResult func greaterThanOrEqual<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.constrain(self, anchor, constant: constant, relation: .greaterThanOrEqual)
     }
 
-    @discardableResult public func lessThanOrEqual<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+    @discardableResult func lessThanOrEqual<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.constrain(self, anchor, constant: constant, relation: .lessThanOrEqual)
     }
+}
 
-    @discardableResult public func equal<Type: AnchorType.Dimension>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+// MARK: - Anchors (AnchorType.Dimension)
+
+public extension Anchor where Type: AnchorType.Dimension {
+    @discardableResult func equal<Type: AnchorType.Dimension, Axis>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.constrain(self, anchor, constant: constant, relation: .equal)
     }
 
-    @discardableResult public func greaterThanOrEqual<Type: AnchorType.Dimension>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+    @discardableResult func greaterThanOrEqual<Type: AnchorType.Dimension, Axis>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.constrain(self, anchor, constant: constant, relation: .greaterThanOrEqual)
     }
 
-    @discardableResult public func lessThanOrEqual<Type: AnchorType.Dimension>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+    @discardableResult func lessThanOrEqual<Type: AnchorType.Dimension, Axis>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.constrain(self, anchor, constant: constant, relation: .lessThanOrEqual)
     }
 }
@@ -176,13 +180,16 @@ extension Anchor where Type: AnchorType.Center {
 // MARK: - Anchors (AnchorType.Dimension)
 
 extension Anchor where Type: AnchorType.Dimension {
-    /// Sets the dimension to a specific size.
-    @discardableResult public func set(_ constant: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        Constraints.constrain(item: item, attribute: attribute, relatedBy: relation, constant: constant)
+    @discardableResult public func equal(_ constant: CGFloat) -> NSLayoutConstraint {
+        Constraints.constrain(item: item, attribute: attribute, relatedBy: .equal, constant: constant)
     }
 
-    @discardableResult public func match<Axis>(_ anchor: Anchor<AnchorType.Dimension, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        Constraints.constrain(self, anchor, relation: relation)
+    @discardableResult public func greaterThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
+        Constraints.constrain(item: item, attribute: attribute, relatedBy: .greaterThanOrEqual, constant: constant)
+    }
+
+    @discardableResult public func lessThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
+        Constraints.constrain(item: item, attribute: attribute, relatedBy: .lessThanOrEqual, constant: constant)
     }
 }
 
@@ -262,7 +269,7 @@ public struct AnchorCollectionCenter {
     let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
 
     /// Centers the view in the superview.
-    @discardableResult public func alignWithSuperview() -> [NSLayoutConstraint] {
+    @discardableResult public func align() -> [NSLayoutConstraint] {
         [x.align(), y.align()]
     }
 
@@ -279,14 +286,31 @@ public struct AnchorCollectionSize {
     let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
 
     /// Set the size of item.
-    @discardableResult public func set(_ size: CGSize, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        [width.set(size.width, relation: relation), height.set(size.height, relation: relation)]
+    @discardableResult public func equal(_ size: CGSize) -> [NSLayoutConstraint] {
+        [width.equal(size.width), height.equal(size.height)]
+    }
+
+    /// Set the size of item.
+    @discardableResult public func greaterThanOrEqul(_ size: CGSize) -> [NSLayoutConstraint] {
+        [width.greaterThanOrEqual(size.width), height.greaterThanOrEqual(size.height)]
+    }
+
+    /// Set the size of item.
+    @discardableResult public func lessThanOrEqual(_ size: CGSize) -> [NSLayoutConstraint] {
+        [width.lessThanOrEqual(size.width), height.lessThanOrEqual(size.height)]
     }
 
     /// Makes the size of the item equal to the size of the other item.
-    @discardableResult public func match(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
-        [width.match(anchors.width * multiplier - insets.width, relation: relation),
-         height.match(anchors.height * multiplier - insets.height, relation: relation)]
+    @discardableResult public func equal(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1) -> [NSLayoutConstraint] {
+        [width.equal(anchors.width * multiplier - insets.width), height.equal(anchors.height * multiplier - insets.height)]
+    }
+
+    @discardableResult public func greaterThanOrEqual(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1) -> [NSLayoutConstraint] {
+        [width.greaterThanOrEqual(anchors.width * multiplier - insets.width), height.greaterThanOrEqual(anchors.height * multiplier - insets.height)]
+    }
+
+    @discardableResult public func lessThanOrEqual(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1) -> [NSLayoutConstraint] {
+        [width.lessThanOrEqual(anchors.width * multiplier - insets.width), height.lessThanOrEqual(anchors.height * multiplier - insets.height)]
     }
 }
 
@@ -435,23 +459,23 @@ public extension LayoutAnchors where Base: LayoutItem {
 }
 
 extension Anchor where Type: AnchorType.Edge {
-    #warning("TODO: deprecate these")
+    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
     @discardableResult public func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
         _pin(to: container ?? item.superview!, attribute: attribute, inset: inset, relation: relation)
     }
 
-    /// Pins the edge to the same edge of the superview.
+    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
      @discardableResult public func pinToSuperview(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
          _pin(to: item.superview!, attribute: attribute, inset: inset, relation: relation)
      }
 
     #if os(iOS) || os(tvOS)
-    /// Pins the edge to the respected margin of the superview.
+    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
     @discardableResult public func pinToSuperviewMargin(inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         _pin(to: item.superview!, attribute: attribute.toMargin, inset: inset, relation: relation)
     }
 
-    /// Pins the edge to the safe area of the view controller.
+    @available(*, deprecated, message: "Please use `pin()` instead. Instead of selecting specific edges, pass an `axis` in the `pin()` method as a parameter. See README.md for more information.")
     @discardableResult public func pinToSafeArea(of vc: UIViewController, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         return _pin(to: vc.view.safeAreaLayoutGuide, attribute: attribute, inset: inset, relation: relation)
     }
@@ -489,9 +513,43 @@ extension Anchor where Type: AnchorType.Alignment {
     }
 }
 
-extension Anchor where Type: AnchorType.Center {
+public extension Anchor where Type: AnchorType.Center {
     @available(*, deprecated, message: "Please use `align`.")
-    @discardableResult public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+    @discardableResult func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         Constraints.constrain(self, toItem: item.superview!, attribute: attribute, constant: offset, relation: relation)
+    }
+}
+
+public extension Anchor where Type: AnchorType.Dimension {
+    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
+    @discardableResult func set(_ constant: CGFloat, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        Constraints.constrain(item: item, attribute: attribute, relatedBy: relation, constant: constant)
+    }
+
+    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
+    @discardableResult func match<Axis>(_ anchor: Anchor<AnchorType.Dimension, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        Constraints.constrain(self, anchor, relation: relation)
+    }
+}
+
+// MARK: - AnchorCollectionSize
+
+public extension AnchorCollectionSize {
+    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
+    @discardableResult func set(_ size: CGSize, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        [width.set(size.width, relation: relation), height.set(size.height, relation: relation)]
+    }
+
+    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
+    @discardableResult func match(_ anchors: AnchorCollectionSize, insets: CGSize = .zero, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> [NSLayoutConstraint] {
+        [width.match(anchors.width * multiplier - insets.width, relation: relation),
+         height.match(anchors.height * multiplier - insets.height, relation: relation)]
+    }
+}
+
+public extension AnchorCollectionCenter {
+    @available(*, deprecated, message: "Please use `align` instead")
+    @discardableResult func alignWithSuperview() -> [NSLayoutConstraint] {
+        [x.align(), y.align()]
     }
 }

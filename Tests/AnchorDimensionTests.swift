@@ -17,33 +17,33 @@ class AnchorDimensionTests: XCTestCase {
 
     func testSetWidth() {
         XCTAssertEqualConstraints(
-            view.anchors.width.set(10),
+            view.anchors.width.equal(10),
             NSLayoutConstraint(item: view, attribute: .width, constant: 10)
         )
         XCTAssertEqualConstraints(
-            view.anchors.width.set(10, relation: .greaterThanOrEqual),
+            view.anchors.width.greaterThanOrEqual(10),
             NSLayoutConstraint(item: view, attribute: .width, relation: .greaterThanOrEqual, constant: 10)
         )
     }
 
     func testSetHeight() {
         XCTAssertEqualConstraints(
-            view.anchors.height.set(10),
+            view.anchors.height.equal(10),
             NSLayoutConstraint(item: view, attribute: .height, constant: 10)
         )
         XCTAssertEqualConstraints(
-            view.anchors.height.set(10, relation: .greaterThanOrEqual),
+            view.anchors.height.greaterThanOrEqual(10),
             NSLayoutConstraint(item: view, attribute: .height, relation: .greaterThanOrEqual, constant: 10)
         )
     }
 
     func testMatchWidth() {
         XCTAssertEqualConstraints(
-            view.anchors.width.match(container.anchors.width),
+            view.anchors.width.equal(container.anchors.width),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width)
         )
         XCTAssertEqualConstraints(
-            view.anchors.width.match(container.anchors.height), // can mix and match
+            view.anchors.width.equal(container.anchors.height), // can mix and match
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .height)
         )
     }

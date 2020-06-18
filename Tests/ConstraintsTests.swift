@@ -18,7 +18,7 @@ class ConstraintsTests: XCTestCase {
 
     func testCanChangePriorityInsideInit() {
         Constraints {
-            let c = view.anchors.top.pinToSuperview()
+            let c = view.anchors.top.pin()
             XCTAssertEqual(c.priority.rawValue, 1000)
             c.priority = LayoutPriority(999)
             XCTAssertEqual(c.priority.rawValue, 999)
@@ -30,12 +30,12 @@ class ConstraintsTests: XCTestCase {
     func testCallsCanBeNested() { // no arguments
         Constraints() {
             XCTAssertEqualConstraints(
-                view.anchors.top.pinToSuperview(),
+                view.anchors.top.pin(),
                 NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top)
             )
             Constraints() {
                 XCTAssertEqualConstraints(
-                    view.anchors.bottom.pinToSuperview(),
+                    view.anchors.bottom.pin(),
                     NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom)
                 )
             }
@@ -76,7 +76,7 @@ class ConstraintsArityTests: XCTestCase {
 
     func testCanChangePriorityInsideInit() {
         Constraints(for: a) {
-            let cons = $0.top.pinToSuperview()
+            let cons = $0.top.pin()
             XCTAssertEqual(cons.priority.rawValue, 1000)
             cons.priority = LayoutPriority(999)
             XCTAssertEqual(cons.priority.rawValue, 999)
@@ -86,12 +86,12 @@ class ConstraintsArityTests: XCTestCase {
     func testCallsCanBeNested() {
         Constraints(for: a) {
             XCTAssertEqualConstraints(
-                $0.top.pinToSuperview(),
+                $0.top.pin(),
                 NSLayoutConstraint(item: a, attribute: .top, toItem: container, attribute: .top)
             )
             Constraints(for: a) {
                 XCTAssertEqualConstraints(
-                    $0.bottom.pinToSuperview(),
+                    $0.bottom.pin(),
                     NSLayoutConstraint(item: a, attribute: .bottom, toItem: container, attribute: .bottom)
                 )
             }

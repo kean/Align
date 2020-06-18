@@ -91,18 +91,18 @@ class AnchorTests: XCTestCase {
 
     func testOffsettingWidth() {
         XCTAssertEqualConstraints(
-            view.anchors.height.match(container.anchors.width + 10),
+            view.anchors.height.equal(container.anchors.width + 10),
             NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .width, constant: 10)
         )
         XCTAssertEqualConstraints(
-            view.anchors.height.match(container.anchors.width - 10),
+            view.anchors.height.equal(container.anchors.width - 10),
             NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .width, constant: -10)
         )
     }
 
     func testOffsetingMultipleTimes() {
         XCTAssertEqualConstraints(
-            view.anchors.height.match((container.anchors.width + 10) + 10),
+            view.anchors.height.equal((container.anchors.width + 10) + 10),
             NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .width, constant: 20)
         )
     }
@@ -111,29 +111,29 @@ class AnchorTests: XCTestCase {
 
     func testMultiplyingWidth() {
         XCTAssertEqualConstraints(
-            view.anchors.width.match(container.anchors.width * 0.5),
+            view.anchors.width.equal(container.anchors.width * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5)
         )
         XCTAssertEqualConstraints(
-            (view.anchors.width * 2).match(container.anchors.width),
+            (view.anchors.width * 2).equal(container.anchors.width),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5)
         )
     }
 
     func testMultiplyingMultipleTimes() {
         XCTAssertEqualConstraints(
-            view.anchors.width.match((container.anchors.width * 0.5) * 0.5),
+            view.anchors.width.equal((container.anchors.width * 0.5) * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.25)
         )
         XCTAssertEqualConstraints(
-            ((view.anchors.width * 2) * 2).match(container.anchors.width),
+            ((view.anchors.width * 2) * 2).equal(container.anchors.width),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.25)
         )
     }
 
     func testMultiplyingBothAnchors() {
         XCTAssertEqualConstraints(
-            (view.anchors.width * 0.5).match(container.anchors.width * 0.5),
+            (view.anchors.width * 0.5).equal(container.anchors.width * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 1)
         )
     }
@@ -142,24 +142,24 @@ class AnchorTests: XCTestCase {
 
     func testMixingMultiplierAndOffset() {
         XCTAssertEqualConstraints(
-            view.anchors.width.match(container.anchors.width * 0.5 + 10),
+            view.anchors.width.equal(container.anchors.width * 0.5 + 10),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5, constant: 10)
         )
         XCTAssertEqualConstraints(
-            view.anchors.width.match((container.anchors.width + 10) * 0.5),
+            view.anchors.width.equal((container.anchors.width + 10) * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5, constant: 5)
         )
         XCTAssertEqualConstraints(
-            view.anchors.width.match((container.anchors.width + 10) * 0.5 + 7),
+            view.anchors.width.equal((container.anchors.width + 10) * 0.5 + 7),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5, constant: 12)
         )
         XCTAssertEqualConstraints(
-            view.anchors.width.match(((container.anchors.width + 10) * 0.5 + 7) * 2),
+            view.anchors.width.equal(((container.anchors.width + 10) * 0.5 + 7) * 2),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 1, constant: 24)
         )
 
         XCTAssertEqualConstraints(
-            view.anchors.width.match(container.anchors.width + 10 * 0.5),
+            view.anchors.width.equal(container.anchors.width + 10 * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 1, constant: 5)
         )
     }

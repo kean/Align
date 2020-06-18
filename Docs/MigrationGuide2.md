@@ -2,6 +2,8 @@
 
 This guide is provided in order to ease the transition of existing applications using Align 1.x to the latest version, as well as explain the design and structure of new and changed functionality.
 
+**Note** If you are migrating from Align 1, upgrade to Align 2.0.0 first. This version contains deprecated APIs that were removed in Align 2.1.0.
+
 ## `.al` extensions deprecated, replaced by `.anchor`
 
 ```swift

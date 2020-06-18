@@ -23,17 +23,17 @@ class AnchorAPITests: XCTestCase {
         view.anchors.left.lessThanOrEqual(container.anchors.left)
 
         // Edge
-        view.anchors.left.pinToSuperview()
+        view.anchors.left.pin()
+        view.anchors.left.pin(inset: 10)
         view.anchors.left.pin(to: container)
-        view.anchors.left.pinToSuperview(inset: 10)
-        view.anchors.left.pinToSuperview(inset: 10, relation: .greaterThanOrEqual)
 
         // Center
         view.anchors.centerX.align()
 
         // Dimension
-        view.anchors.width.set(10)
-        view.anchors.width.match(container.anchors.width)
+        view.anchors.width.equal(10)
+        view.anchors.width.greaterThanOrEqual(10)
+        view.anchors.width.equal(container.anchors.width)
 
         // AnchorCollectionEdges
         view.anchors.edges.pin()
@@ -42,10 +42,10 @@ class AnchorAPITests: XCTestCase {
         view.anchors.edges.pin(axis: .horizontal)
 
         // AnchorCollectionCenter
-        view.anchors.center.alignWithSuperview()
+        view.anchors.center.align()
         view.anchors.center.align(with: container.anchors.center)
 
         // AnchorCollectionSize
-        view.anchors.size.match(container.anchors.size)
+        view.anchors.size.equal(container.anchors.size)
     }
 }
