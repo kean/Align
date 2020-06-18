@@ -250,7 +250,7 @@ public struct AnchorCollectionEdges {
     public typealias Axis = NSLayoutConstraint.Orientation
     #endif
 
-    @discardableResult public func pin(to item2: LayoutItem? = nil, axis: Axis? = nil, insets: EdgeInsets = .zero, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
+    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
         let item2 = item2 ?? item.superview!
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing
