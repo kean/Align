@@ -15,7 +15,7 @@ Align introduces a better alternative to Auto Layout [anchors](https://developer
 - **FLUENT**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
 - **SIMPLE**. Stop worrying about `translatesAutoresizingMaskIntoConstraints` and manually activating constraints.  
 
-To give you a taste, of what Align APIs looks, here is just one example:
+To give you a taste, of what Align APIs looks like, here is just one example:
 
 ```swift
 view.anchors.edges.pin(insets: 20, alignment: .center)
@@ -32,7 +32,7 @@ The entire library fits in a single file with less than 300 lines of code. You c
 Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**. To create constraints, start by selecting an anchor of a view (or of a layout guide). Then use anchor's methods to create constraints. Each anchor has methods tailored for its particular type.
 
 ```swift
-a.anchors.leading.align(with: b.anchors.leading)
+a.anchors.leading.equal(b.anchors.leading)
 ```
 
 <img src="https://user-images.githubusercontent.com/1567433/84958877-43785d00-b0cc-11ea-9425-a848844c524e.png" alt="pin edges" width="400px"/>
@@ -50,7 +50,7 @@ a.anchors.bottom.spacing(20, to: b.anchors.top)
 <img src="https://user-images.githubusercontent.com/1567433/84958928-5f7bfe80-b0cc-11ea-97d3-66ccd1ecace2.png" alt="pin edges" width="400px"/>
 
 ```swift
-a.anchors.height.match(b.anchors.height)
+a.anchors.height.equal(b.anchors.height)
 ```
 
 <img src="https://user-images.githubusercontent.com/1567433/84958748-07dd9300-b0cc-11ea-9f55-ce7df2356b2a.png" alt="pin edges" width="400px"/>
@@ -104,13 +104,30 @@ anchors.edges.pin(insets: 20, alignment: Alignment(vertical: .center, horizontal
 
 <img src="https://user-images.githubusercontent.com/1567433/84932264-0b5c2480-b0a2-11ea-9574-d32a6de77fb7.png" alt="pin edges with center alignmnet for horizontal axis" width="400px"/>
 
-
 ## Center
 
+```swift
+a.anchors.center.align()
+```
 
+<img src="https://user-images.githubusercontent.com/1567433/84965361-bc7fb080-b0dc-11ea-8353-389f05888470.png" alt="size equal" width="400px"/>
 
 ## Size
 
+
+```swift
+a.anchors.size.equal(CGSize(width: 120, height: 40))
+```
+
+> `greaterThanEqual` and `lessThanOrEqual` options are also available
+
+<img src="https://user-images.githubusercontent.com/1567433/84965098-f7351900-b0db-11ea-9e22-09f017f6c730.png" alt="size equal" width="400px"/>
+
+```swift
+a.anchors.size.equal(b)
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/84965233-54c96580-b0dc-11ea-8200-0e7741801432.png" alt="size equal other view" width="400px"/>
 
 ## Advanced
 
@@ -119,13 +136,13 @@ Constraints created `Constraints` API are activated all of the same time when yo
 ```swift
 Constraints(for: title, subtitle) { title, subtitle in
     // Align one anchor with another
-    subtitle.top.align(with: title.bottom + 10)
+    subtitle.top.spacing(10, to: title.bottom + 10)
 
     // Manipulate dimensions
-    title.width.set(100)
+    title.width.equal(100)
 
     // Change a priority of constraints inside a group:
-    subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
+    subtitle.bottom.pin().priority = UILayoutPriority(999)
 }
 ```
 

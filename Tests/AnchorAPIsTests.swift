@@ -47,5 +47,6 @@ class AnchorAPITests: XCTestCase {
 
         // AnchorCollectionSize
         view.anchors.size.equal(container)
+        view.anchors.size.greaterThanOrEqual(container)
     }
 }
