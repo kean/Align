@@ -16,7 +16,7 @@ class AnchorTests: XCTestCase {
     }
 
     func testConstraintsCreatedByAnchorsAreInstalledAutomatically() {
-        let constraint = view.anchors.top.align(with: container.anchors.top)
+        let constraint = view.anchors.top.equal(container.anchors.top)
         XCTAssertEqual(constraint.isActive, true)
     }
 
@@ -27,13 +27,13 @@ class AnchorTests: XCTestCase {
         XCTAssertTrue(view.translatesAutoresizingMaskIntoConstraints)
         XCTAssertTrue(container.translatesAutoresizingMaskIntoConstraints)
 
-        view.anchors.top.align(with: container.anchors.top)
+        view.anchors.top.equal(container.anchors.top)
 
         XCTAssertFalse(view.translatesAutoresizingMaskIntoConstraints)
         XCTAssertTrue(container.translatesAutoresizingMaskIntoConstraints)
 
         view.translatesAutoresizingMaskIntoConstraints = true
-        container.anchors.top.align(with: view.anchors.top)
+        container.anchors.top.equal(view.anchors.top)
 
         XCTAssertTrue(view.translatesAutoresizingMaskIntoConstraints)
         XCTAssertFalse(container.translatesAutoresizingMaskIntoConstraints)
@@ -44,26 +44,26 @@ class AnchorTests: XCTestCase {
     func testOffsettingTopAnchor() {
         let anchor = container.anchors.top + 10
         XCTAssertEqualConstraints(
-            view.anchors.top.align(with: anchor),
+            view.anchors.top.equal(anchor),
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 10)
         )
         XCTAssertEqualConstraints(
-            view.anchors.top.align(with: anchor + 10),
+            view.anchors.top.equal(anchor + 10),
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 20)
         )
         XCTAssertEqualConstraints( // test that works both ways
-            anchor.align(with: view.anchors.top),
+            anchor.equal(view.anchors.top),
             NSLayoutConstraint(item: container, attribute: .top, toItem: view, attribute: .top, constant: -10)
         )
     }
 
     func testOffsettingUsingOperators() {
         XCTAssertEqualConstraints(
-            view.anchors.top.align(with: container.anchors.top + 10),
+            view.anchors.top.equal(container.anchors.top + 10),
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 10)
         )
         XCTAssertEqualConstraints(
-            view.anchors.top.align(with: container.anchors.top - 10),
+            view.anchors.top.equal(container.anchors.top - 10),
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: -10)
         )
     }
@@ -71,11 +71,11 @@ class AnchorTests: XCTestCase {
     func testOffsettingRightAnchor() {
         let anchor = container.anchors.right - 10
         XCTAssertEqualConstraints(
-            view.anchors.right.align(with: anchor),
+            view.anchors.right.equal(anchor),
             NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right, constant: -10)
         )
         XCTAssertEqualConstraints( // test that works both ways
-            anchor.align(with: view.anchors.right),
+            anchor.equal(view.anchors.right),
             NSLayoutConstraint(item: container, attribute: .right, toItem: view, attribute: .right, constant: 10)
         )
     }
@@ -84,7 +84,7 @@ class AnchorTests: XCTestCase {
         let containerTop = container.anchors.top + 10
         let viewTop = view.anchors.top + 10
         XCTAssertEqualConstraints(
-            viewTop.align(with: containerTop), // nobody's going to do that, but it's nice it's their
+            viewTop.equal(containerTop), // nobody's going to do that, but it's nice it's their
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 0)
         )
     }

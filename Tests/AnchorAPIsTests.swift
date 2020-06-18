@@ -18,15 +18,18 @@ class AnchorAPITests: XCTestCase {
 
     func testAPIs() {
         // Alignment
-        view.anchors.left.align(with: container.anchors.left)
-        view.anchors.left.align(with: container.anchors.left + 10)
-        view.anchors.left.align(with: container.anchors.left, relation: .lessThanOrEqual)
+        view.anchors.left.equal(container.anchors.left)
+        view.anchors.left.equal(container.anchors.left + 10)
+        view.anchors.left.lessThanOrEqual(container.anchors.left)
 
         // Edge
         view.anchors.left.pinToSuperview()
         view.anchors.left.pin(to: container)
         view.anchors.left.pinToSuperview(inset: 10)
         view.anchors.left.pinToSuperview(inset: 10, relation: .greaterThanOrEqual)
+
+        // Center
+        view.anchors.centerX.align()
 
         // Dimension
         view.anchors.width.set(10)

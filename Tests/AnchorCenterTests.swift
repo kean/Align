@@ -19,15 +19,15 @@ class AnchorCenterTests: XCTestCase {
 
     func testAlignWithSuperview() {
         XCTAssertEqualConstraints(
-            view.anchors.centerX.alignWithSuperview(),
+            view.anchors.centerX.align(),
             NSLayoutConstraint(item: view, attribute: .centerX, toItem: container, attribute: .centerX)
         )
         XCTAssertEqualConstraints(
-            view.anchors.centerY.alignWithSuperview(),
+            view.anchors.centerY.align(),
             NSLayoutConstraint(item: view, attribute: .centerY, toItem: container, attribute: .centerY)
         )
         XCTAssertEqualConstraints(
-            view.anchors.centerY.alignWithSuperview(offset: -10),
+            view.anchors.centerY.align(offset: -10),
             NSLayoutConstraint(item: view, attribute: .centerY, toItem: container, attribute: .centerY, constant: -10)
         )
     }

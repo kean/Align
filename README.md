@@ -9,58 +9,56 @@
 
 Align introduces a better alternative to Auto Layout [anchors](https://developer.apple.com/documentation/uikit/nslayoutanchor).
 
-**POWERFUL**. Create multiple constraints with a single line by manipulating collections of anchors.  
-**TYPE SAFE**. Makes in impossible to create invalid constraints, at compile time.  
-**FLUENT**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
-**SIMPLE**. Stop worrying about managing `translatesAutoresizingMaskIntoConstraints` and manually activating constraints.  
+- **SEMANTIC**. Align APIs are high level and focus on what your goals are.  
+- **POWERFUL**. Create multiple constraints with a single line by manipulating collections of anchors.  
+- **TYPE SAFE**. Makes in impossible to create invalid constraints, at compile time.  
+- **FLUENT**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
+- **SIMPLE**. Stop worrying about `translatesAutoresizingMaskIntoConstraints` and manually activating constraints.  
+
+To give you a taste, of what Align APIs looks, here is just one example:
+
+```swift
+view.anchors.edges.pin(insets: 20, alignment: .center)
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/84931836-5cb7e400-b0a1-11ea-8342-ce76b151fcad.png" alt="pin edges with center alignmnet" width="400px"/>
+
 
 ## Getting Started
 
-The entire library fits in a single file with less than 300 lines of code. You can simply drag-n-drop it into your app if you'd like. For more installation options, see [**Installation Guide**](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md). This README file has a great overview of the Align APIs. For a complete list, see a dedicated [**Align Programming Guide**](https://github.com/kean/Align/blob/master/Docs/AlignGuide.md).
+The entire library fits in a single file with less than 300 lines of code. You can simply drag-n-drop it into your app if you'd like. For more installation options, see [**Installation Guide**](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md).
 
 ## Anchors
 
-Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**. To create constraints, start by selecting an **anchor** or a **collection of anchors** of a view (or of a layout guide). Then use anchor's methods to create constraints.
-
-Each anchor and collection of anchors have methods tailored for that particular kind of anchor:
+Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**. To create constraints, start by selecting an anchor of a view (or of a layout guide). Then use anchor's methods to create constraints. Each anchor has methods tailored for its particular type.
 
 ```swift
-Constraints(for: title, subtitle) { title, subtitle in
-    // Align one anchor with another
-    subtitle.top.align(with: title.bottom + 10)
-
-    // Align center with a superview
-    title.centerX.alignWithSuperview()
-
-    // Fill along the horizontal axis
-    title.edges.pinToSuperview(insets: 16)
-
-    // Manipulate dimensions
-    title.width.set(100)
-
-    // Offset and multiply anchors using convenient operators
-    subtitle.width.match(title.width * 2)
-
-    // Change a priority of constraints inside a group:
-    subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
-}
+a.anchors.leading.align(with: b.anchors.leading)
 ```
 
-Every view that you manipulate using Align has `translatesAutoresizingMaskIntoConstraints` set to `false`. Align also automatically activates all of the created constraints. Constraints created using `Constraints` API are activated all of the same time when you exit from the closure. It gives you a chance to change `priority` of the constraints.
+<img src="https://user-images.githubusercontent.com/1567433/84958877-43785d00-b0cc-11ea-9425-a848844c524e.png" alt="pin edges" width="400px"/>
 
-Anchors can be also be accessed using a convenience `.anchors` proxy:
+> **Note**. Every view that you manipulate using Align has `translatesAutoresizingMaskIntoConstraints` set to `false`. Align also automatically activates all of the created constraints.
 
-```swift
-title.anchors.top.pinToSuperview()
-```
-
-There are a variety of APIs in Align that you can use to create constraints. All of them are easily discoverable using code completion in Xcode. For a complete list, you can always refer to [**Align Programming Guide**](https://github.com/kean/Align/blob/master/Docs/AlignGuide.md).
+There are a variety of APIs in Align that you can use to create constraints. Align APIs are designed to be easily discoverable using code completion in Xcode.
 
 > Align has full test coverage. If you'd like to learn about which constraints (`NSLayoutConstraint`) Align creates each time you call one of its methods, test cases are a great place to start.
 
+```swift
+a.anchors.bottom.spacing(20, to: b.anchors.top)
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/84958928-5f7bfe80-b0cc-11ea-97d3-66ccd1ecace2.png" alt="pin edges" width="400px"/>
+
+```swift
+a.anchors.height.match(b.anchors.height)
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/84958748-07dd9300-b0cc-11ea-9f55-ce7df2356b2a.png" alt="pin edges" width="400px"/>
+
 ## Edges
 
-You can manipulate multiple edges at the same time. This is probably the most powerful and flexible API in Align.
+With Align, you can manipulate multiple edges at the same time, creating more than one constraint at a time. `pin()` is probably the most powerful and flexible API in Align.
 
 ```swift
 view.anchors.edges.pin(insets: 20)
@@ -108,16 +106,29 @@ anchors.edges.pin(insets: 20, alignment: Alignment(vertical: .center, horizontal
 <img src="https://user-images.githubusercontent.com/1567433/84932264-0b5c2480-b0a2-11ea-9574-d32a6de77fb7.png" alt="pin edges with center alignmnet for horizontal axis" width="400px"/>
 
 
-
-
-
-
 ## Center
+
 
 
 ## Size
 
 
+## Advanced
+
+Constraints created `Constraints` API are activated all of the same time when you exit from the closure. It gives you a chance to change `priority` of the constraints.
+
+```swift
+Constraints(for: title, subtitle) { title, subtitle in
+    // Align one anchor with another
+    subtitle.top.align(with: title.bottom + 10)
+
+    // Manipulate dimensions
+    title.width.set(100)
+
+    // Change a priority of constraints inside a group:
+    subtitle.bottom.pinToSuperview().priority = UILayoutPriority(999)
+}
+```
 
 ## Requirements
 

@@ -63,7 +63,7 @@ class ConstraintsArityTests: XCTestCase {
 
     func testArity() {
         Constraints(for: a, b) { a, b in
-            let constraint = a.top.align(with: b.top)
+            let constraint = a.top.equal(b.top)
             XCTAssertEqualConstraints(constraint, NSLayoutConstraint(
                 item: self.a,
                 attribute: .top,

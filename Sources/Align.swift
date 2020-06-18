@@ -80,7 +80,6 @@ public enum AnchorAxis {
 
 public enum AnchorType {
     public class Dimension {}
-    /// Includes `center`, `edge` and `baselines` anchors.
     public class Alignment {}
     public class Center: Alignment {}
     public class Edge: Alignment {}
@@ -122,12 +121,31 @@ public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> A
     anchor.multiplied(by: multiplier)
 }
 
-// MARK: - Anchors (AnchorType.Alignment)
+// MARK: - Anchors
 
-extension Anchor where Type: AnchorType.Alignment {
-    /// Aligns two anchors.
-    @discardableResult public func align<Type: AnchorType.Alignment>(with anchor: Anchor<Type, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        Constraints.constrain(self, anchor, relation: relation)
+extension Anchor {
+    @discardableResult public func equal<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+        Constraints.constrain(self, anchor, constant: constant, relation: .equal)
+    }
+
+    @discardableResult public func greaterThanOrEqual<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+        Constraints.constrain(self, anchor, constant: constant, relation: .greaterThanOrEqual)
+    }
+
+    @discardableResult public func lessThanOrEqual<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+        Constraints.constrain(self, anchor, constant: constant, relation: .lessThanOrEqual)
+    }
+
+    @discardableResult public func equal<Type: AnchorType.Dimension>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+        Constraints.constrain(self, anchor, constant: constant, relation: .equal)
+    }
+
+    @discardableResult public func greaterThanOrEqual<Type: AnchorType.Dimension>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+        Constraints.constrain(self, anchor, constant: constant, relation: .greaterThanOrEqual)
+    }
+
+    @discardableResult public func lessThanOrEqual<Type: AnchorType.Dimension>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
+        Constraints.constrain(self, anchor, constant: constant, relation: .lessThanOrEqual)
     }
 }
 
@@ -142,7 +160,7 @@ extension Anchor where Type: AnchorType.Edge {
     // Pin the anchor to another layout item.
     private func _pin(to item2: Any?, attribute attr2: NSLayoutConstraint.Attribute, inset: CGFloat, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
-        return Constraints.constrain(self, toItem: item2, attribute: attr2, offset: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
+        return Constraints.constrain(self, toItem: item2, attribute: attr2, constant: (isInverted ? -inset : inset), relation: (isInverted ? relation.inverted : relation))
     }
 }
 
@@ -150,8 +168,8 @@ extension Anchor where Type: AnchorType.Edge {
 
 extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
-    @discardableResult public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        align(with: Anchor<Type, Axis>(item.superview!, attribute) + offset, relation: relation)
+    @discardableResult public func align(offset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        Constraints.constrain(self, toItem: item.superview!, attribute: attribute, constant: offset, relation: relation)
     }
 }
 
@@ -245,12 +263,12 @@ public struct AnchorCollectionCenter {
 
     /// Centers the view in the superview.
     @discardableResult public func alignWithSuperview() -> [NSLayoutConstraint] {
-        [x.alignWithSuperview(), y.alignWithSuperview()]
+        [x.align(), y.align()]
     }
 
     /// Makes the axis equal to the other collection of axis.
     @discardableResult public func align(with anchors: AnchorCollectionCenter) -> [NSLayoutConstraint] {
-        [x.align(with: anchors.x), y.align(with: anchors.y)]
+        [x.equal(anchors.x), y.equal(anchors.y)]
     }
 }
 
@@ -306,14 +324,14 @@ public final class Constraints {
     }
 
     /// Creates and automatically installs a constraint between two anchors.
-    static func constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: (multiplier / lhs.multiplier) * rhs.multiplier, constant: offset - lhs.offset + rhs.offset)
+    static func constrain<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: (multiplier / lhs.multiplier) * rhs.multiplier, constant: constant - lhs.offset + rhs.offset)
     }
 
     /// Creates and automatically installs a constraint between an anchor and
     /// a given item.
-    static func constrain<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: Any?, attribute attr2: NSLayoutConstraint.Attribute?, offset: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
-        constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: offset - lhs.offset)
+    static func constrain<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: Any?, attribute attr2: NSLayoutConstraint.Attribute?, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        constrain(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: constant - lhs.offset)
     }
 
     private static var _stack = [Constraints]() // this is what enabled constraint auto-installing
@@ -417,6 +435,7 @@ public extension LayoutAnchors where Base: LayoutItem {
 }
 
 extension Anchor where Type: AnchorType.Edge {
+    #warning("TODO: deprecate these")
     @discardableResult public func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation) -> NSLayoutConstraint {
         _pin(to: container ?? item.superview!, attribute: attribute, inset: inset, relation: relation)
     }
@@ -461,4 +480,18 @@ public extension AnchorCollectionEdges {
         anchors.map { $0.pinToSafeArea(of: vc, inset: insets.inset(for: $0.attribute), relation: relation) }
     }
     #endif
+}
+
+extension Anchor where Type: AnchorType.Alignment {
+    @available(*, deprecated, message: "Please use `equal`, `greaterThanOrEqual`, `lessThanOrEqual` instead")
+    @discardableResult public func align<Type: AnchorType.Alignment>(with anchor: Anchor<Type, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        Constraints.constrain(self, anchor, relation: relation)
+    }
+}
+
+extension Anchor where Type: AnchorType.Center {
+    @available(*, deprecated, message: "Please use `align`.")
+    @discardableResult public func alignWithSuperview(offset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+        Constraints.constrain(self, toItem: item.superview!, attribute: attribute, constant: offset, relation: relation)
+    }
 }
