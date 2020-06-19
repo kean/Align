@@ -387,7 +387,17 @@ public struct AnchorCollectionSize {
 
 // MARK: - Constraints
 
-public final class Constraints {
+public final class Constraints: Collection {
+    public typealias Element = NSLayoutConstraint
+    public typealias Index = Int
+
+    public subscript(position: Int) -> NSLayoutConstraint {
+        get { constraints[position] }
+    }
+    public var startIndex: Int { constraints.startIndex }
+    public var endIndex: Int { constraints.endIndex }
+    public func index(after i: Int) -> Int { i + 1 }
+
     /// Returns all of the created constraints.
     public private(set) var constraints = [NSLayoutConstraint]()
 

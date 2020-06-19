@@ -98,6 +98,28 @@ class ConstraintsArityTests: XCTestCase {
         }
     }
 
+    func testCollection() {
+        let constraints = Constraints {
+            a.anchors.top.pin()
+            a.anchors.bottom.pin()
+        }
+
+        XCTAssertEqualConstraints(Array(constraints), [
+            NSLayoutConstraint(item: a, attribute: .top, toItem: container, attribute: .top),
+            NSLayoutConstraint(item: a, attribute: .bottom, toItem: container, attribute: .bottom)
+        ])
+
+        XCTAssertEqualConstraints(
+            constraints[0],
+            NSLayoutConstraint(item: a, attribute: .top, toItem: container, attribute: .top)
+        )
+
+        XCTAssertEqualConstraints(
+            constraints[1],
+            NSLayoutConstraint(item: a, attribute: .bottom, toItem: container, attribute: .bottom)
+        )
+    }
+
     // MARK: Multiple Arguments
 
     func testOne() {
