@@ -57,14 +57,16 @@ a.anchors.height.equal(30)
 
 <img src="https://user-images.githubusercontent.com/1567433/84966617-f30afa80-b0df-11ea-8f62-0abd95eea4ef.png" alt="pin edges" width="400px"/>
 
-> **Note**. Every view that you manipulate using Align has `translatesAutoresizingMaskIntoConstraints` set to `false` so you no longer have to worry about it. 
->
-> Align also automatically activates the created constraints. Using [`(NSLayoutConstraint.active(_:)`](https://developer.apple.com/documentation/uikit/nslayoutconstraint/1526955-activate) is typically slightly more efficient than activating each constraint individually. To take advantage of this method, wrap your code into `Constrains` initializer.
->
->     Constraints {
->         // Create constraints in this closure
->     }
-> 
+**Note**. Every view that you manipulate using Align has `translatesAutoresizingMaskIntoConstraints` set to `false` so you no longer have to worry about it. 
+
+Align also automatically activates the created constraints. Using [`(NSLayoutConstraint.active(_:)`](https://developer.apple.com/documentation/uikit/nslayoutconstraint/1526955-activate) is typically slightly more efficient than activating each constraint individually. To take advantage of this method, wrap your code into `Constrains` initializer.
+
+```swift
+Constraints {       
+    // Create constraints in this closure
+}
+```
+ 
 > Align has full test coverage. If you'd like to learn about which constraints (`NSLayoutConstraint`) Align creates each time you call one of its methods, test cases are a great place to start.
 
 Align allows you to offset and multiple anchors.
