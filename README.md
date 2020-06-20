@@ -37,7 +37,7 @@ Anchors represent layout attributes of a view including **edges**, **dimensions*
 
 There are four types of APIs available in Align and they fit in the following quadrant.
 
-<img src="https://user-images.githubusercontent.com/1567433/85031709-00120300-b14d-11ea-9b59-a274e61af23b.png" width="600px">
+<img src="https://user-images.githubusercontent.com/1567433/85213133-4ec7c480-b328-11ea-9c2a-9f214f682760.png" width="600px">
 
 Both APIs are useful in different contexts, but all are designed to be easily discoverable using Xcode code completions.
 
