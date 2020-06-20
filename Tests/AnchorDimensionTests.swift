@@ -47,4 +47,12 @@ class AnchorDimensionTests: XCTestCase {
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .height)
         )
     }
+
+    func testClamp() {
+        XCTAssertEqualConstraints(
+            view.anchors.height.clamp(to: 10...20),
+            [NSLayoutConstraint(item: view, attribute: .height, relation: .greaterThanOrEqual, constant: 10),
+             NSLayoutConstraint(item: view, attribute: .height, relation: .lessThanOrEqual, constant: 20)]
+        )
+    }
 }

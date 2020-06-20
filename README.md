@@ -93,6 +93,13 @@ a.anchors.trailing.pin(inset: 20)
 
 <img src="https://user-images.githubusercontent.com/1567433/84966505-b3441300-b0df-11ea-8c83-cd9436e09abd.png" alt="pin edges" width="400px"/>
 
+```swift
+Clamps the dimension of a view to the given limiting range.
+a.anchors.width.clamp(to: 40...100)
+```
+
+<img src="https://user-images.githubusercontent.com/1567433/85213053-47ec8200-b327-11ea-878e-2b6d19e37fdc.png" alt="pin edges" width="400px"/>
+
 
 ## Anchor Collections
 

@@ -5,6 +5,7 @@
 ## Align 2.3.0
 
 - `Constraints` type now conforms to `Collection` protocol (backed by `Array`)
+- Add `clamp(to limit: ClosedRange<CGFloat>)` API for dimension anchors
 
 ## Align 2.2.1
 

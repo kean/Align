@@ -171,6 +171,10 @@ extension Anchor where Type: AnchorType.Dimension {
     @discardableResult public func lessThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
         Constraints.constrain(item: item, attribute: attribute, relatedBy: .lessThanOrEqual, constant: constant)
     }
+
+    @discardableResult public func clamp(to limits: ClosedRange<CGFloat>) -> [NSLayoutConstraint] {
+        [greaterThanOrEqual(limits.lowerBound), lessThanOrEqual(limits.upperBound)]
+    }
 }
 
 // MARK: - Anchors (AnchorType.Edge)
@@ -264,7 +268,7 @@ public struct AnchorCollectionEdges {
     public typealias Axis = NSLayoutConstraint.Orientation
     #endif
 
-    // MARK: Core
+    // MARK: Core API
 
     private var anchors: [Anchor<AnchorType.Edge, Any>] {
         let attributes = isAbsolute ?
@@ -277,7 +281,7 @@ public struct AnchorCollectionEdges {
         zip(anchors, collection.anchors).map { $0.equal($1, constant: insets.inset(for: $0.attribute, edge: true)) }
     }
 
-    // MARK: Semantic
+    // MARK: Semantic API
 
     @discardableResult public func pin(to item2: LayoutItem? = nil, insets: CGFloat, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
         pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: axis, alignment: alignment)
@@ -317,7 +321,7 @@ public struct AnchorCollectionCenter {
     let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
     let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
 
-    // MARK: Core
+    // MARK: Core API
 
     private var anchors: [Anchor<AnchorType.Edge, Any>] {
         [NSLayoutConstraint.Attribute.centerX, .centerY].map { Anchor(x.item, $0) }
@@ -335,7 +339,7 @@ public struct AnchorCollectionCenter {
         zip(anchors, collection.anchors).map { $0.greaterThanOrEqual($1, constant: offset.offset(for: $0.attribute)) }
     }
 
-    // MARK: Semantic
+    // MARK: Semantic API
 
     /// Centers the view in the superview.
     @discardableResult public func align() -> [NSLayoutConstraint] {
@@ -354,7 +358,7 @@ public struct AnchorCollectionSize {
     let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
     let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
 
-    // MARK: Core
+    // MARK: Core API
 
     /// Set the size of item.
     @discardableResult public func equal(_ size: CGSize) -> [NSLayoutConstraint] {
