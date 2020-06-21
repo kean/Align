@@ -159,35 +159,35 @@ public extension Anchor where Type: AnchorType.Dimension {
 
 // MARK: - Anchors (AnchorType.Dimension)
 
-extension Anchor where Type: AnchorType.Dimension {
-    @discardableResult public func equal(_ constant: CGFloat) -> NSLayoutConstraint {
+public extension Anchor where Type: AnchorType.Dimension {
+    @discardableResult func equal(_ constant: CGFloat) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .equal, constant: constant)
     }
 
-    @discardableResult public func greaterThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
+    @discardableResult func greaterThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .greaterThanOrEqual, constant: constant)
     }
 
-    @discardableResult public func lessThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
+    @discardableResult func lessThanOrEqual(_ constant: CGFloat) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .lessThanOrEqual, constant: constant)
     }
 
-    @discardableResult public func clamp(to limits: ClosedRange<CGFloat>) -> [NSLayoutConstraint] {
+    @discardableResult func clamp(to limits: ClosedRange<CGFloat>) -> [NSLayoutConstraint] {
         [greaterThanOrEqual(limits.lowerBound), lessThanOrEqual(limits.upperBound)]
     }
 }
 
 // MARK: - Anchors (AnchorType.Edge)
 
-extension Anchor where Type: AnchorType.Edge {
+public extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the respected edges of the given container.
-    @discardableResult public func pin(to container: LayoutItem? = nil, inset: CGFloat = 0) -> NSLayoutConstraint {
+    @discardableResult func pin(to container: LayoutItem? = nil, inset: CGFloat = 0) -> NSLayoutConstraint {
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
         return Constraints.add(self, toItem: container ?? item.superview!, attribute: attribute, constant: (isInverted ? -inset : inset))
     }
 
     /// Adds spacing between the current anchors.
-    @discardableResult public func spacing<Type: AnchorType.Edge>(_ spacing: CGFloat, to anchor: Anchor<Type, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
+    @discardableResult func spacing<Type: AnchorType.Edge>(_ spacing: CGFloat, to anchor: Anchor<Type, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let isInverted = (attribute == .bottom && anchor.attribute == .top) ||
             (attribute == .right && anchor.attribute == .left) ||
             (attribute == .trailing && anchor.attribute == .leading)
@@ -197,9 +197,9 @@ extension Anchor where Type: AnchorType.Edge {
 
 // MARK: - Anchors (AnchorType.Center)
 
-extension Anchor where Type: AnchorType.Center {
+public extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
-    @discardableResult public func align(offset: CGFloat = 0) -> NSLayoutConstraint {
+    @discardableResult func align(offset: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, toItem: item.superview!, attribute: attribute, constant: offset)
     }
 }
@@ -454,20 +454,20 @@ public final class Constraints: Collection {
     }
 }
 
-extension Constraints {
-    @discardableResult public convenience init<A: LayoutItem>(for a: A, _ closure: (LayoutAnchors<A>) -> Void) {
+public extension Constraints {
+    @discardableResult convenience init<A: LayoutItem>(for a: A, _ closure: (LayoutAnchors<A>) -> Void) {
         self.init { closure(a.anchors) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem>(for a: A, _ b: B, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>) -> Void) {
+    @discardableResult convenience init<A: LayoutItem, B: LayoutItem>(for a: A, _ b: B, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>) -> Void) {
         self.init { closure(a.anchors, b.anchors) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem>(for a: A, _ b: B, _ c: C, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>, LayoutAnchors<C>) -> Void) {
+    @discardableResult convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem>(for a: A, _ b: B, _ c: C, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>, LayoutAnchors<C>) -> Void) {
         self.init { closure(a.anchors, b.anchors, c.anchors) }
     }
 
-    @discardableResult public convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>, LayoutAnchors<C>, LayoutAnchors<D>) -> Void) {
+    @discardableResult convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>, LayoutAnchors<C>, LayoutAnchors<D>) -> Void) {
         self.init { closure(a.anchors, b.anchors, c.anchors, d.anchors) }
     }
 }
