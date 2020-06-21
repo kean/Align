@@ -234,26 +234,6 @@ public struct Alignmment {
     public static let top = Alignmment(horizontal: .fill, vertical: .top)
 }
 
-public protocol AnchorCollection {
-    associatedtype AnchorType
-
-    func anchors() -> Anchor<AnchorType, Any>
-}
-
-public extension AnchorCollection {
-    @discardableResult func equal<Anchors: AnchorCollection>(_ collection: Anchors, constant: CGFloat = 0) -> NSLayoutConstraint where Anchors.AnchorType == AnchorType {
-        fatalError()
-    }
-
-    @discardableResult func greaterThanOrEqual<Anchors: AnchorCollection>(_ collection: Anchors, constant: CGFloat = 0) -> NSLayoutConstraint where Anchors.AnchorType == AnchorType {
-        fatalError()
-    }
-
-    @discardableResult func lessThanOrEqual<Anchors: AnchorCollection>(_ collection: Anchors, constant: CGFloat = 0) -> NSLayoutConstraint  where Anchors.AnchorType == AnchorType {
-        fatalError()
-    }
-}
-
 public struct AnchorCollectionEdges {
     let item: LayoutItem
     var isAbsolute = false
