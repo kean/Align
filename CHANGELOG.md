@@ -2,6 +2,11 @@
 
 # Align 2
 
+## Align 2.4.0
+
+- Add [Cheat Sheet](https://github.com/kean/Align/files/4809887/align-cheat-sheet.pdf)
+- Remove `anchors.margins` and `anchors.safeArea` APIs
+
 ## Align 2.3.0
 
 *June 20, 2020*

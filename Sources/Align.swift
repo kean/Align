@@ -63,13 +63,6 @@ public extension LayoutAnchors where Base: LayoutItem {
     var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }
 
-#if os(iOS) || os(tvOS)
-public extension LayoutAnchors where Base: UIView {
-    var margins: LayoutAnchors<UILayoutGuide> { base.layoutMarginsGuide.anchors }
-    var safeArea: LayoutAnchors<UILayoutGuide> { base.safeAreaLayoutGuide.anchors }
-}
-#endif
-
 // MARK: - Anchors
 
 // phantom types
