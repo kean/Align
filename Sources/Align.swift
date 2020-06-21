@@ -219,7 +219,7 @@ public extension Anchor where Type: AnchorType.Center {
 
 // MARK: - AnchorCollectionEdges
 
-public struct Alignmment {
+public struct Alignment {
     public enum Horizontal {
         case fill, center, leading, trailing
     }
@@ -234,16 +234,16 @@ public struct Alignmment {
         (self.horizontal, self.vertical) = (horizontal, vertical)
     }
 
-    public static let fill = Alignmment(horizontal: .fill, vertical: .fill)
-    public static let center = Alignmment(horizontal: .center, vertical: .center)
-    public static let topLeading = Alignmment(horizontal: .leading, vertical: .top)
-    public static let leading = Alignmment(horizontal: .leading, vertical: .fill)
-    public static let bottomLeading = Alignmment(horizontal: .leading, vertical: .bottom)
-    public static let bottom = Alignmment(horizontal: .fill, vertical: .bottom)
-    public static let bottomTrailing = Alignmment(horizontal: .trailing, vertical: .bottom)
-    public static let trailing = Alignmment(horizontal: .trailing, vertical: .fill)
-    public static let topTrailing = Alignmment(horizontal: .trailing, vertical: .top)
-    public static let top = Alignmment(horizontal: .fill, vertical: .top)
+    public static let fill = Alignment(horizontal: .fill, vertical: .fill)
+    public static let center = Alignment(horizontal: .center, vertical: .center)
+    public static let topLeading = Alignment(horizontal: .leading, vertical: .top)
+    public static let leading = Alignment(horizontal: .leading, vertical: .fill)
+    public static let bottomLeading = Alignment(horizontal: .leading, vertical: .bottom)
+    public static let bottom = Alignment(horizontal: .fill, vertical: .bottom)
+    public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
+    public static let trailing = Alignment(horizontal: .trailing, vertical: .fill)
+    public static let topTrailing = Alignment(horizontal: .trailing, vertical: .top)
+    public static let top = Alignment(horizontal: .fill, vertical: .top)
 }
 
 public struct AnchorCollectionEdges {
@@ -291,7 +291,7 @@ public struct AnchorCollectionEdges {
     /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
     /// - parameter alignment: `.fill` by default, see `Alignment` for a list of
     /// the available options.
-    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: CGFloat, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
+    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: CGFloat, axis: Axis? = nil, alignment: Alignment = .fill) -> [NSLayoutConstraint] {
         pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: axis, alignment: alignment)
     }
 
@@ -305,11 +305,11 @@ public struct AnchorCollectionEdges {
     /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
     /// - parameter alignment: `.fill` by default, see `Alignment` for a list of
     /// the available options.
-    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
+    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignment = .fill) -> [NSLayoutConstraint] {
         pin(to: item2, insets: insets, axis: axis, alignment: alignment, isCenteringEnabled: true)
     }
 
-    private func pin(to item2: LayoutItem?, insets: EdgeInsets, axis: Axis?, alignment: Alignmment, isCenteringEnabled: Bool) -> [NSLayoutConstraint] {
+    private func pin(to item2: LayoutItem?, insets: EdgeInsets, axis: Axis?, alignment: Alignment, isCenteringEnabled: Bool) -> [NSLayoutConstraint] {
         let item2 = item2 ?? item.superview!
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing

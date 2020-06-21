@@ -2,6 +2,12 @@
 
 # Align 2
 
+## Align 2.4.1
+
+*June 21, 2020*
+
+- Fix typo in `Alignment`
+
 ## Align 2.4.0
 
 *June 21, 2020*
