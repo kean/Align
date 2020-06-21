@@ -21,7 +21,7 @@ To give you a taste of what the *semantic* APIs look like, here is an example:
 view.anchors.edges.pin(insets: 20, alignment: .center)
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84931836-5cb7e400-b0a1-11ea-8342-ce76b151fcad.png" alt="pin edges with center alignmnet" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84931836-5cb7e400-b0a1-11ea-8342-ce76b151fcad.png" alt="pin edges with center alignmnet" width="360px"/>
 
 ## Getting Started
 
@@ -35,7 +35,7 @@ The entire library fits in a single file with around 300 lines of code. You can 
 
 Anchors (`Anchor<Type, Axis`) represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**. You use anchors to create constraints. The Align APIs fit in the following quadrant:
 
-<img src="https://user-images.githubusercontent.com/1567433/85213133-4ec7c480-b328-11ea-9c2a-9f214f682760.png" width="600px">
+<img src="https://user-images.githubusercontent.com/1567433/85213133-4ec7c480-b328-11ea-9c2a-9f214f682760.png" width="500px">
 
 **Core API** allows you to create constraints by setting relations between one or more anchors, there APIs are similar to what `NSLayoutAnchor` provides. **Semantic API** is a high-level API that focus on your goals, such as pinning edges to the container, aligning the view, setting spacing between views, etc.
 
@@ -57,7 +57,7 @@ a.anchors.leading.equal(b.anchors.leading)
 a.anchors.height.equal(30)
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84966617-f30afa80-b0df-11ea-8f62-0abd95eea4ef.png" alt="pin edges" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84966617-f30afa80-b0df-11ea-8f62-0abd95eea4ef.png" alt="pin edges" width="360px"/>
 
 Align automatically sets `translatesAutoresizingMaskIntoConstraints` to `false` for every view that you manipulate using it, so you no longer have to worry about it. 
 
@@ -81,7 +81,7 @@ b.anchors.leading.equal(a.anchors.trailing + 20)
 b.anchors.height.equal(a.anchors.width * 2)
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84966337-4df02200-b0df-11ea-9bfe-e9c333cb09ef.png" alt="pin edges" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84966337-4df02200-b0df-11ea-9bfe-e9c333cb09ef.png" alt="pin edges" width="360px"/>
 
 ### Semantic API
 
@@ -93,14 +93,14 @@ a.anchors.bottom.spacing(20, to: b.anchors.top)
 a.anchors.trailing.pin(inset: 20)
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84966505-b3441300-b0df-11ea-8c83-cd9436e09abd.png" alt="pin edges" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84966505-b3441300-b0df-11ea-8c83-cd9436e09abd.png" alt="pin edges" width="360px"/>
 
 ```swift
 Clamps the dimension of a view to the given limiting range.
 a.anchors.width.clamp(to: 40...100)
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/85213053-47ec8200-b327-11ea-878e-2b6d19e37fdc.png" alt="pin edges" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/85213053-47ec8200-b327-11ea-878e-2b6d19e37fdc.png" alt="pin edges" width="360px"/>
 
 
 ## Anchor Collections
@@ -122,7 +122,7 @@ view.anchors.edges.pin(
 )
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84931360-b10e9400-b0a0-11ea-937b-eb4fbb97a6f7.png" alt="pin edges" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84931360-b10e9400-b0a0-11ea-937b-eb4fbb97a6f7.png" alt="pin edges" width="360px"/>
 
 By default, `pin()` method pin the edges to the superview of the current view. However, you can select any target view or layout guide:
 
@@ -145,7 +145,7 @@ By default, `pin()` users `.fill` alignment. There are variety of other alignmen
 view.anchors.edges.pin(insets: 20, alignment: .center)
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84931836-5cb7e400-b0a1-11ea-8342-ce76b151fcad.png" alt="pin edges with center alignmnet" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84931836-5cb7e400-b0a1-11ea-8342-ce76b151fcad.png" alt="pin edges with center alignmnet" width="360px"/>
 
 You can create constraint along the given axis.
 
@@ -153,7 +153,7 @@ You can create constraint along the given axis.
 view.anchors.edges.pin(insets: 20, axis: .horizontal, alignment: .center)
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84932039-af919b80-b0a1-11ea-9798-43a944f4b681.png" alt="pin edges with center alignmnet for horizontal axis" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84932039-af919b80-b0a1-11ea-9798-43a944f4b681.png" alt="pin edges with center alignmnet for horizontal axis" width="360px"/>
 
 
 Or pin the view to to a corner.
@@ -162,7 +162,7 @@ Or pin the view to to a corner.
 view.anchors.edges.pin(insets: 20, alignment: .topLeading)
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84932173-e36cc100-b0a1-11ea-9a5d-b6381cde2df7.png" alt="pin edges with center alignmnet for horizontal axis" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84932173-e36cc100-b0a1-11ea-9a5d-b6381cde2df7.png" alt="pin edges with center alignmnet for horizontal axis" width="360px"/>
 
 You can create custom alignments (see `Alignment` type) by providing a vertical and horizontal component.
 
@@ -170,7 +170,7 @@ You can create custom alignments (see `Alignment` type) by providing a vertical 
 anchors.edges.pin(insets: 20, alignment: Alignment(vertical: .center, horizontal: .leading))
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84932264-0b5c2480-b0a2-11ea-9574-d32a6de77fb7.png" alt="pin edges with center alignmnet for horizontal axis" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84932264-0b5c2480-b0a2-11ea-9574-d32a6de77fb7.png" alt="pin edges with center alignmnet for horizontal axis" width="360px"/>
 
 ### Center
 
@@ -178,7 +178,7 @@ anchors.edges.pin(insets: 20, alignment: Alignment(vertical: .center, horizontal
 a.anchors.center.align()
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84965361-bc7fb080-b0dc-11ea-8353-389f05888470.png" alt="size equal" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84965361-bc7fb080-b0dc-11ea-8353-389f05888470.png" alt="size equal" width="360px"/>
 
 ### Size
 
@@ -188,13 +188,13 @@ a.anchors.size.equal(CGSize(width: 120, height: 40))
 
 > `greaterThanEqual` and `lessThanOrEqual` options are also available
 
-<img src="https://user-images.githubusercontent.com/1567433/84965098-f7351900-b0db-11ea-9e22-09f017f6c730.png" alt="size equal" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84965098-f7351900-b0db-11ea-9e22-09f017f6c730.png" alt="size equal" width="360px"/>
 
 ```swift
 a.anchors.size.equal(b)
 ```
 
-<img src="https://user-images.githubusercontent.com/1567433/84965233-54c96580-b0dc-11ea-8200-0e7741801432.png" alt="size equal other view" width="400px"/>
+<img src="https://user-images.githubusercontent.com/1567433/84965233-54c96580-b0dc-11ea-8200-0e7741801432.png" alt="size equal other view" width="360px"/>
 
 ## Advanced
 
