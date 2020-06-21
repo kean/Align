@@ -80,7 +80,24 @@ public enum AnchorType {
 }
 
 /// An anchor represents one of the view's layout attributes (e.g. `left`,
-/// `centerX`, `width`, etc). Use the anchor’s methods to construct constraints.
+/// `centerX`, `width`, etc).
+///
+/// Instead of creating `NSLayoutConstraint` objects directly, start with a `UIView`,
+/// `NSView`, or `UILayoutGuide` object you wish to constrain, and select one of
+/// that object’s anchor properties. These properties correspond to the main
+/// `NSLayoutConstraint.Attribute` values used in Auto Layout, and provide an
+/// appropriate `Anchor` type for creating constraints to that attribute. For
+/// example, `view.anchors.top` is represted by `Anchor<AnchorType.Edge, AnchorAxis.Vertical>`.
+/// Use the anchor’s methods to construct your constraint.
+///
+/// - note: `UIView` does not provide anchor properties for the layout margin attributes.
+/// Instead, the `layoutMarginsGuide` property provides a `UILayoutGuide` object that
+/// represents these margins. Use the guide’s anchor properties to create your constraints.
+///
+/// When you create constraints using `Anchor` APIs, the constraints are activated
+/// automatically and the target view has `translatesAutoresizingMaskIntoConstraints`
+/// set to `false`. If you want to activate all the constraints at the same or
+/// create them without activation, use `Constraints` type.
 public struct Anchor<Type, Axis> { // type and axis are phantom types
     let item: LayoutItem
     let attribute: NSLayoutConstraint.Attribute
@@ -121,6 +138,7 @@ public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> A
 // MARK: - Anchors (AnchorType.Alignment)
 
 public extension Anchor where Type: AnchorType.Alignment {
+    /// Adds a constraint that defines the anchors' attributes as equal to each other.
     @discardableResult func equal<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal)
     }
@@ -137,6 +155,7 @@ public extension Anchor where Type: AnchorType.Alignment {
 // MARK: - Anchors (AnchorType.Dimension)
 
 public extension Anchor where Type: AnchorType.Dimension {
+    /// Adds a constraint that defines the anchors' attributes as equal to each other.
     @discardableResult func equal<Type: AnchorType.Dimension, Axis>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal)
     }
@@ -262,10 +281,30 @@ public struct AnchorCollectionEdges {
 
     // MARK: Semantic API
 
+    /// Pins the edges to the edges of the given item. By default, pins the edges
+    /// to the superview.
+    ///
+    /// - parameter target: The target view, by default, uses the superview.
+    /// - parameter insets: Insets the reciever's edges by the given insets.
+    /// - parameter axis: If provided, creates constraints only along the given
+    /// axis. For example, if you pass axis `.horizontal`, only the `.leading`,
+    /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
+    /// - parameter alignment: `.fill` by default, see `Alignment` for a list of
+    /// the available options.
     @discardableResult public func pin(to item2: LayoutItem? = nil, insets: CGFloat, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
         pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: axis, alignment: alignment)
     }
 
+    /// Pins the edges to the edges of the given item. By default, pins the edges
+    /// to the superview.
+    ///
+    /// - parameter target: The target view, by default, uses the superview.
+    /// - parameter insets: Insets the reciever's edges by the given insets.
+    /// - parameter axis: If provided, creates constraints only along the given
+    /// axis. For example, if you pass axis `.horizontal`, only the `.leading`,
+    /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
+    /// - parameter alignment: `.fill` by default, see `Alignment` for a list of
+    /// the available options.
     @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
         pin(to: item2, insets: insets, axis: axis, alignment: alignment, isCenteringEnabled: true)
     }
