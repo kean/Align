@@ -9,13 +9,13 @@
 
 Align introduces a better alternative to Auto Layout [anchors](https://developer.apple.com/documentation/uikit/nslayoutanchor).
 
-- **Semantic**. Align APIs focus on your goals, not math behind constraints.
-- **Powerful**. Create multiple constraints with a single line by manipulating collections of anchors.  
+- **Semantic**. Align APIs focus on your goals, not the math behind Auto Layout constraints.  
+- **Powerful**. Create multiple constraints with a single line of code.  
 - **Type Safe**. Makes it impossible to create invalid constraints, at compile time.  
 - **Fluent**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
 - **Simple**. Stop worrying about `translatesAutoresizingMaskIntoConstraints` and manually activating constraints.  
 
-To give you a taste of what *semantic* APIs look like, here is an example:
+To give you a taste of what the *semantic* APIs look like, here is an example:
 
 ```swift
 view.anchors.edges.pin(insets: 20, alignment: .center)
@@ -25,23 +25,25 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 
 ## Getting Started
 
-The entire library fits in a single file with less than 300 lines of code. You can simply drag-n-drop it into your app if you'd like. For more installation options, see [**Installation Guide**](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md).
+The entire library fits in a single file with around 300 lines of code. You can simply drag-n-drop it into your app if you'd like. For more installation options, see [**Installation Guide**](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md).
 
-- [**Anchors**](#anchors) ‣ [Core APIs](#core-apis) · [Semantic APIs](#semantic-apis)
-- [**Anchor Collections**](#anchor-collections) ‣ [Edges](#edges) · [Center](#center) · [Size](#size)
+- **Anchors** ‣ [Introduction](#introduction) · [Core API](#core-api) · [Semantic API](#semantic-api)
+- **Anchor Collections** ‣ [Edges](#edges) · [Center](#center) · [Size](#size)
 - [**Advanced**](#advanced) · [**Requirements**](#requirements) · [**Why Align**](#why-align)
 
-## Anchors
+## Introduction
 
-Anchors represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**. To create constraints, start by selecting an anchor of a view (or of a layout guide). Then use anchor's methods to create constraints.
-
-There are four types of APIs available in Align and they fit in the following quadrant.
+Anchors (`Anchor<Type, Axis`) represent layout attributes of a view including **edges**, **dimensions**, **axis**, and **baselines**. You use anchors to create constraints. The Align APIs fit in the following quadrant:
 
 <img src="https://user-images.githubusercontent.com/1567433/85213133-4ec7c480-b328-11ea-9c2a-9f214f682760.png" width="600px">
 
-Both APIs are useful in different contexts, but all are designed to be easily discoverable using Xcode code completions.
+**Core API** allows you to create constraints by setting relations between one or more anchors, there APIs are similar to what `NSLayoutAnchor` provides. **Semantic API** is a high-level API that focus on your goals, such as pinning edges to the container, aligning the view, setting spacing between views, etc.
 
-### Core APIs
+Both of these types of APIs are designed to be easily discoverable using Xcode code completions. However, the best way to learn them is to follow the illustrated guide from the README.
+
+## Anchors
+
+### Core API
 
 ```swift
 // Align two views along one of the edges
@@ -57,7 +59,7 @@ a.anchors.height.equal(30)
 
 <img src="https://user-images.githubusercontent.com/1567433/84966617-f30afa80-b0df-11ea-8f62-0abd95eea4ef.png" alt="pin edges" width="400px"/>
 
-**Note**. Every view that you manipulate using Align has `translatesAutoresizingMaskIntoConstraints` set to `false` so you no longer have to worry about it. 
+Align automatically sets `translatesAutoresizingMaskIntoConstraints` to `false` for every view that you manipulate using it, so you no longer have to worry about it. 
 
 Align also automatically activates the created constraints. Using [`(NSLayoutConstraint.active(_:)`](https://developer.apple.com/documentation/uikit/nslayoutconstraint/1526955-activate) is typically slightly more efficient than activating each constraint individually. To take advantage of this method, wrap your code into `Constrains` initializer.
 
@@ -69,11 +71,11 @@ Constraints {
  
 > Align has full test coverage. If you'd like to learn about which constraints (`NSLayoutConstraint`) Align creates each time you call one of its methods, test cases are a great place to start.
 
-Align allows you to offset and multiple anchors.
+Align also allows you to offset and multiply anchors. This is a lightweight operation with no allocations involved.
 
 ```swift
 // Offset one of the anchors, creating a "virtual" anchor
-b.anchors.leading.equal(a.anchors.trailng + 20)
+b.anchors.leading.equal(a.anchors.trailing + 20)
 
 // Set aspect ratio for a view
 b.anchors.height.equal(a.anchors.width * 2)
@@ -81,7 +83,7 @@ b.anchors.height.equal(a.anchors.width * 2)
 
 <img src="https://user-images.githubusercontent.com/1567433/84966337-4df02200-b0df-11ea-9bfe-e9c333cb09ef.png" alt="pin edges" width="400px"/>
 
-### Semantic APIs
+### Semantic API
 
 ```swift
 // Set spacing between two views
