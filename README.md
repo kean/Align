@@ -29,7 +29,7 @@ The entire library fits in a single file with around 300 lines of code. You can 
 
 - **Anchors** ‣ [Introduction](#introduction) · [Core API](#core-api) · [Semantic API](#semantic-api)
 - **Anchor Collections** ‣ [Edges](#edges) · [Center](#center) · [Size](#size)
-- [**Advanced**](#advanced) · [**Requirements**](#requirements) · [**Why Align**](#why-align)
+- [**Advanced**](#advanced) · [**Cheat Sheet**](#cheat-sheet) · [**Requirements**](#requirements) · [**Why Align**](#why-align)
 
 ## Introduction
 
@@ -39,7 +39,7 @@ Anchors (`Anchor<Type, Axis`) represent layout attributes of a view including **
 
 **Core API** allows you to create constraints by setting relations between one or more anchors, there APIs are similar to what `NSLayoutAnchor` provides. **Semantic API** is a high-level API that focus on your goals, such as pinning edges to the container, aligning the view, setting spacing between views, etc.
 
-Both of these types of APIs are designed to be easily discoverable using Xcode code completions. However, the best way to learn them is to follow the illustrated guide from the README.
+Both of these types of APIs are designed to be easily discoverable using Xcode code completions. There is also a [**cheat sheet**](#cheat-sheet) available, as well as an illustrated guide located in this README. 
 
 ## Anchors
 
@@ -220,6 +220,13 @@ Constraints(activate: false) {
     // Create your constraints here
 }
 ```
+
+## Cheat Sheet
+
+[Align Cheat Sheet](https://github.com/kean/Align/files/4809887/align-cheat-sheet.pdf)
+
+<img alt="Align Cheat Sheet" src="https://user-images.githubusercontent.com/1567433/85230732-33a89380-b3c0-11ea-81ca-07fe2d8c1fec.png">
+
 
 ## Requirements
 
