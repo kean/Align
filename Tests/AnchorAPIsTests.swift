@@ -49,7 +49,10 @@ class AnchorAPITests: XCTestCase {
         view.anchors.edges.pin(axis: .horizontal)
         view.anchors.edges.pin(to: container, insets: 20, axis: .horizontal, alignment: .center)
 
-        // AnchorCollectionCenter
+        // AnchorCollectionCenter (Core API)
+        view.anchors.center.equal(container)
+
+        // AnchorCollectionCenter (Semantic API)
         view.anchors.center.align()
         view.anchors.center.align(with: container)
 

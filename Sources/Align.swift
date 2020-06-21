@@ -313,16 +313,16 @@ public struct AnchorCollectionCenter {
 
     // MARK: Core API
 
-    @discardableResult public func equal(_ collection: AnchorCollectionCenter, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
-        [x.equal(collection.x, constant: offset.x), y.equal(collection.y, constant: offset.y)]
+    @discardableResult public func equal<Item: LayoutItem>(_ item2: Item, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
+        [x.equal(item2.anchors.centerX, constant: offset.x), y.equal(item2.anchors.centerY, constant: offset.y)]
     }
 
-    @discardableResult public func greaterThanOrEqual(_ collection: AnchorCollectionCenter, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
-        [x.greaterThanOrEqual(collection.x, constant: offset.x), y.greaterThanOrEqual(collection.y, constant: offset.y)]
+    @discardableResult public func greaterThanOrEqual<Item: LayoutItem>(_ item2: Item, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
+        [x.greaterThanOrEqual(item2.anchors.centerX, constant: offset.x), y.greaterThanOrEqual(item2.anchors.centerY, constant: offset.y)]
     }
 
-    @discardableResult public func lessThanOrEqual(_ collection: AnchorCollectionCenter, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
-        [x.lessThanOrEqual(collection.x, constant: offset.x), y.lessThanOrEqual(collection.y, constant: offset.y)]
+    @discardableResult public func lessThanOrEqual<Item: LayoutItem>(_ item2: Item, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
+        [x.lessThanOrEqual(item2.anchors.centerX, constant: offset.x), y.lessThanOrEqual(item2.anchors.centerY, constant: offset.y)]
     }
 
     // MARK: Semantic API

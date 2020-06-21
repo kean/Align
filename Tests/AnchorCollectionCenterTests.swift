@@ -18,25 +18,25 @@ class AnchorCollectionCenterTests: XCTestCase {
 
     func testCore() {
         XCTAssertEqualConstraints(
-            view.anchors.center.equal(container.anchors.center),
+            view.anchors.center.equal(container),
             [NSLayoutConstraint(item: view, attribute: .centerX, toItem: container, attribute: .centerX),
             NSLayoutConstraint(item: view, attribute: .centerY, toItem: container, attribute: .centerY)]
         )
 
         XCTAssertEqualConstraints(
-            view.anchors.center.equal(container.anchors.center, offset: CGPoint(x: 10, y: 20)),
+            view.anchors.center.equal(container, offset: CGPoint(x: 10, y: 20)),
             [NSLayoutConstraint(item: view, attribute: .centerX, toItem: container, attribute: .centerX, constant: 10),
             NSLayoutConstraint(item: view, attribute: .centerY, toItem: container, attribute: .centerY, constant: 20)]
         )
 
         XCTAssertEqualConstraints(
-            view.anchors.center.greaterThanOrEqual(container.anchors.center),
+            view.anchors.center.greaterThanOrEqual(container),
             [NSLayoutConstraint(item: view, attribute: .centerX, relation: .greaterThanOrEqual, toItem: container, attribute: .centerX),
             NSLayoutConstraint(item: view, attribute: .centerY, relation: .greaterThanOrEqual, toItem: container, attribute: .centerY)]
         )
 
         XCTAssertEqualConstraints(
-            view.anchors.center.lessThanOrEqual(container.anchors.center),
+            view.anchors.center.lessThanOrEqual(container),
             [NSLayoutConstraint(item: view, attribute: .centerX, relation: .lessThanOrEqual, toItem: container, attribute: .centerX),
             NSLayoutConstraint(item: view, attribute: .centerY, relation: .lessThanOrEqual, toItem: container, attribute: .centerY)]
         )
