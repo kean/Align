@@ -172,6 +172,7 @@ public extension Anchor where Type: AnchorType.Dimension {
         Constraints.add(item: item, attribute: attribute, relatedBy: .lessThanOrEqual, constant: constant)
     }
 
+    /// Clamps the dimension of a view to the given limiting range.
     @discardableResult func clamp(to limits: ClosedRange<CGFloat>) -> [NSLayoutConstraint] {
         [greaterThanOrEqual(limits.lowerBound), lessThanOrEqual(limits.upperBound)]
     }
@@ -418,6 +419,20 @@ public final class Constraints: Collection {
         Constraints.stack.removeLast()
         if activate { NSLayoutConstraint.activate(constraints) }
     }
+
+    // MARK: Activate
+
+    /// Activates each constraint in the reciever.
+    public func activate() {
+        NSLayoutConstraint.activate(constraints)
+    }
+
+    /// Deactivates each constraint in the reciever.
+    public func deactivate() {
+        NSLayoutConstraint.deactivate(constraints)
+    }
+
+    // MARK: Adding Constraints
 
     /// Creates and automatically installs a constraint.
     static func add(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
