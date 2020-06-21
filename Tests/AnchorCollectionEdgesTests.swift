@@ -46,7 +46,7 @@ class AnchorCollectionEdgesTests: XCTestCase {
         )
     }
 
-    func testPinToSuperviewLessThanOrEqual() {
+    func testPinToSuperviewLessThanOrEqualAlignmentCenter() {
         XCTAssertEqualConstraints(
             view.anchors.edges.pin(alignment: .center),
             [NSLayoutConstraint(item: view, attribute: .top, relation: .greaterThanOrEqual, toItem: container, attribute: .top),
@@ -55,6 +55,16 @@ class AnchorCollectionEdgesTests: XCTestCase {
              NSLayoutConstraint(item: view, attribute: .trailing, relation: .lessThanOrEqual, toItem: container, attribute: .trailing),
              NSLayoutConstraint(item: view, attribute: .centerX, relation: .equal, toItem: container, attribute: .centerX),
              NSLayoutConstraint(item: view, attribute: .centerY, relation: .equal, toItem: container, attribute: .centerY)]
+        )
+    }
+
+    func testPinToSuperviewLessThanOrEqual() {
+        XCTAssertEqualConstraints(
+            view.anchors.edges.lessThanOrEqual(container.anchors.edges),
+            [NSLayoutConstraint(item: view, attribute: .top, relation: .greaterThanOrEqual, toItem: container, attribute: .top),
+             NSLayoutConstraint(item: view, attribute: .leading, relation: .greaterThanOrEqual,toItem: container, attribute: .leading),
+             NSLayoutConstraint(item: view, attribute: .bottom, relation: .lessThanOrEqual, toItem: container, attribute: .bottom),
+             NSLayoutConstraint(item: view, attribute: .trailing, relation: .lessThanOrEqual, toItem: container, attribute: .trailing)]
         )
     }
 

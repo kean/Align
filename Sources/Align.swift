@@ -251,15 +251,12 @@ public struct AnchorCollectionEdges {
 
     // MARK: Core API
 
-    private var anchors: [Anchor<AnchorType.Edge, Any>] {
-        let attributes = isAbsolute ?
-            [NSLayoutConstraint.Attribute.left, .bottom, .right, .top] :
-            [NSLayoutConstraint.Attribute.leading, .bottom, .trailing, .top]
-        return attributes.map { Anchor(item, $0) }
+    @discardableResult public func equal(_ collection: AnchorCollectionEdges, insets: EdgeInsets = .zero) -> [NSLayoutConstraint] {
+        pin(to: collection.item, insets: insets)
     }
 
-    @discardableResult public func equal(_ collection: AnchorCollectionEdges, insets: EdgeInsets) -> [NSLayoutConstraint] {
-        zip(anchors, collection.anchors).map { $0.equal($1, constant: insets.inset(for: $0.attribute, edge: true)) }
+    @discardableResult public func lessThanOrEqual(_ collection: AnchorCollectionEdges, insets: EdgeInsets = .zero) -> [NSLayoutConstraint] {
+        pin(to: collection.item, insets: insets, alignment: .center, isCenteringEnabled: false)
     }
 
     // MARK: Semantic API
@@ -269,6 +266,10 @@ public struct AnchorCollectionEdges {
     }
 
     @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignmment = .fill) -> [NSLayoutConstraint] {
+        pin(to: item2, insets: insets, axis: axis, alignment: alignment, isCenteringEnabled: true)
+    }
+
+    private func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignmment = .fill, isCenteringEnabled: Bool) -> [NSLayoutConstraint] {
         let item2 = item2 ?? item.superview!
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing
@@ -281,14 +282,14 @@ public struct AnchorCollectionEdges {
         if axis == nil || axis == .horizontal {
             constrain(attribute: left, relation: alignment.horizontal == .fill || alignment.horizontal == .leading ? .equal : .greaterThanOrEqual, constant: insets.left)
             constrain(attribute: right, relation: alignment.horizontal == .fill || alignment.horizontal == .trailing ? .equal : .lessThanOrEqual, constant: -insets.right)
-            if alignment.horizontal == .center {
+            if alignment.horizontal == .center && isCenteringEnabled {
                 constrain(attribute: .centerX, relation: .equal, constant: 0)
             }
         }
         if axis == nil || axis == .vertical {
             constrain(attribute: .top, relation: alignment.vertical == .fill || alignment.vertical == .top ? .equal : .greaterThanOrEqual, constant: insets.top)
             constrain(attribute: .bottom, relation: alignment.vertical == .fill || alignment.vertical == .bottom ? .equal : .lessThanOrEqual, constant: -insets.bottom)
-            if alignment.vertical == .center {
+            if alignment.vertical == .center && isCenteringEnabled {
                 constrain(attribute: .centerY, relation: .equal, constant: 0)
             }
         }
