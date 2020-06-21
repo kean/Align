@@ -13,7 +13,7 @@ Align introduces a better alternative to Auto Layout [anchors](https://developer
 - **Powerful**. Create multiple constraints with a single line of code.  
 - **Type Safe**. Makes it impossible to create invalid constraints, at compile time.  
 - **Fluent**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
-- **Simple**. Stop worrying about `translatesAutoresizingMaskIntoConstraints` and manually activating constraints.  
+- **Simple**. Stop worrying about `translatesAutoresizingMaskIntoConstraints` and constraints activation.  
 
 To give you a taste of what the *semantic* APIs look like, here is an example:
 
