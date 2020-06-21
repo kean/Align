@@ -251,12 +251,20 @@ public struct AnchorCollectionEdges {
 
     // MARK: Core API
 
-    @discardableResult public func equal(_ collection: AnchorCollectionEdges, insets: EdgeInsets = .zero) -> [NSLayoutConstraint] {
-        pin(to: collection.item, insets: insets)
+    @discardableResult public func equal(_ item2: LayoutItem, insets: EdgeInsets = .zero) -> [NSLayoutConstraint] {
+        pin(to: item2, insets: insets)
     }
 
-    @discardableResult public func lessThanOrEqual(_ collection: AnchorCollectionEdges, insets: EdgeInsets = .zero) -> [NSLayoutConstraint] {
-        pin(to: collection.item, insets: insets, alignment: .center, isCenteringEnabled: false)
+    @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: EdgeInsets = .zero) -> [NSLayoutConstraint] {
+        pin(to: item2, insets: insets, alignment: .center, isCenteringEnabled: false)
+    }
+
+    @discardableResult public func equal(_ item2: LayoutItem, insets: CGFloat) -> [NSLayoutConstraint] {
+        pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets))
+    }
+
+    @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: CGFloat) -> [NSLayoutConstraint] {
+        pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), alignment: .center, isCenteringEnabled: false)
     }
 
     // MARK: Semantic API

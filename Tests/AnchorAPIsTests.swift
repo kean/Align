@@ -35,11 +35,19 @@ class AnchorAPITests: XCTestCase {
         view.anchors.width.greaterThanOrEqual(10)
         view.anchors.width.equal(container.anchors.width)
 
-        // AnchorCollectionEdges
+        // AnchorCollectionEdges (Core API)
+        view.anchors.edges.equal(container)
+        view.anchors.edges.equal(container, insets: 20)
+        view.anchors.edges.equal(container, insets: EdgeInsets(top: 10, left: 20, bottom: 10, right: 20))
+        view.anchors.edges.lessThanOrEqual(container, insets: EdgeInsets(top: 10, left: 20, bottom: 10, right: 20))
+
+        // AnchorCollectionEdges (Semantic API)
         view.anchors.edges.pin()
+        view.anchors.edges.pin(insets: 20)
         view.anchors.edges.pin(insets: EdgeInsets(top: 10, left: 20, bottom: 10, right: 20))
         view.anchors.edges.pin(to: container)
         view.anchors.edges.pin(axis: .horizontal)
+        view.anchors.edges.pin(to: container, insets: 20, axis: .horizontal, alignment: .center)
 
         // AnchorCollectionCenter
         view.anchors.center.align()

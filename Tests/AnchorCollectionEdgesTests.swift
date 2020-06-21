@@ -15,6 +15,50 @@ class AnchorCollectionEdgesTests: XCTestCase {
         container.addSubview(view)
     }
 
+    // MARK: - Core API
+
+    func testEqual() {
+        XCTAssertEqualConstraints(
+            view.anchors.edges.equal(container),
+            [NSLayoutConstraint(item: view, attribute: .top, relation: .equal, toItem: container, attribute: .top),
+             NSLayoutConstraint(item: view, attribute: .leading, relation: .equal,toItem: container, attribute: .leading),
+             NSLayoutConstraint(item: view, attribute: .bottom, relation: .equal, toItem: container, attribute: .bottom),
+             NSLayoutConstraint(item: view, attribute: .trailing, relation: .equal, toItem: container, attribute: .trailing)]
+        )
+    }
+
+    func testEqualAbsolute() {
+        XCTAssertEqualConstraints(
+            view.anchors.edges.absolute().equal(container),
+            [NSLayoutConstraint(item: view, attribute: .top, relation: .equal, toItem: container, attribute: .top),
+             NSLayoutConstraint(item: view, attribute: .left, relation: .equal,toItem: container, attribute: .left),
+             NSLayoutConstraint(item: view, attribute: .bottom, relation: .equal, toItem: container, attribute: .bottom),
+             NSLayoutConstraint(item: view, attribute: .right, relation: .equal, toItem: container, attribute: .right)]
+        )
+    }
+
+    func testEqualWithInsets() {
+        XCTAssertEqualConstraints(
+            view.anchors.edges.equal(container, insets: 20),
+            [NSLayoutConstraint(item: view, attribute: .top, relation: .equal, toItem: container, attribute: .top, constant: 20),
+             NSLayoutConstraint(item: view, attribute: .leading, relation: .equal,toItem: container, attribute: .leading, constant: 20),
+             NSLayoutConstraint(item: view, attribute: .bottom, relation: .equal, toItem: container, attribute: .bottom, constant: -20),
+             NSLayoutConstraint(item: view, attribute: .trailing, relation: .equal, toItem: container, attribute: .trailing, constant: -20)]
+        )
+    }
+
+    func testPinToSuperviewLessThanOrEqual() {
+        XCTAssertEqualConstraints(
+            view.anchors.edges.lessThanOrEqual(container),
+            [NSLayoutConstraint(item: view, attribute: .top, relation: .greaterThanOrEqual, toItem: container, attribute: .top),
+             NSLayoutConstraint(item: view, attribute: .leading, relation: .greaterThanOrEqual,toItem: container, attribute: .leading),
+             NSLayoutConstraint(item: view, attribute: .bottom, relation: .lessThanOrEqual, toItem: container, attribute: .bottom),
+             NSLayoutConstraint(item: view, attribute: .trailing, relation: .lessThanOrEqual, toItem: container, attribute: .trailing)]
+        )
+    }
+
+    // MARK: - Semantic API
+
     func testPinToSuperview() {
         XCTAssertEqualConstraints(
             view.anchors.edges.pin(),
@@ -55,16 +99,6 @@ class AnchorCollectionEdgesTests: XCTestCase {
              NSLayoutConstraint(item: view, attribute: .trailing, relation: .lessThanOrEqual, toItem: container, attribute: .trailing),
              NSLayoutConstraint(item: view, attribute: .centerX, relation: .equal, toItem: container, attribute: .centerX),
              NSLayoutConstraint(item: view, attribute: .centerY, relation: .equal, toItem: container, attribute: .centerY)]
-        )
-    }
-
-    func testPinToSuperviewLessThanOrEqual() {
-        XCTAssertEqualConstraints(
-            view.anchors.edges.lessThanOrEqual(container.anchors.edges),
-            [NSLayoutConstraint(item: view, attribute: .top, relation: .greaterThanOrEqual, toItem: container, attribute: .top),
-             NSLayoutConstraint(item: view, attribute: .leading, relation: .greaterThanOrEqual,toItem: container, attribute: .leading),
-             NSLayoutConstraint(item: view, attribute: .bottom, relation: .lessThanOrEqual, toItem: container, attribute: .bottom),
-             NSLayoutConstraint(item: view, attribute: .trailing, relation: .lessThanOrEqual, toItem: container, attribute: .trailing)]
         )
     }
 
