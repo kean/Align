@@ -256,7 +256,7 @@ public struct AnchorCollectionEdges {
     }
 
     @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: EdgeInsets = .zero) -> [NSLayoutConstraint] {
-        pin(to: item2, insets: insets, alignment: .center, isCenteringEnabled: false)
+        pin(to: item2, insets: insets, axis: nil, alignment: .center, isCenteringEnabled: false)
     }
 
     @discardableResult public func equal(_ item2: LayoutItem, insets: CGFloat) -> [NSLayoutConstraint] {
@@ -264,7 +264,7 @@ public struct AnchorCollectionEdges {
     }
 
     @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: CGFloat) -> [NSLayoutConstraint] {
-        pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), alignment: .center, isCenteringEnabled: false)
+        pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: nil, alignment: .center, isCenteringEnabled: false)
     }
 
     // MARK: Semantic API
@@ -277,7 +277,7 @@ public struct AnchorCollectionEdges {
         pin(to: item2, insets: insets, axis: axis, alignment: alignment, isCenteringEnabled: true)
     }
 
-    private func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignmment = .fill, isCenteringEnabled: Bool) -> [NSLayoutConstraint] {
+    private func pin(to item2: LayoutItem?, insets: EdgeInsets, axis: Axis?, alignment: Alignmment, isCenteringEnabled: Bool) -> [NSLayoutConstraint] {
         let item2 = item2 ?? item.superview!
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing
