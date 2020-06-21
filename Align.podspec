@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name             = "Align"
-    s.version          = "2.3.0"
+    s.version          = "2.4.0"
     s.summary          = "An intuitive and powerful Auto Layout library"
 
     s.homepage         = "https://github.com/kean/Align"
