@@ -225,7 +225,9 @@ Constraints(activate: false) {
 
 [Align Cheat Sheet](https://github.com/kean/Align/files/4809887/align-cheat-sheet.pdf)
 
+<a href="https://github.com/kean/Align/files/4809887/align-cheat-sheet.pdf">
 <img alt="Align Cheat Sheet" src="https://user-images.githubusercontent.com/1567433/85231571-3a3a0980-b3c6-11ea-9c7f-e0084d905a38.png">
+</a>
 
 
 ## Requirements
