@@ -496,12 +496,3 @@ extension EdgeInsets {
         }
     }
 }
-
-extension CGPoint {
-    func offset(for attributes: NSLayoutConstraint.Attribute) -> CGFloat {
-        switch attributes {
-        case .centerX: return x; case .centerY: return y
-        default: return 0
-        }
-    }
-}
