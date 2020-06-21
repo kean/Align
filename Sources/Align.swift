@@ -304,20 +304,16 @@ public struct AnchorCollectionCenter {
 
     // MARK: Core API
 
-    private var anchors: [Anchor<AnchorType.Edge, Any>] {
-        [NSLayoutConstraint.Attribute.centerX, .centerY].map { Anchor(x.item, $0) }
-    }
-
     @discardableResult public func equal(_ collection: AnchorCollectionCenter, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
-        zip(anchors, collection.anchors).map { $0.equal($1, constant: offset.offset(for: $0.attribute)) }
+        [x.equal(collection.x, constant: offset.x), y.equal(collection.y, constant: offset.y)]
     }
 
     @discardableResult public func greaterThanOrEqual(_ collection: AnchorCollectionCenter, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
-        zip(anchors, collection.anchors).map { $0.greaterThanOrEqual($1, constant: offset.offset(for: $0.attribute)) }
+        [x.greaterThanOrEqual(collection.x, constant: offset.x), y.greaterThanOrEqual(collection.y, constant: offset.y)]
     }
 
     @discardableResult public func lessThanOrEqual(_ collection: AnchorCollectionCenter, offset: CGPoint = .zero) -> [NSLayoutConstraint] {
-        zip(anchors, collection.anchors).map { $0.greaterThanOrEqual($1, constant: offset.offset(for: $0.attribute)) }
+        [x.lessThanOrEqual(collection.x, constant: offset.x), y.lessThanOrEqual(collection.y, constant: offset.y)]
     }
 
     // MARK: Semantic API

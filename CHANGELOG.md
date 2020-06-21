@@ -7,6 +7,8 @@
 - `Constraints` type now conforms to `Collection` protocol (backed by `Array`)
 - Add `clamp(to limit: ClosedRange<CGFloat>)` API for dimension anchors
 - Add `Constraints` `activate()` and `deactivate()` methods
+- Fix `AnchorCollectionCenter` `lessThatOrEqual()`
+- Performance optimizations
 
 ## Align 2.2.1
 

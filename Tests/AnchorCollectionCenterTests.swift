@@ -34,6 +34,12 @@ class AnchorCollectionCenterTests: XCTestCase {
             [NSLayoutConstraint(item: view, attribute: .centerX, relation: .greaterThanOrEqual, toItem: container, attribute: .centerX),
             NSLayoutConstraint(item: view, attribute: .centerY, relation: .greaterThanOrEqual, toItem: container, attribute: .centerY)]
         )
+
+        XCTAssertEqualConstraints(
+            view.anchors.center.lessThanOrEqual(container.anchors.center),
+            [NSLayoutConstraint(item: view, attribute: .centerX, relation: .lessThanOrEqual, toItem: container, attribute: .centerX),
+            NSLayoutConstraint(item: view, attribute: .centerY, relation: .lessThanOrEqual, toItem: container, attribute: .centerY)]
+        )
     }
 
     func testAlign() {
