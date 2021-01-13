@@ -241,5 +241,6 @@ Align is for someone who:
 
 - Prefers fluent API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)
 - [Doesn't want](http://chris.eidhof.nl/post/micro-autolayout-dsl/) to depend on big, complex libraries
+- Prefers to have as little extensions for native classes as possible, `Align` only adds one property
 - Doesn't overuse operator overloads, prefers [fast compile times](https://github.com/robb/Cartography/issues/215)
 - Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wishes it had simpler, more fluent API which didn't require manually activating constraints
