@@ -23,6 +23,8 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 
 <img src="https://user-images.githubusercontent.com/1567433/84931836-5cb7e400-b0a1-11ea-8342-ce76b151fcad.png" alt="pin edges with center alignmnet" width="360px"/>
 
+> You can choose to add convenience extensions that you prefer to make it even more concise for select use cases, e.g. `view.pin(insets: 20)`.
+
 ## Getting Started
 
 The entire library fits in a single file with around 300 lines of code. You can simply drag-n-drop it into your app if you'd like. For more installation options, see [**Installation Guide**](https://github.com/kean/Align/blob/master/Docs/InstallationGuide.md).
