@@ -9,9 +9,9 @@ let package = Package(
         .macOS(.v10_13),
     ],
     products: [
-        .library(name: "Align", targets: ["Align"]),
+        .library(name: "Align", type: .dynamic, targets: ["Align"]),
     ],
     targets: [
-        .target(name: "Align", path: "Sources")
+        .target(name: "Align",  path: "Sources")
     ]
 )
