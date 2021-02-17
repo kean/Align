@@ -21,7 +21,7 @@
 
 [Swift Package Manager](https://swift.org/package-manager/) is a dependency manager built into Xcode.
 
-If you are using Xcode 11 or higher, go to **File / Swift Packages / Add Package Dependency...** and enter package repository URL **https://github.com/kean/Nuke.git**, then follow the instructions.
+If you are using Xcode 11 or higher, go to **File / Swift Packages / Add Package Dependency...** and enter package repository URL **https://github.com/kean/Align.git**, then follow the instructions.
 
 To remove the dependency, select the project and open **Swift Packages** (which is next to **Build Settings**). You can add and remove packages from this tab.
 
