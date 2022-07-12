@@ -1,25 +1,27 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017-2020 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2017-2022 Alexander Grebenyuk (github.com/kean).
 
 #if os(iOS) || os(tvOS)
 import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 
-public protocol LayoutItem { // `UIView`, `UILayoutGuide`
+public protocol LayoutItem {
+#if os(iOS) || os(tvOS)
     var superview: UIView? { get }
+#else
+    var superview: NSView? { get }
+#endif
 }
 
+#if os(iOS) || os(tvOS)
 extension UIView: LayoutItem {}
 extension UILayoutGuide: LayoutItem {
     public var superview: UIView? { owningView }
 }
 #elseif os(macOS)
-import AppKit
-
-public protocol LayoutItem { // `NSView`, `NSLayoutGuide`
-    var superview: NSView? { get }
-}
-
 extension NSView: LayoutItem {}
 extension NSLayoutGuide: LayoutItem {
     public var superview: NSView? { owningView }
