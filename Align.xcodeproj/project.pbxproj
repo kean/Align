@@ -37,7 +37,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0C2EE5C3225A700E00743F47 /* Align.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Align.xcconfig; path = Supporting/Align.xcconfig; sourceTree = "<group>"; };
 		0C62A9A81FD28B5900C6EA6E /* Align.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Align.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0C683A0F1FBA4624002ACEB9 /* AnchorCollectionEdgesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCollectionEdgesTests.swift; sourceTree = "<group>"; };
 		0C72B1CB249AB71D006DCEDA /* MigrationGuide2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = MigrationGuide2.md; path = Docs/MigrationGuide2.md; sourceTree = "<group>"; };
@@ -158,7 +157,6 @@
 			isa = PBXGroup;
 			children = (
 				0CE361241C8607BB00EA70CF /* Info.plist */,
-				0C2EE5C3225A700E00743F47 /* Align.xcconfig */,
 			);
 			name = Supporting;
 			sourceTree = "<group>";
@@ -346,7 +344,6 @@
 		};
 		0CE3611E1C86077B00EA70CF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C2EE5C3225A700E00743F47 /* Align.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -356,8 +353,12 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				ONLY_ACTIVE_ARCH = YES;
+				SUPPORTED_PLATFORMS = "iphoneos appletvos iphonesimulator appletvsimulator macosx";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -365,12 +366,15 @@
 		};
 		0CE3611F1C86077B00EA70CF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0C2EE5C3225A700E00743F47 /* Align.xcconfig */;
 			buildSettings = {
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				SUPPORTED_PLATFORMS = "iphoneos appletvos iphonesimulator appletvsimulator macosx";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TVOS_DEPLOYMENT_TARGET = 12.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
