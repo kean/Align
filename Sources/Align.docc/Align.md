@@ -31,10 +31,10 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 
 - ``LayoutItem``
 - ``LayoutAnchors``
-
-### Anchors and Collections
-
 - ``Anchor``
+
+### Manipulating Multiple Anchors
+
 - ``AnchorCollectionEdges``
 - ``AnchorCollectionCenter``
 - ``AnchorCollectionSize``

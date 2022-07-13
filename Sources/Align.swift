@@ -104,25 +104,25 @@ public enum AnchorType {
     public class Baseline: Alignment {}
 }
 
-/// An anchor represents one of the view's layout attributes (e.g. `left`,
-/// `centerX`, `width`, etc).
+/// An anchor represents one of the view's layout attributes.
 ///
-/// Instead of creating `NSLayoutConstraint` objects directly, start with a `UIView`,
-/// `NSView`, or `UILayoutGuide` object you wish to constrain, and select one of
-/// that object’s anchor properties. These properties correspond to the main
-/// `NSLayoutConstraint.Attribute` values used in Auto Layout, and provide an
-/// appropriate `Anchor` type for creating constraints to that attribute. For
-/// example, `view.anchors.top` is represted by `Anchor<AnchorType.Edge, AnchorAxis.Vertical>`.
-/// Use the anchor’s methods to construct your constraint.
+/// Instead of creating `NSLayoutConstraint` objects directly, start with a `UIView`
+/// or `UILayoutGuide` and select one of its anchors. For example, `view.anchors.top`
+/// is represted by `Anchor<AnchorType.Edge, AnchorAxis.Vertical>`. Then use the
+/// anchor’s methods to construct your constraint.
 ///
-/// - note: `UIView` does not provide anchor properties for the layout margin attributes.
-/// Instead, the `layoutMarginsGuide` property provides a `UILayoutGuide` object that
-/// represents these margins. Use the guide’s anchor properties to create your constraints.
+/// ```swift
+/// // Align two views along one of the edges
+/// a.anchors.leading.equal(b.anchors.leading)
+/// ```
 ///
 /// When you create constraints using `Anchor` APIs, the constraints are activated
 /// automatically and the target view has `translatesAutoresizingMaskIntoConstraints`
 /// set to `false`. If you want to activate all the constraints at the same or
 /// create them without activation, use `Constraints` type.
+///
+/// - tip: `UIView` does not provide anchor properties for the layout margin attributes.
+/// Instead, call `view.layoutMarginsGuide.anchors`.
 public struct Anchor<Type, Axis> { // type and axis are phantom types
     let item: LayoutItem
     let attribute: NSLayoutConstraint.Attribute
@@ -135,27 +135,30 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
 
     /// Returns a new anchor offset by a given amount.
     ///
-    /// - note: Consider using a convenience operator instead: `view.anchors.top + 10`.
+    /// - tip: Consider using a convenience operator instead: `view.anchors.top + 10`.
     public func offsetting(by offset: CGFloat) -> Anchor {
         Anchor(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
     }
 
-    /// Returns a new anchor with a given multiplier.
+    /// Returns a new anchor with an constant multiplied by the given amount.
     ///
-    /// - note: Consider using a convenience operator instead: `view.anchors.height * 2`.
+    /// - tip: Consider using a convenience operator instead: `view.anchors.height * 2`.
     public func multiplied(by multiplier: CGFloat) -> Anchor {
         Anchor(item, attribute, offset: self.offset * multiplier, multiplier: self.multiplier * multiplier)
     }
 }
 
+/// Returns a new anchor offset by a given amount.
 public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: offset)
 }
 
+/// Returns a new anchor offset by a given amount.
 public func - <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: -offset)
 }
 
+/// Returns a new anchor with an constant multiplied by the given amount.
 public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
     anchor.multiplied(by: multiplier)
 }
@@ -163,7 +166,6 @@ public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> A
 // MARK: - Anchors (AnchorType.Alignment)
 
 public extension Anchor where Type: AnchorType.Alignment {
-    /// Adds a constraint that defines the anchors' attributes as equal to each other.
     @discardableResult func equal<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal)
     }
@@ -180,7 +182,6 @@ public extension Anchor where Type: AnchorType.Alignment {
 // MARK: - Anchors (AnchorType.Dimension)
 
 public extension Anchor where Type: AnchorType.Dimension {
-    /// Adds a constraint that defines the anchors' attributes as equal to each other.
     @discardableResult func equal<Type: AnchorType.Dimension, Axis>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal)
     }
@@ -244,11 +245,12 @@ public extension Anchor where Type: AnchorType.Center {
 
 // MARK: - AnchorCollectionEdges
 
+/// Create multiple constraints at once by operating more than one edge at once.
 public struct AnchorCollectionEdges {
     let item: LayoutItem
     var isAbsolute = false
 
-    // By default, edges use locale-specific `.leading` and `.trailing`
+    /// Use `left` and `right` edges instead of `leading` and `trailing`.
     public func absolute() -> AnchorCollectionEdges {
         AnchorCollectionEdges(item: item, isAbsolute: true)
     }
