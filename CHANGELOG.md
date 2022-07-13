@@ -1,5 +1,19 @@
 [Changelog](https://github.com/kean/Align/releases) for all versions
 
+# Align 3
+
+## Align 3.0.0
+
+*July 13, 2022*
+
+- **Breaking Change**: The `Alignment` used in `pin()` method now works slightly differently by default for the pre-defined `.trailing`, `.leading`, `.bottom`, and `.top` alignments. Previously, `.leading` alignment would pin to the view to the `.leading` horizontal guide and `.fill` the view vertically. In Align 3.0, it centers the view vertically instead. The same logic is applied to other previously listed alignments.
+- Add new [documentation](https://kean-docs.github.io/align/documentation/align/)) created using DocC
+- Increase the minimum required Xcode version to 13.3
+- Increase the minimum supported platforms to iOS 12.0 / tvOS 12.0 / macOS 10.14
+- Rename `LayoutAnchors/base` to `LayoutAnchors/item`
+- Move `Alignment` to `AnchorCollectionEdges/Alignment `
+- Fix typos
+
 # Align 2
 
 ## Align 2.4.1
@@ -49,7 +63,7 @@
 
 > Use [Migraiton Guide](https://github.com/kean/Align/blob/master/Docs/MigrationGuide2.md) included in the repo to ease migration.
 
-- Remove all deprecated APIs. If you are migrating from the previous version, consider migrating to version 2.0.0 first. It is going to guide you throught the migration.
+- Remove all deprecated APIs. If you are migrating from the previous version, consider migrating to version 2.0.0 first. It is going to guide you thought the migration.
 
 ## Align 2.0.0
 
@@ -65,7 +79,7 @@
 - Add `constraints` property to `Constraints` type to allow access to all of the constraints created using it
 - Add `activate` parameter to `Constraints` initiliazer to optionally disable automatic activation of constraints
 - Deprecated `func edges(_ edges: LayoutEdge...)`, use `pin(axis:)` insteads
-- `pin()` methods now use `.leading` and `.trailing` anchors intead of absolute `.left` and `.right` anchors. To switch to absolute anchors, use `absolute()`: `view.anchors.edges.absolute()`
+- `pin()` methods now use `.leading` and `.trailing` anchors instead of absolute `.left` and `.right` anchors. To switch to absolute anchors, use `absolute()`: `view.anchors.edges.absolute()`
 - Remove `addSubview` family of APIs
 - Migrate to Swift 5.1
 - Increase minimum required platform versions

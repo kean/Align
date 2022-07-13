@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017-2020 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2017-2022 Alexander Grebenyuk (github.com/kean).
 
 import XCTest
 
@@ -112,7 +112,7 @@ extension NSLayoutConstraint.Attribute {
         case .centerXWithinMargins: return "centerXWithinMargins"
         case .centerYWithinMargins: return "centerYWithinMargins"
 #endif
-        @unknown default: return "unexpacted"
+        @unknown default: return "unexpected"
         }
     }
 }

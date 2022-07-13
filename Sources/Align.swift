@@ -1,76 +1,86 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017-2020 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2017-2022 Alexander Grebenyuk (github.com/kean).
 
 #if os(iOS) || os(tvOS)
 import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 
-public protocol LayoutItem { // `UIView`, `UILayoutGuide`
+/// A type that has layout anchors: either a view or a layout guide.
+public protocol LayoutItem {
+#if os(iOS) || os(tvOS)
     var superview: UIView? { get }
+#else
+    var superview: NSView? { get }
+#endif
 }
 
+#if os(iOS) || os(tvOS)
 extension UIView: LayoutItem {}
 extension UILayoutGuide: LayoutItem {
     public var superview: UIView? { owningView }
 }
 #elseif os(macOS)
-import AppKit
-
-public protocol LayoutItem { // `NSView`, `NSLayoutGuide`
-    var superview: NSView? { get }
-}
-
 extension NSView: LayoutItem {}
 extension NSLayoutGuide: LayoutItem {
     public var superview: NSView? { owningView }
 }
 #endif
 
-public extension LayoutItem { // Align methods are available via `LayoutAnchors`
-    @nonobjc var anchors: LayoutAnchors<Self> { LayoutAnchors(base: self) }
+extension LayoutItem { // Align methods are available via `LayoutAnchors`
+    /// Provides access to the layout anchors and anchor collections.
+    @nonobjc public var anchors: LayoutAnchors<Self> { LayoutAnchors(self) }
 }
 
 // MARK: - LayoutAnchors
 
-public struct LayoutAnchors<Base> {
-    public let base: Base
-}
+/// Provides access to the layout anchors and anchor collections.
+public struct LayoutAnchors<T: LayoutItem> {
+    /// The underlying item.
+    public let item: T
 
-public extension LayoutAnchors where Base: LayoutItem {
+    public init(_ item: T) { self.item = item }
+
+    // Deprecated in Align 3.0
+    @available(*, deprecated, message: "Please use `view` to `layoutGuide`.")
+    public var base: T { item }
 
     // MARK: Anchors
 
-    var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .top) }
-    var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .bottom) }
-    var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .left) }
-    var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .right) }
-    var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .leading) }
-    var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .trailing) }
+    public var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .top) }
+    public var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .bottom) }
+    public var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .left) }
+    public var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .right) }
+    public var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .leading) }
+    public var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .trailing) }
 
-    var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(base, .centerX) }
-    var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(base, .centerY) }
+    public var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(item, .centerX) }
+    public var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(item, .centerY) }
 
-    var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .firstBaseline) }
-    var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .lastBaseline) }
+    public var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .firstBaseline) }
+    public var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .lastBaseline) }
 
-    var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(base, .width) }
-    var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(base, .height) }
+    public var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(item, .width) }
+    public var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(item, .height) }
 
     // MARK: Anchor Collections
 
-    var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: base) }
-    var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
-    var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
+    public var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: item) }
+    public var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
+    public var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }
 
 // MARK: - Anchors
 
-// phantom types
+/// A type that represents a layout axis.
 public enum AnchorAxis {
     public class Horizontal {}
     public class Vertical {}
 }
 
+/// Represents an anchor type.
 public enum AnchorType {
     public class Dimension {}
     public class Alignment {}
@@ -79,25 +89,25 @@ public enum AnchorType {
     public class Baseline: Alignment {}
 }
 
-/// An anchor represents one of the view's layout attributes (e.g. `left`,
-/// `centerX`, `width`, etc).
+/// An anchor represents one of the view's layout attributes.
 ///
-/// Instead of creating `NSLayoutConstraint` objects directly, start with a `UIView`,
-/// `NSView`, or `UILayoutGuide` object you wish to constrain, and select one of
-/// that object’s anchor properties. These properties correspond to the main
-/// `NSLayoutConstraint.Attribute` values used in Auto Layout, and provide an
-/// appropriate `Anchor` type for creating constraints to that attribute. For
-/// example, `view.anchors.top` is represted by `Anchor<AnchorType.Edge, AnchorAxis.Vertical>`.
-/// Use the anchor’s methods to construct your constraint.
+/// Instead of creating `NSLayoutConstraint` objects directly, start with a `UIView`
+/// or `UILayoutGuide` and select one of its anchors. For example, `view.anchors.top`
+/// is represted by `Anchor<AnchorType.Edge, AnchorAxis.Vertical>`. Then use the
+/// anchor’s methods to construct your constraint.
 ///
-/// - note: `UIView` does not provide anchor properties for the layout margin attributes.
-/// Instead, the `layoutMarginsGuide` property provides a `UILayoutGuide` object that
-/// represents these margins. Use the guide’s anchor properties to create your constraints.
+/// ```swift
+/// // Align two views along one of the edges
+/// a.anchors.leading.equal(b.anchors.leading)
+/// ```
 ///
 /// When you create constraints using `Anchor` APIs, the constraints are activated
 /// automatically and the target view has `translatesAutoresizingMaskIntoConstraints`
 /// set to `false`. If you want to activate all the constraints at the same or
 /// create them without activation, use `Constraints` type.
+///
+/// - tip: `UIView` does not provide anchor properties for the layout margin attributes.
+/// Instead, call `view.layoutMarginsGuide.anchors`.
 public struct Anchor<Type, Axis> { // type and axis are phantom types
     let item: LayoutItem
     let attribute: NSLayoutConstraint.Attribute
@@ -110,27 +120,30 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
 
     /// Returns a new anchor offset by a given amount.
     ///
-    /// - note: Consider using a convenience operator instead: `view.anchors.top + 10`.
+    /// - tip: Consider using a convenience operator instead: `view.anchors.top + 10`.
     public func offsetting(by offset: CGFloat) -> Anchor {
         Anchor(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
     }
 
-    /// Returns a new anchor with a given multiplier.
+    /// Returns a new anchor with an constant multiplied by the given amount.
     ///
-    /// - note: Consider using a convenience operator instead: `view.anchors.height * 2`.
+    /// - tip: Consider using a convenience operator instead: `view.anchors.height * 2`.
     public func multiplied(by multiplier: CGFloat) -> Anchor {
         Anchor(item, attribute, offset: self.offset * multiplier, multiplier: self.multiplier * multiplier)
     }
 }
 
+/// Returns a new anchor offset by a given amount.
 public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: offset)
 }
 
+/// Returns a new anchor offset by a given amount.
 public func - <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: -offset)
 }
 
+/// Returns a new anchor with an constant multiplied by the given amount.
 public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
     anchor.multiplied(by: multiplier)
 }
@@ -138,7 +151,6 @@ public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> A
 // MARK: - Anchors (AnchorType.Alignment)
 
 public extension Anchor where Type: AnchorType.Alignment {
-    /// Adds a constraint that defines the anchors' attributes as equal to each other.
     @discardableResult func equal<Type: AnchorType.Alignment>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal)
     }
@@ -155,7 +167,6 @@ public extension Anchor where Type: AnchorType.Alignment {
 // MARK: - Anchors (AnchorType.Dimension)
 
 public extension Anchor where Type: AnchorType.Dimension {
-    /// Adds a constraint that defines the anchors' attributes as equal to each other.
     @discardableResult func equal<Type: AnchorType.Dimension, Axis>(_ anchor: Anchor<Type, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal)
     }
@@ -219,47 +230,21 @@ public extension Anchor where Type: AnchorType.Center {
 
 // MARK: - AnchorCollectionEdges
 
-public struct Alignment {
-    public enum Horizontal {
-        case fill, center, leading, trailing
-    }
-    public enum Vertical {
-        case fill, center, top, bottom
-    }
-
-    public let horizontal: Horizontal
-    public let vertical: Vertical
-
-    public init(horizontal: Horizontal, vertical: Vertical) {
-        (self.horizontal, self.vertical) = (horizontal, vertical)
-    }
-
-    public static let fill = Alignment(horizontal: .fill, vertical: .fill)
-    public static let center = Alignment(horizontal: .center, vertical: .center)
-    public static let topLeading = Alignment(horizontal: .leading, vertical: .top)
-    public static let leading = Alignment(horizontal: .leading, vertical: .fill)
-    public static let bottomLeading = Alignment(horizontal: .leading, vertical: .bottom)
-    public static let bottom = Alignment(horizontal: .fill, vertical: .bottom)
-    public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
-    public static let trailing = Alignment(horizontal: .trailing, vertical: .fill)
-    public static let topTrailing = Alignment(horizontal: .trailing, vertical: .top)
-    public static let top = Alignment(horizontal: .fill, vertical: .top)
-}
-
+/// Create multiple constraints at once by operating more than one edge at once.
 public struct AnchorCollectionEdges {
     let item: LayoutItem
     var isAbsolute = false
 
-    // By default, edges use locale-specific `.leading` and `.trailing`
+    /// Use `left` and `right` edges instead of `leading` and `trailing`.
     public func absolute() -> AnchorCollectionEdges {
         AnchorCollectionEdges(item: item, isAbsolute: true)
     }
 
-    #if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS)
     public typealias Axis = NSLayoutConstraint.Axis
-    #else
+#else
     public typealias Axis = NSLayoutConstraint.Orientation
-    #endif
+#endif
 
     // MARK: Core API
 
@@ -285,7 +270,7 @@ public struct AnchorCollectionEdges {
     /// to the superview.
     ///
     /// - parameter target: The target view, by default, uses the superview.
-    /// - parameter insets: Insets the reciever's edges by the given insets.
+    /// - parameter insets: Insets the receiver's edges by the given insets.
     /// - parameter axis: If provided, creates constraints only along the given
     /// axis. For example, if you pass axis `.horizontal`, only the `.leading`,
     /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
@@ -299,7 +284,7 @@ public struct AnchorCollectionEdges {
     /// to the superview.
     ///
     /// - parameter target: The target view, by default, uses the superview.
-    /// - parameter insets: Insets the reciever's edges by the given insets.
+    /// - parameter insets: Insets the receiver's edges by the given insets.
     /// - parameter axis: If provided, creates constraints only along the given
     /// axis. For example, if you pass axis `.horizontal`, only the `.leading`,
     /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
@@ -335,10 +320,94 @@ public struct AnchorCollectionEdges {
         }
         return constraints
     }
+
+    public struct Alignment {
+
+        /// The alignment along the horizontal axis.
+        public enum Horizontal {
+            /// Pin both leading and trailing edges to the superview.
+            case fill
+            /// Center the view in the container along the vertical axis.
+            case center
+            /// Pin the leading edge to the superview and prevent the view from
+            /// overflowing the container by pinning the trailing edge using
+            /// "less than or equal" constraint.
+            case leading
+            /// Pin the trailing edge to the superview and prevent the view from
+            /// overflowing the container by pinning the leading edge using
+            /// "less than or equal" constraint.
+            case trailing
+        }
+
+        /// The alignment along the vertical axis.
+        public enum Vertical {
+            /// Pin both top and bottom edges to the superview.
+            case fill
+            /// Center the view in the container along the vertical axis.
+            case center
+            /// Pin the top edge to the superview and prevent the view from
+            /// overflowing the container by pinning the bottom edge using
+            /// "less than or equal" constraint.
+            case top
+            /// Pin the bottom edge to the superview and prevent the view from
+            /// overflowing the container by pinning the top edge using
+            /// "less than or equal" constraint.
+            case bottom
+        }
+        /// The alignment along the horizontal axis.
+        public let horizontal: Horizontal
+        /// The alignment along the vertical axis.
+        public let vertical: Vertical
+
+        /// Initializes the alignment.
+        public init(horizontal: Horizontal, vertical: Vertical) {
+            (self.horizontal, self.vertical) = (horizontal, vertical)
+        }
+
+        /// The edges are pinned to the matching edges of the container with the
+        /// given edge insets.
+        public static let fill = Alignment(horizontal: .fill, vertical: .fill)
+        /// The view is centered in the container and the edges are pinned using
+        /// "less than or equal" constraints making sure it doesn't overflow the container.
+        public static let center = Alignment(horizontal: .center, vertical: .center)
+        /// The view is pinned to the top-leading corner of the container with the
+        /// given edge insets and the remaining edges are pinned using "less than or
+        /// equal" constraints making sure the view doesn't overflow the container.
+        public static let topLeading = Alignment(horizontal: .leading, vertical: .top)
+        /// The view is pinned to the top edge with the inset while the bottom
+        /// edge is pinned using "less than or equal" constraint making sure the view
+        /// doesn't overflow the container. The view is also centered horizontally.
+        public static let top = Alignment(horizontal: .center, vertical: .top)
+        /// The view is pinned to the bottom-trailing corner of the container with the
+        /// given edge insets and the remaining edges are pinned using "less than or
+        /// equal" constraints making sure the view doesn't overflow the container.
+        public static let topTrailing = Alignment(horizontal: .trailing, vertical: .top)
+        /// The view is pinned to the trailing edge with the inset while the leading
+        /// edge is pinned using "less than or equal" constraint making sure the view
+        /// doesn't overflow the container. The view is also centered vertically.
+        public static let trailing = Alignment(horizontal: .trailing, vertical: .center)
+        /// The view is pinned to the bottom-trailing corner of the container with the
+        /// given edge insets and the remaining edges are pinned using "less than or
+        /// equal" constraints making sure the view doesn't overflow the container.
+        public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
+        /// The view is pinned to the bottom edge with the inset while the top
+        /// edge is pinned using "less than or equal" constraint making sure the view
+        /// doesn't overflow the container. The view is also centered horizontally.
+        public static let bottom = Alignment(horizontal: .center, vertical: .bottom)
+        /// The view is pinned to the bottom-leading corner of the container with the
+        /// given edge insets and the remaining edges are pinned using "less than or
+        /// equal" constraints making sure the view doesn't overflow the container.
+        public static let bottomLeading = Alignment(horizontal: .leading, vertical: .bottom)
+        /// The view is pinned to the leading edge with the inset while the trailing
+        /// edge is pinned using "less than or equal" constraint making sure the view
+        /// doesn't overflow the container. The view is also centered vertically.
+        public static let leading = Alignment(horizontal: .leading, vertical: .center)
+    }
 }
 
 // MARK: - AnchorCollectionCenter
 
+/// Create multiple constraints at once by using both `centerX` and `centerY` anchors.
 public struct AnchorCollectionCenter {
     let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
     let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
@@ -372,6 +441,7 @@ public struct AnchorCollectionCenter {
 
 // MARK: - AnchorCollectionSize
 
+/// Create multiple constraints at once by using both `width` and `height` anchors.
 public struct AnchorCollectionSize {
     let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
     let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
@@ -409,6 +479,35 @@ public struct AnchorCollectionSize {
 
 // MARK: - Constraints
 
+/// Allows you to access the underlying constraints.
+///
+/// By default, Align automatically activates created constraints. Using
+/// ``Constraints`` API, constraints are activated all of the same time when you
+/// exit from the closure. It gives you a chance to change the `priority` of
+/// the created constraints.
+///
+/// ```swift
+/// Constraints(for: title, subtitle) { title, subtitle in
+///     // Align one anchor with another
+///     subtitle.top.spacing(10, to: title.bottom + 10)
+///
+///     // Manipulate dimensions
+///     title.width.equal(100)
+///
+///     // Change a priority of constraints inside a group:
+///     subtitle.bottom.pin().priority = UILayoutPriority(999)
+/// }
+/// ```
+///
+/// ``Constraints`` also give you easy access to Align anchors (notice, there
+/// is no `.anchors` call in the example). And if you want to not activate the
+/// constraints, there is an option for that:
+///
+/// ```swift
+/// Constraints(activate: false) {
+///     // Create your constraints here
+/// }
+/// ```
 public final class Constraints: Collection {
     public typealias Element = NSLayoutConstraint
     public typealias Index = Int
@@ -439,12 +538,12 @@ public final class Constraints: Collection {
 
     // MARK: Activate
 
-    /// Activates each constraint in the reciever.
+    /// Activates each constraint in the receiver.
     public func activate() {
         NSLayoutConstraint.activate(constraints)
     }
 
-    /// Deactivates each constraint in the reciever.
+    /// Deactivates each constraint in the receiver.
     public func deactivate() {
         NSLayoutConstraint.deactivate(constraints)
     }

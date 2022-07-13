@@ -1,17 +1,18 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.6
 import PackageDescription
 
 let package = Package(
     name: "Align",
     platforms: [
-        .iOS(.v11),
-        .tvOS(.v11),
-        .macOS(.v10_13),
+        .iOS(.v12),
+        .tvOS(.v12),
+        .macOS(.v10_14),
     ],
     products: [
-        .library(name: "Align", targets: ["Align"]),
+        .library(name: "Align", type: .dynamic, targets: ["Align"]),
     ],
     targets: [
-        .target(name: "Align", path: "Sources")
+        .target(name: "Align",  path: "Sources"),
+        .testTarget(name: "AlignTests", dependencies: ["Align"], path: "Tests")
     ]
 )
