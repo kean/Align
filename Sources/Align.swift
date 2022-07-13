@@ -29,38 +29,60 @@ extension NSLayoutGuide: LayoutItem {
 #endif
 
 public extension LayoutItem { // Align methods are available via `LayoutAnchors`
-    @nonobjc var anchors: LayoutAnchors<Self> { LayoutAnchors(base: self) }
+    @nonobjc var anchors: LayoutAnchors<Self> { LayoutAnchors(item: self) }
 }
 
 // MARK: - LayoutAnchors
 
-public struct LayoutAnchors<Base> {
-    public let base: Base
+public struct LayoutAnchors<T: LayoutItem> {
+    let item: T
+
+    // Deprecated in Align 3.0
+    @available(*, deprecated, message: "Please use `view` to `layoutGuide`.")
+    public var base: T { item }
 }
 
-public extension LayoutAnchors where Base: LayoutItem {
+#if os(iOS) || os(tvOS)
+extension LayoutAnchors where T: UIView {
+    public var view: T { item }
+}
+
+extension LayoutAnchors where T: UILayoutGuide {
+    public var layoutGuide: T { item }
+}
+#else
+extension LayoutAnchors where T: NSView {
+    public var view: T { item }
+}
+
+extension LayoutAnchors where T: NSLayoutGuide {
+    public var layoutGuide: T { item }
+}
+#endif
+
+public extension LayoutAnchors {
 
     // MARK: Anchors
 
-    var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .top) }
-    var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(base, .bottom) }
-    var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .left) }
-    var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .right) }
-    var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .leading) }
-    var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(base, .trailing) }
+    var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .top) }
+    var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .bottom) }
+    var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .left) }
+    var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .right) }
+    var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .leading) }
+    var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .trailing) }
 
-    var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(base, .centerX) }
-    var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(base, .centerY) }
+    var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(item, .centerX) }
+    var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(item, .centerY) }
 
-    var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .firstBaseline) }
-    var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(base, .lastBaseline) }
+    var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .firstBaseline) }
+    var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .lastBaseline) }
 
-    var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(base, .width) }
-    var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(base, .height) }
+    var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(item, .width) }
+    var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(item, .height) }
 
     // MARK: Anchor Collections
 
-    var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: base) }
+    var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: item) }
     var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
     var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }

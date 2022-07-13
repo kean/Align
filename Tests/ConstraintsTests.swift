@@ -124,32 +124,32 @@ class ConstraintsArityTests: XCTestCase {
 
     func testOne() {
         Constraints(for: a) {
-            XCTAssertTrue($0.base === a)
+            XCTAssertTrue($0.view === a)
             return
         }
     }
 
     func testTwo() {
         Constraints(for: a, b) {
-            XCTAssertTrue($0.base === a)
-            XCTAssertTrue($1.base === b)
+            XCTAssertTrue($0.view === a)
+            XCTAssertTrue($1.view === b)
         }
     }
 
     func testThree() {
         Constraints(for: a, b, c) {
-            XCTAssertTrue($0.base === a)
-            XCTAssertTrue($1.base === b)
-            XCTAssertTrue($2.base === c)
+            XCTAssertTrue($0.view === a)
+            XCTAssertTrue($1.view === b)
+            XCTAssertTrue($2.view === c)
         }
     }
 
     func testFour() {
         Constraints(for: a, b, c, d) {
-            XCTAssertTrue($0.base === a)
-            XCTAssertTrue($1.base === b)
-            XCTAssertTrue($2.base === c)
-            XCTAssertTrue($3.base === d)
+            XCTAssertTrue($0.view === a)
+            XCTAssertTrue($1.view === b)
+            XCTAssertTrue($2.view === c)
+            XCTAssertTrue($3.view === d)
         }
     }
 }
@@ -164,42 +164,42 @@ class AddingSubviewsTests: XCTestCase {
 
     func testOne() {
         container.addSubview(a) {
-            XCTAssertTrue($0.base.superview === container)
-            XCTAssertTrue($0.base === a)
+            XCTAssertTrue($0.view.superview === container)
+            XCTAssertTrue($0.view === a)
             return
         }
     }
 
     func testTwo() {
         container.addSubview(a, b) {
-            XCTAssertTrue($0.base.superview === container)
-            XCTAssertTrue($1.base.superview === container)
-            XCTAssertTrue($0.base === a)
-            XCTAssertTrue($1.base === b)
+            XCTAssertTrue($0.view.superview === container)
+            XCTAssertTrue($1.view.superview === container)
+            XCTAssertTrue($0.view === a)
+            XCTAssertTrue($1.view === b)
         }
     }
 
     func testThree() {
         container.addSubview(a, b, c) {
-            XCTAssertTrue($0.base.superview === container)
-            XCTAssertTrue($1.base.superview === container)
-            XCTAssertTrue($2.base.superview === container)
-            XCTAssertTrue($0.base === a)
-            XCTAssertTrue($1.base === b)
-            XCTAssertTrue($2.base === c)
+            XCTAssertTrue($0.view.superview === container)
+            XCTAssertTrue($1.view.superview === container)
+            XCTAssertTrue($2.view.superview === container)
+            XCTAssertTrue($0.view === a)
+            XCTAssertTrue($1.view === b)
+            XCTAssertTrue($2.view === c)
         }
     }
 
     func testFour() {
         container.addSubview(a, b, c, d) {
-            XCTAssertTrue($0.base.superview === container)
-            XCTAssertTrue($1.base.superview === container)
-            XCTAssertTrue($2.base.superview === container)
-            XCTAssertTrue($3.base.superview === container)
-            XCTAssertTrue($0.base === a)
-            XCTAssertTrue($1.base === b)
-            XCTAssertTrue($2.base === c)
-            XCTAssertTrue($3.base === d)
+            XCTAssertTrue($0.view.superview === container)
+            XCTAssertTrue($1.view.superview === container)
+            XCTAssertTrue($2.view.superview === container)
+            XCTAssertTrue($3.view.superview === container)
+            XCTAssertTrue($0.view === a)
+            XCTAssertTrue($1.view === b)
+            XCTAssertTrue($2.view === c)
+            XCTAssertTrue($3.view === d)
         }
     }
 }
