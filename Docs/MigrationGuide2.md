@@ -26,14 +26,14 @@ view.pin(
     to item2: LayoutItem? = nil,
     axis: NSLayoutConstraint.Axis? = nil,
     insets: EdgeInsets = .zero,
-    alignment: Alignmment = .fill
+    alignment: Alignment = .fill
 )
 
 view.pin(
     to item2: LayoutItem? = nil,
     axis: NSLayoutConstraint.Axis? = nil,
     insets: CGFloat = .zero,
-    alignment: Alignmment = .fill
+    alignment: Alignment = .fill
 )
 ```
 
@@ -92,7 +92,7 @@ view.anchors.edges.pin(to: view.safeAreaLayoutGuide)
 
 ## `leading` instead of `left`, etc
 
-`pin()` methods now use `.leading` and `.trailing` anchors intead of absolute `.left` and `.right` anchors. To switch to absolute anchors, use `absolute()`:
+`pin()` methods now use `.leading` and `.trailing` anchors instead of absolute `.left` and `.right` anchors. To switch to absolute anchors, use `absolute()`:
 
 ```swift
 // Align 2

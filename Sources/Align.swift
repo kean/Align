@@ -31,14 +31,17 @@ extension NSLayoutGuide: LayoutItem {
 
 extension LayoutItem { // Align methods are available via `LayoutAnchors`
     /// Provides access to the layout anchors and anchor collections.
-    @nonobjc public var anchors: LayoutAnchors<Self> { LayoutAnchors(item: self) }
+    @nonobjc public var anchors: LayoutAnchors<Self> { LayoutAnchors(self) }
 }
 
 // MARK: - LayoutAnchors
 
 /// Provides access to the layout anchors and anchor collections.
 public struct LayoutAnchors<T: LayoutItem> {
-    let item: T
+    /// The underlying item.
+    public let item: T
+
+    public init(_ item: T) { self.item = item }
 
     // Deprecated in Align 3.0
     @available(*, deprecated, message: "Please use `view` to `layoutGuide`.")
@@ -68,24 +71,6 @@ public struct LayoutAnchors<T: LayoutItem> {
     public var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
     public var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }
-
-#if os(iOS) || os(tvOS)
-extension LayoutAnchors where T: UIView {
-    public var view: T { item }
-}
-
-extension LayoutAnchors where T: UILayoutGuide {
-    public var layoutGuide: T { item }
-}
-#else
-extension LayoutAnchors where T: NSView {
-    public var view: T { item }
-}
-
-extension LayoutAnchors where T: NSLayoutGuide {
-    public var layoutGuide: T { item }
-}
-#endif
 
 // MARK: - Anchors
 
@@ -255,11 +240,11 @@ public struct AnchorCollectionEdges {
         AnchorCollectionEdges(item: item, isAbsolute: true)
     }
 
-    #if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS)
     public typealias Axis = NSLayoutConstraint.Axis
-    #else
+#else
     public typealias Axis = NSLayoutConstraint.Orientation
-    #endif
+#endif
 
     // MARK: Core API
 
@@ -285,7 +270,7 @@ public struct AnchorCollectionEdges {
     /// to the superview.
     ///
     /// - parameter target: The target view, by default, uses the superview.
-    /// - parameter insets: Insets the reciever's edges by the given insets.
+    /// - parameter insets: Insets the receiver's edges by the given insets.
     /// - parameter axis: If provided, creates constraints only along the given
     /// axis. For example, if you pass axis `.horizontal`, only the `.leading`,
     /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
@@ -299,7 +284,7 @@ public struct AnchorCollectionEdges {
     /// to the superview.
     ///
     /// - parameter target: The target view, by default, uses the superview.
-    /// - parameter insets: Insets the reciever's edges by the given insets.
+    /// - parameter insets: Insets the receiver's edges by the given insets.
     /// - parameter axis: If provided, creates constraints only along the given
     /// axis. For example, if you pass axis `.horizontal`, only the `.leading`,
     /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
@@ -335,40 +320,94 @@ public struct AnchorCollectionEdges {
         }
         return constraints
     }
-}
 
-extension AnchorCollectionEdges {
     public struct Alignment {
+
+        /// The alignment along the horizontal axis.
         public enum Horizontal {
-            case fill, center, leading, trailing
-        }
-        public enum Vertical {
-            case fill, center, top, bottom
+            /// Pin both leading and trailing edges to the superview.
+            case fill
+            /// Center the view in the container along the vertical axis.
+            case center
+            /// Pin the leading edge to the superview and prevent the view from
+            /// overflowing the container by pinning the trailing edge using
+            /// "less than or equal" constraint.
+            case leading
+            /// Pin the trailing edge to the superview and prevent the view from
+            /// overflowing the container by pinning the leading edge using
+            /// "less than or equal" constraint.
+            case trailing
         }
 
+        /// The alignment along the vertical axis.
+        public enum Vertical {
+            /// Pin both top and bottom edges to the superview.
+            case fill
+            /// Center the view in the container along the vertical axis.
+            case center
+            /// Pin the top edge to the superview and prevent the view from
+            /// overflowing the container by pinning the bottom edge using
+            /// "less than or equal" constraint.
+            case top
+            /// Pin the bottom edge to the superview and prevent the view from
+            /// overflowing the container by pinning the top edge using
+            /// "less than or equal" constraint.
+            case bottom
+        }
+        /// The alignment along the horizontal axis.
         public let horizontal: Horizontal
+        /// The alignment along the vertical axis.
         public let vertical: Vertical
 
+        /// Initializes the alignment.
         public init(horizontal: Horizontal, vertical: Vertical) {
             (self.horizontal, self.vertical) = (horizontal, vertical)
         }
 
+        /// The edges are pinned to the matching edges of the container with the
+        /// given edge insets.
         public static let fill = Alignment(horizontal: .fill, vertical: .fill)
+        /// The view is centered in the container and the edges are pinned using
+        /// "less than or equal" constraints making sure it doesn't overflow the container.
         public static let center = Alignment(horizontal: .center, vertical: .center)
+        /// The view is pinned to the top-leading corner of the container with the
+        /// given edge insets and the remaining edges are pinned using "less than or
+        /// equal" constraints making sure the view doesn't overflow the container.
         public static let topLeading = Alignment(horizontal: .leading, vertical: .top)
-        public static let leading = Alignment(horizontal: .leading, vertical: .fill)
-        public static let bottomLeading = Alignment(horizontal: .leading, vertical: .bottom)
-        public static let bottom = Alignment(horizontal: .fill, vertical: .bottom)
-        public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
-        public static let trailing = Alignment(horizontal: .trailing, vertical: .fill)
+        /// The view is pinned to the top edge with the inset while the bottom
+        /// edge is pinned using "less than or equal" constraint making sure the view
+        /// doesn't overflow the container. The view is also centered horizontally.
+        public static let top = Alignment(horizontal: .center, vertical: .top)
+        /// The view is pinned to the bottom-trailing corner of the container with the
+        /// given edge insets and the remaining edges are pinned using "less than or
+        /// equal" constraints making sure the view doesn't overflow the container.
         public static let topTrailing = Alignment(horizontal: .trailing, vertical: .top)
-        public static let top = Alignment(horizontal: .fill, vertical: .top)
+        /// The view is pinned to the trailing edge with the inset while the leading
+        /// edge is pinned using "less than or equal" constraint making sure the view
+        /// doesn't overflow the container. The view is also centered vertically.
+        public static let trailing = Alignment(horizontal: .trailing, vertical: .center)
+        /// The view is pinned to the bottom-trailing corner of the container with the
+        /// given edge insets and the remaining edges are pinned using "less than or
+        /// equal" constraints making sure the view doesn't overflow the container.
+        public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
+        /// The view is pinned to the bottom edge with the inset while the top
+        /// edge is pinned using "less than or equal" constraint making sure the view
+        /// doesn't overflow the container. The view is also centered horizontally.
+        public static let bottom = Alignment(horizontal: .center, vertical: .bottom)
+        /// The view is pinned to the bottom-leading corner of the container with the
+        /// given edge insets and the remaining edges are pinned using "less than or
+        /// equal" constraints making sure the view doesn't overflow the container.
+        public static let bottomLeading = Alignment(horizontal: .leading, vertical: .bottom)
+        /// The view is pinned to the leading edge with the inset while the trailing
+        /// edge is pinned using "less than or equal" constraint making sure the view
+        /// doesn't overflow the container. The view is also centered vertically.
+        public static let leading = Alignment(horizontal: .leading, vertical: .center)
     }
 }
 
 // MARK: - AnchorCollectionCenter
 
-/// Create multiple constraints at once by operating both `centerX` and `centerY` anchors
+/// Create multiple constraints at once by using both `centerX` and `centerY` anchors.
 public struct AnchorCollectionCenter {
     let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
     let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
@@ -402,7 +441,7 @@ public struct AnchorCollectionCenter {
 
 // MARK: - AnchorCollectionSize
 
-/// Create multiple constraints at once by operating both `width` and `height` anchors
+/// Create multiple constraints at once by using both `width` and `height` anchors.
 public struct AnchorCollectionSize {
     let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
     let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
@@ -499,12 +538,12 @@ public final class Constraints: Collection {
 
     // MARK: Activate
 
-    /// Activates each constraint in the reciever.
+    /// Activates each constraint in the receiver.
     public func activate() {
         NSLayoutConstraint.activate(constraints)
     }
 
-    /// Deactivates each constraint in the reciever.
+    /// Deactivates each constraint in the receiver.
     public func deactivate() {
         NSLayoutConstraint.deactivate(constraints)
     }

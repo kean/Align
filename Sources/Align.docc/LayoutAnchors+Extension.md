@@ -34,8 +34,7 @@
 
 ### Accessing Underlying View
 
-- ``view``
-- ``layoutGuide``
+- ``item``
 
 ### Deprecated 
 

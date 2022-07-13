@@ -1,5 +1,17 @@
 # ``Align/AnchorCollectionSize``
 
+```swift
+a.anchors.size.equal(CGSize(width: 120, height: 40))
+```
+
+![size](size-01.png)
+
+```swift
+a.anchors.size.equal(b)
+```
+
+![size](size-02.png)
+
 ## Topics
 
 ### Core Constraints

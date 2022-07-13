@@ -112,7 +112,7 @@ extension NSLayoutConstraint.Attribute {
         case .centerXWithinMargins: return "centerXWithinMargins"
         case .centerYWithinMargins: return "centerYWithinMargins"
 #endif
-        @unknown default: return "unexpacted"
+        @unknown default: return "unexpected"
         }
     }
 }

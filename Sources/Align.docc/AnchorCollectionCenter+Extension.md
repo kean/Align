@@ -1,5 +1,11 @@
 # ``Align/AnchorCollectionCenter``
 
+```swift
+a.anchors.center.align()
+```
+
+![Center](center-01.png)
+
 ## Topics
 
 ### Core Constraints

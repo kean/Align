@@ -26,7 +26,7 @@ class MyViewController : UIViewController {
 
         subview.anchors.edges.pin(
             insets: EdgeInsets(top: 10, left: 10, bottom: 10, right: 10),
-            alignment: Alignmment(horizontal: .leading, vertical: .center)
+            alignment: Alignment(horizontal: .leading, vertical: .center)
         )
 
         view.addSubview(container)

@@ -49,7 +49,7 @@
 
 > Use [Migraiton Guide](https://github.com/kean/Align/blob/master/Docs/MigrationGuide2.md) included in the repo to ease migration.
 
-- Remove all deprecated APIs. If you are migrating from the previous version, consider migrating to version 2.0.0 first. It is going to guide you throught the migration.
+- Remove all deprecated APIs. If you are migrating from the previous version, consider migrating to version 2.0.0 first. It is going to guide you thought the migration.
 
 ## Align 2.0.0
 
@@ -65,7 +65,7 @@
 - Add `constraints` property to `Constraints` type to allow access to all of the constraints created using it
 - Add `activate` parameter to `Constraints` initiliazer to optionally disable automatic activation of constraints
 - Deprecated `func edges(_ edges: LayoutEdge...)`, use `pin(axis:)` insteads
-- `pin()` methods now use `.leading` and `.trailing` anchors intead of absolute `.left` and `.right` anchors. To switch to absolute anchors, use `absolute()`: `view.anchors.edges.absolute()`
+- `pin()` methods now use `.leading` and `.trailing` anchors instead of absolute `.left` and `.right` anchors. To switch to absolute anchors, use `absolute()`: `view.anchors.edges.absolute()`
 - Remove `addSubview` family of APIs
 - Migrate to Swift 5.1
 - Increase minimum required platform versions
