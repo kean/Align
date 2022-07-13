@@ -402,6 +402,7 @@ public struct AnchorCollectionCenter {
 
 // MARK: - AnchorCollectionSize
 
+/// Create multiple constraints at once by operating both `width` and `height` anchors
 public struct AnchorCollectionSize {
     let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
     let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
@@ -439,6 +440,35 @@ public struct AnchorCollectionSize {
 
 // MARK: - Constraints
 
+/// Allows you to access the underlying constraints.
+///
+/// By default, Align automatically activates created constraints. Using
+/// ``Constraints`` API, constraints are activated all of the same time when you
+/// exit from the closure. It gives you a chance to change the `priority` of
+/// the created constraints.
+///
+/// ```swift
+/// Constraints(for: title, subtitle) { title, subtitle in
+///     // Align one anchor with another
+///     subtitle.top.spacing(10, to: title.bottom + 10)
+///
+///     // Manipulate dimensions
+///     title.width.equal(100)
+///
+///     // Change a priority of constraints inside a group:
+///     subtitle.bottom.pin().priority = UILayoutPriority(999)
+/// }
+/// ```
+///
+/// ``Constraints`` also give you easy access to Align anchors (notice, there
+/// is no `.anchors` call in the example). And if you want to not activate the
+/// constraints, there is an option for that:
+///
+/// ```swift
+/// Constraints(activate: false) {
+///     // Create your constraints here
+/// }
+/// ```
 public final class Constraints: Collection {
     public typealias Element = NSLayoutConstraint
     public typealias Index = Int
