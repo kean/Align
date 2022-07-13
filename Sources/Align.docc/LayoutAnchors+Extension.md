@@ -1,6 +1,5 @@
 # ``Align/LayoutAnchors``
 
-
 ## Topics
 
 ### Edges
@@ -36,3 +35,8 @@
 ### Accessing Underlying View
 
 - ``view``
+- ``layoutGuide``
+
+### Deprecated 
+
+- ``base``

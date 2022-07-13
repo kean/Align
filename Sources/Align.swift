@@ -8,6 +8,7 @@ import UIKit
 import AppKit
 #endif
 
+/// A type that has layout anchors: either a view or a layout guide.
 public protocol LayoutItem {
 #if os(iOS) || os(tvOS)
     var superview: UIView? { get }
@@ -28,18 +29,44 @@ extension NSLayoutGuide: LayoutItem {
 }
 #endif
 
-public extension LayoutItem { // Align methods are available via `LayoutAnchors`
-    @nonobjc var anchors: LayoutAnchors<Self> { LayoutAnchors(item: self) }
+extension LayoutItem { // Align methods are available via `LayoutAnchors`
+    /// Provides access to the layout anchors and anchor collections.
+    @nonobjc public var anchors: LayoutAnchors<Self> { LayoutAnchors(item: self) }
 }
 
 // MARK: - LayoutAnchors
 
+/// Provides access to the layout anchors and anchor collections.
 public struct LayoutAnchors<T: LayoutItem> {
     let item: T
 
     // Deprecated in Align 3.0
     @available(*, deprecated, message: "Please use `view` to `layoutGuide`.")
     public var base: T { item }
+
+    // MARK: Anchors
+
+    public var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .top) }
+    public var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .bottom) }
+    public var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .left) }
+    public var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .right) }
+    public var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .leading) }
+    public var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .trailing) }
+
+    public var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(item, .centerX) }
+    public var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(item, .centerY) }
+
+    public var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .firstBaseline) }
+    public var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .lastBaseline) }
+
+    public var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(item, .width) }
+    public var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(item, .height) }
+
+    // MARK: Anchor Collections
+
+    public var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: item) }
+    public var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
+    public var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }
 
 #if os(iOS) || os(tvOS)
@@ -59,33 +86,6 @@ extension LayoutAnchors where T: NSLayoutGuide {
     public var layoutGuide: T { item }
 }
 #endif
-
-public extension LayoutAnchors {
-
-    // MARK: Anchors
-
-    var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .top) }
-    var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .bottom) }
-    var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .left) }
-    var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .right) }
-    var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .leading) }
-    var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .trailing) }
-
-    var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(item, .centerX) }
-    var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(item, .centerY) }
-
-    var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .firstBaseline) }
-    var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .lastBaseline) }
-
-    var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(item, .width) }
-    var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(item, .height) }
-
-    // MARK: Anchor Collections
-
-    var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: item) }
-    var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
-    var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
-}
 
 // MARK: - Anchors
 
