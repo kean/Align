@@ -368,6 +368,7 @@ extension AnchorCollectionEdges {
 
 // MARK: - AnchorCollectionCenter
 
+/// Create multiple constraints at once by operating both `centerX` and `centerY` anchors
 public struct AnchorCollectionCenter {
     let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
     let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
