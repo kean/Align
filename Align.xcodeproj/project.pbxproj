@@ -53,7 +53,6 @@
 		0C8FD79C1FB88D2100A20E3D /* AnchorCollectionSizeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCollectionSizeTests.swift; sourceTree = "<group>"; };
 		0CBC06B7249E9F790055D1B1 /* AnchorPerformanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorPerformanceTests.swift; sourceTree = "<group>"; };
 		0CC3A0671D7476A700754E59 /* Align Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Align Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0CC3A0751D7476B300754E59 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0CCC2072287E3D26001FC3CE /* Align.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Align.docc; sourceTree = "<group>"; };
 		0CD220BC22BBECE70095AD2A /* Align.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Align.podspec; sourceTree = "<group>"; };
 		0CD220BF22BBED040095AD2A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -63,7 +62,6 @@
 		0CD220C422BBED2C0095AD2A /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = "<group>"; };
 		0CD220C522BBED340095AD2A /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		0CE361181C86077B00EA70CF /* Align.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Align.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0CE361241C8607BB00EA70CF /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Supporting/Info.plist; sourceTree = "<group>"; };
 		0CF93193249834DB00E1016A /* Align+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Align+Extensions.swift"; sourceTree = "<group>"; };
 		0CF931962499039500E1016A /* AnchorAPIsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorAPIsTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -100,7 +98,6 @@
 		0CC3A0721D7476B300754E59 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				0CC3A0751D7476B300754E59 /* Info.plist */,
 				0C8FD7811FB85F5600A20E3D /* AnchorTests.swift */,
 				0CF931962499039500E1016A /* AnchorAPIsTests.swift */,
 				0C8FD78D1FB88B9B00A20E3D /* AnchorAlignmentTests.swift */,
@@ -138,7 +135,6 @@
 				0C62A9A81FD28B5900C6EA6E /* Align.playground */,
 				0CE361261C8607D600EA70CF /* Sources */,
 				0CC3A0721D7476B300754E59 /* Tests */,
-				0CE361231C8607A900EA70CF /* Supporting */,
 				0CD220BB22BBECD70095AD2A /* Metadata */,
 				0CE361191C86077B00EA70CF /* Products */,
 			);
@@ -151,14 +147,6 @@
 				0CC3A0671D7476A700754E59 /* Align Tests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		0CE361231C8607A900EA70CF /* Supporting */ = {
-			isa = PBXGroup;
-			children = (
-				0CE361241C8607BB00EA70CF /* Info.plist */,
-			);
-			name = Supporting;
 			sourceTree = "<group>";
 		};
 		0CE361261C8607D600EA70CF /* Sources */ = {
@@ -323,7 +311,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.kean.Align-iOS-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -335,7 +322,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.github.kean.Align-iOS-Tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -345,6 +331,7 @@
 		0CE3611E1C86077B00EA70CF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
@@ -353,11 +340,13 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				ONLY_ACTIVE_ARCH = YES;
 				SUPPORTED_PLATFORMS = "iphoneos appletvos iphonesimulator appletvsimulator macosx";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 12.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -367,13 +356,16 @@
 		0CE3611F1C86077B00EA70CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				SUPPORTED_PLATFORMS = "iphoneos appletvos iphonesimulator appletvsimulator macosx";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				TVOS_DEPLOYMENT_TARGET = 12.0;
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -388,7 +380,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Supporting/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 2.4.1;
@@ -405,7 +396,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "$(SRCROOT)/Supporting/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 2.4.1;
