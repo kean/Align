@@ -32,4 +32,13 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 - ``LayoutItem``
 - ``LayoutAnchors``
 
+### Anchors and Collections
+
 - ``Anchor``
+- ``AnchorCollectionEdges``
+- ``AnchorCollectionCenter``
+- ``AnchorCollectionSize``
+
+### Managing Constraints
+
+- ``Constraints``

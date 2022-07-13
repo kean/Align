@@ -89,12 +89,13 @@ extension LayoutAnchors where T: NSLayoutGuide {
 
 // MARK: - Anchors
 
-// phantom types
+/// A type that represents a layout axis.
 public enum AnchorAxis {
     public class Horizontal {}
     public class Vertical {}
 }
 
+/// Represents an anchor type.
 public enum AnchorType {
     public class Dimension {}
     public class Alignment {}
@@ -243,33 +244,6 @@ public extension Anchor where Type: AnchorType.Center {
 
 // MARK: - AnchorCollectionEdges
 
-public struct Alignment {
-    public enum Horizontal {
-        case fill, center, leading, trailing
-    }
-    public enum Vertical {
-        case fill, center, top, bottom
-    }
-
-    public let horizontal: Horizontal
-    public let vertical: Vertical
-
-    public init(horizontal: Horizontal, vertical: Vertical) {
-        (self.horizontal, self.vertical) = (horizontal, vertical)
-    }
-
-    public static let fill = Alignment(horizontal: .fill, vertical: .fill)
-    public static let center = Alignment(horizontal: .center, vertical: .center)
-    public static let topLeading = Alignment(horizontal: .leading, vertical: .top)
-    public static let leading = Alignment(horizontal: .leading, vertical: .fill)
-    public static let bottomLeading = Alignment(horizontal: .leading, vertical: .bottom)
-    public static let bottom = Alignment(horizontal: .fill, vertical: .bottom)
-    public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
-    public static let trailing = Alignment(horizontal: .trailing, vertical: .fill)
-    public static let topTrailing = Alignment(horizontal: .trailing, vertical: .top)
-    public static let top = Alignment(horizontal: .fill, vertical: .top)
-}
-
 public struct AnchorCollectionEdges {
     let item: LayoutItem
     var isAbsolute = false
@@ -358,6 +332,35 @@ public struct AnchorCollectionEdges {
             }
         }
         return constraints
+    }
+}
+
+extension AnchorCollectionEdges {
+    public struct Alignment {
+        public enum Horizontal {
+            case fill, center, leading, trailing
+        }
+        public enum Vertical {
+            case fill, center, top, bottom
+        }
+
+        public let horizontal: Horizontal
+        public let vertical: Vertical
+
+        public init(horizontal: Horizontal, vertical: Vertical) {
+            (self.horizontal, self.vertical) = (horizontal, vertical)
+        }
+
+        public static let fill = Alignment(horizontal: .fill, vertical: .fill)
+        public static let center = Alignment(horizontal: .center, vertical: .center)
+        public static let topLeading = Alignment(horizontal: .leading, vertical: .top)
+        public static let leading = Alignment(horizontal: .leading, vertical: .fill)
+        public static let bottomLeading = Alignment(horizontal: .leading, vertical: .bottom)
+        public static let bottom = Alignment(horizontal: .fill, vertical: .bottom)
+        public static let bottomTrailing = Alignment(horizontal: .trailing, vertical: .bottom)
+        public static let trailing = Alignment(horizontal: .trailing, vertical: .fill)
+        public static let topTrailing = Alignment(horizontal: .trailing, vertical: .top)
+        public static let top = Alignment(horizontal: .fill, vertical: .top)
     }
 }
 
