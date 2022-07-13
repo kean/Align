@@ -1,4 +1,4 @@
-<img width="918" alt="Screen Shot 2020-06-15 at 23 06 32" src="https://user-images.githubusercontent.com/1567433/84727379-e01bed00-af5c-11ea-834d-149a991c166a.png">
+<img width="918" alt="84727379-e01bed00-af5c-11ea-834d-149a991c166a" src="https://user-images.githubusercontent.com/1567433/178784134-b0d748cc-d7ed-452c-bd50-8be081bf04b1.png">
 
 <p align="left">
 <img src="https://img.shields.io/badge/platforms-iOS%2C%20tvOS%2C%20macOS-lightgrey.svg?colorA=28a745">
