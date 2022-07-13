@@ -4,7 +4,7 @@
 <img src="https://img.shields.io/badge/platforms-iOS%2C%20tvOS%2C%20macOS-lightgrey.svg?colorA=28a745">
 </p>
 
-Align introduces a better alternative to Auto Layout anchors.
+The best way to create constraints in code.
 
 - **Semantic**. Align APIs focus on your goals, not the math behind Auto Layout constraints.  
 - **Powerful**. Create multiple constraints with a single line of code.  

@@ -1,6 +1,6 @@
 # ``Align``
 
-Align introduces a better alternative to Auto Layout anchors.
+The best way to create constraints in code.
 
 ![Logo](logo.png)
 
