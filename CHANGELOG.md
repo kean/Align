@@ -2,6 +2,13 @@
 
 # Align 3
 
+## Align 3.1.0
+
+*July 22, 2023*
+
+- Use static linking by default
+- Fix warnings in Xcode 15
+
 ## Align 3.0.0
 
 *July 13, 2022*
