@@ -43,10 +43,6 @@ public struct LayoutAnchors<T: LayoutItem> {
 
     public init(_ item: T) { self.item = item }
 
-    // Deprecated in Align 3.0
-    @available(*, deprecated, message: "Please use `view` to `layoutGuide`.")
-    public var base: T { item }
-
     // MARK: Anchors
 
     public var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .top) }
@@ -213,8 +209,8 @@ public extension Anchor where Type: AnchorType.Edge {
     /// Adds spacing between the current anchors.
     @discardableResult func spacing<OtherType: AnchorType.Edge>(_ spacing: CGFloat, to anchor: Anchor<OtherType, Axis>, relation: NSLayoutConstraint.Relation = .equal) -> NSLayoutConstraint {
         let isInverted = (attribute == .bottom && anchor.attribute == .top) ||
-            (attribute == .right && anchor.attribute == .left) ||
-            (attribute == .trailing && anchor.attribute == .leading)
+        (attribute == .right && anchor.attribute == .left) ||
+        (attribute == .trailing && anchor.attribute == .leading)
         return Constraints.add(self, anchor, constant: isInverted ? -spacing : spacing, relation: isInverted ? relation.inverted : relation)
     }
 }
@@ -553,11 +549,11 @@ public final class Constraints: Collection {
     /// Creates and automatically installs a constraint.
     static func add(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
         precondition(Thread.isMainThread, "Align APIs can only be used from the main thread")
-        #if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS)
         (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
-        #elseif os(macOS)
+#elseif os(macOS)
         (item1 as? NSView)?.translatesAutoresizingMaskIntoConstraints = false
-        #endif
+#endif
         let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
         install(constraint)
         return constraint

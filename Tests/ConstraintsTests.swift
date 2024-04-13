@@ -5,7 +5,6 @@
 import XCTest
 import Align
 
-
 class ConstraintsTests: XCTestCase {
     let container = View()
     let view = View()

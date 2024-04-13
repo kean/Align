@@ -2,6 +2,13 @@
 
 # Align 3
 
+## Align 3.2
+
+*April 13, 2024*
+
+- Remove deprecated `.base` property
+- Increase the minimum supported Xcode version to 14.3
+
 ## Align 3.1.0
 
 *July 22, 2023*
