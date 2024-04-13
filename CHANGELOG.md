@@ -8,6 +8,7 @@
 
 - Remove deprecated `.base` property
 - Increase the minimum supported Xcode version to 14.3
+- Increase the minimum supported platforms to iOS 13.0, tvOS 13.0, macOS 10.15
 
 ## Align 3.1.0
 

@@ -30,10 +30,11 @@ The [**documentation**](https://kean-docs.github.io/align/documentation/align/) 
 
 ## Requirements
 
-| Align          | Swift       | Xcode             | Platforms                          |
-|----------------|-------------|-------------------|------------------------------------|
-| Align 3.0      | Swift 5.6   | Xcode 13.3        | iOS 12.0 / tvOS 12.0 / macOS 10.14 |
-| Align 2.0      | Swift 5.1   | Xcode 11.0        | iOS 11.0 / tvOS 11.0 / macOS 10.13 | 
+| Align          | Swift       | Xcode             | Platforms                        |
+|----------------|-------------|-------------------|----------------------------------|
+| Align 3.2      | Swift 5.8   | Xcode 14.3        | iOS 13.0, tvOS 13.0, macOS 10.15 |
+| Align 3.0      | Swift 5.6   | Xcode 13.3        | iOS 12.0, tvOS 12.0, macOS 10.14 |
+| Align 2.0      | Swift 5.1   | Xcode 11.0        | iOS 11.0, tvOS 11.0, macOS 10.13 | 
 
 ## Why Align
 
