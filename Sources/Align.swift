@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2017-2022 Alexander Grebenyuk (github.com/kean).
+// Copyright (c) 2017-2024 Alexander Grebenyuk (github.com/kean).
 
 #if os(iOS) || os(tvOS)
 import UIKit
