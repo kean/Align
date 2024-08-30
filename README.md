@@ -12,7 +12,20 @@ The best way to create constraints in code.
 - **Fluent**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
 - **Simple**. Stop worrying about `translatesAutoresizingMaskIntoConstraints` and constraints activation.  
 
-To give you a taste of what the *semantic* APIs look like, here is an example:
+Example usage:
+
+```swift
+// Core API
+anchors.top.equal(superview.top)
+anchors.width.equal(anchors.height * 2)
+
+// Semantic API
+anchors.edges.pin(insets: 20) // Pins to superview
+anchors.edges.pin(to: superview.safeAreaLayoutGuide, insets: 20)
+anchors.width.clamp(to: 10...40)
+```
+
+And here's something a bit more powerful:
 
 ```swift
 view.anchors.edges.pin(insets: 20, alignment: .center)
