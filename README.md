@@ -16,13 +16,13 @@ Example usage:
 
 ```swift
 // Core API
-anchors.top.equal(superview.top)
-anchors.width.equal(anchors.height * 2)
+view.anchors.top.equal(superview.top)
+view.anchors.width.equal(view.anchors.height * 2)
 
 // Semantic API
-anchors.edges.pin(insets: 20) // Pins to superview
-anchors.edges.pin(to: superview.safeAreaLayoutGuide, insets: 20)
-anchors.width.clamp(to: 10...40)
+view.anchors.edges.pin(insets: 20) // Pins to superview
+view.anchors.edges.pin(to: superview.safeAreaLayoutGuide, insets: 20)
+view.anchors.width.clamp(to: 10...40)
 ```
 
 And here's something a bit more powerful:
