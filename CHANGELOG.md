@@ -2,6 +2,13 @@
 
 # Align 3
 
+## Align 3.3
+
+*Sep 13, 2024*
+
+- Add `Sendable` and `@MainActor` annotations
+- Add compatibility with Swift 6 and Xcode 16
+
 ## Align 3.2
 
 *April 13, 2024*
