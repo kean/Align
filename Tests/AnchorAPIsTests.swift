@@ -6,13 +6,13 @@ import Foundation
 import XCTest
 import Align
 
+@MainActor
 class AnchorAPITests: XCTestCase {
     let view = View()
     let container = View()
 
-    override func setUp() {
-        super.setUp()
-
+    @MainActor
+    override func setUp() async throws {
         container.addSubview(view)
     }
 

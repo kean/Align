@@ -4,18 +4,19 @@
 import XCTest
 import Align
 
+@MainActor
 class AnchorEdgeTests: XCTestCase {
     let container = View()
     let view = View()
 
-    override func setUp() {
-        super.setUp()
-
+    @MainActor
+    override func setUp() async throws {
         container.addSubview(view)
     }
 
     // MARK: Pinning
 
+    @MainActor
     func testPinToSuperview() {
         test("pin top to superview") {
             let c = view.anchors.top.pin()
@@ -41,6 +42,7 @@ class AnchorEdgeTests: XCTestCase {
     }
 
 #if os(iOS) || os(tvOS)
+    @MainActor
     func testPinToSuperviewMargin() {
         test("pin top to superview margin") {
             let c = view.anchors.top.pin(to: container.layoutMarginsGuide)

@@ -5,13 +5,13 @@
 import XCTest
 import Align
 
+@MainActor
 class ConstraintsTests: XCTestCase {
     let container = View()
     let view = View()
 
-    override func setUp() {
-        super.setUp()
-
+    @MainActor
+    override func setUp() async throws {
         container.addSubview(view)
     }
 
@@ -42,6 +42,7 @@ class ConstraintsTests: XCTestCase {
     }
 }
 
+@MainActor
 class ConstraintsArityTests: XCTestCase {
     let container = View()
     let a = View()
@@ -49,9 +50,8 @@ class ConstraintsArityTests: XCTestCase {
     let c = View()
     let d = View()
 
-    override func setUp() {
-        super.setUp()
-
+    @MainActor
+    override func setUp() async throws {
         container.addSubview(a)
         container.addSubview(b)
         container.addSubview(c)
@@ -103,18 +103,18 @@ class ConstraintsArityTests: XCTestCase {
             a.anchors.bottom.pin()
         }
 
-        XCTAssertEqualConstraints(Array(constraints), [
+        XCTAssertEqualConstraints(constraints.constraints, [
             NSLayoutConstraint(item: a, attribute: .top, toItem: container, attribute: .top),
             NSLayoutConstraint(item: a, attribute: .bottom, toItem: container, attribute: .bottom)
         ])
 
         XCTAssertEqualConstraints(
-            constraints[0],
+            constraints.constraints[0],
             NSLayoutConstraint(item: a, attribute: .top, toItem: container, attribute: .top)
         )
 
         XCTAssertEqualConstraints(
-            constraints[1],
+            constraints.constraints[1],
             NSLayoutConstraint(item: a, attribute: .bottom, toItem: container, attribute: .bottom)
         )
     }
@@ -154,6 +154,7 @@ class ConstraintsArityTests: XCTestCase {
 }
 
 #if os(iOS) || os(tvOS)
+@MainActor
 class AddingSubviewsTests: XCTestCase {
     let container = View()
     let a = View()

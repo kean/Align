@@ -14,7 +14,8 @@ func test<T>(_ title: String? = nil, with element: T, _ closure: (T) -> Void) {
 
 // MARK: Asserts
 
-public func XCTAssertEqualConstraints(_ expected: [NSLayoutConstraint], _ received: [NSLayoutConstraint], file: StaticString = #file, line: UInt = #line) {
+@MainActor
+public func XCTAssertEqualConstraints(_ expected: [NSLayoutConstraint], _ received: [NSLayoutConstraint], file: StaticString = #filePath, line: UInt = #line) {
     XCTAssertEqual(expected.count, received.count, file: file, line: line)
 
     var received = received
@@ -29,11 +30,13 @@ public func XCTAssertEqualConstraints(_ expected: [NSLayoutConstraint], _ receiv
     }
 }
 
-public func XCTAssertEqualConstraints(_ expected: NSLayoutConstraint, _ received: NSLayoutConstraint, file: StaticString = #file, line: UInt = #line) {
+@MainActor
+public func XCTAssertEqualConstraints(_ expected: NSLayoutConstraint, _ received: NSLayoutConstraint, file: StaticString = #filePath, line: UInt = #line) {
     XCTAssertEqualConstraints(Constraint(expected), Constraint(received), file: file, line: line)
 }
 
-private func XCTAssertEqualConstraints<T: Equatable>(_ expected: T, _ received: T, file: StaticString = #file, line: UInt = #line) {
+@MainActor
+private func XCTAssertEqualConstraints<T: Equatable>(_ expected: T, _ received: T, file: StaticString = #filePath, line: UInt = #line) {
     print(diff(expected, received))
     XCTAssertTrue(expected == received, "Found difference for " + diff(expected, received).joined(separator: ", "), file: file, line: line)
 }
@@ -48,7 +51,8 @@ extension NSLayoutConstraint {
     }
 }
 
-private struct Constraint: Equatable {
+@MainActor
+private struct Constraint {
     let firstItem: AnyObject?
     let firstAttribute: String
     let secondItem: AnyObject?
@@ -70,7 +74,10 @@ private struct Constraint: Equatable {
         priority = c.priority.rawValue
         identifier = c.identifier
     }
+}
 
+#if swift(>=6.0)
+extension Constraint: @preconcurrency Equatable {
     static func ==(lhs: Constraint, rhs: Constraint) -> Bool {
         return lhs.firstItem === rhs.firstItem &&
             lhs.firstAttribute == rhs.firstAttribute &&
@@ -83,6 +90,21 @@ private struct Constraint: Equatable {
             lhs.identifier == rhs.identifier
     }
 }
+#else
+extension Constraint: Equatable {
+    static func ==(lhs: Constraint, rhs: Constraint) -> Bool {
+        return lhs.firstItem === rhs.firstItem &&
+            lhs.firstAttribute == rhs.firstAttribute &&
+            lhs.relation == rhs.relation &&
+            lhs.secondItem === rhs.secondItem &&
+            lhs.secondAttribute == rhs.secondAttribute &&
+            lhs.multiplier == rhs.multiplier &&
+            lhs.constant == rhs.constant &&
+            lhs.priority == rhs.priority &&
+            lhs.identifier == rhs.identifier
+    }
+}
+#endif
 
 // MARK: Helpers
 

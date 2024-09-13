@@ -16,17 +16,17 @@ public extension UIView {
     }
 
     @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, constraints: (LayoutAnchors<UIView>, LayoutAnchors<UIView>) -> Void) -> Constraints {
-        [a, b].forEach(addSubview)
+        [a, b].forEach { addSubview($0) }
         return Constraints(for: a, b, constraints)
     }
 
     @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, constraints: (LayoutAnchors<UIView>, LayoutAnchors<UIView>, LayoutAnchors<UIView>) -> Void) -> Constraints {
-        [a, b, c].forEach(addSubview)
+        [a, b, c].forEach { addSubview($0) }
         return Constraints(for: a, b, c, constraints)
     }
 
     @discardableResult @nonobjc func addSubview(_ a: UIView, _ b: UIView, _ c: UIView, _ d: UIView, constraints: (LayoutAnchors<UIView>, LayoutAnchors<UIView>, LayoutAnchors<UIView>, LayoutAnchors<UIView>) -> Void) -> Constraints {
-        [a, b, c, d].forEach(addSubview)
+        [a, b, c, d].forEach { addSubview($0) }
         return Constraints(for: a, b, c, d, constraints)
     }
 }

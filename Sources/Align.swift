@@ -9,7 +9,7 @@ import AppKit
 #endif
 
 /// A type that has layout anchors: either a view or a layout guide.
-public protocol LayoutItem {
+@MainActor public protocol LayoutItem {
 #if os(iOS) || os(tvOS)
     var superview: UIView? { get }
 #else
@@ -37,7 +37,7 @@ extension LayoutItem { // Align methods are available via `LayoutAnchors`
 // MARK: - LayoutAnchors
 
 /// Provides access to the layout anchors and anchor collections.
-public struct LayoutAnchors<T: LayoutItem> {
+@MainActor public struct LayoutAnchors<T: LayoutItem> {
     /// The underlying item.
     public let item: T
 
@@ -104,7 +104,7 @@ public enum AnchorType {
 ///
 /// - tip: `UIView` does not provide anchor properties for the layout margin attributes.
 /// Instead, call `view.layoutMarginsGuide.anchors`.
-public struct Anchor<Type, Axis> { // type and axis are phantom types
+@MainActor public struct Anchor<Type, Axis> { // type and axis are phantom types
     let item: LayoutItem
     let attribute: NSLayoutConstraint.Attribute
     let offset: CGFloat
@@ -130,23 +130,23 @@ public struct Anchor<Type, Axis> { // type and axis are phantom types
 }
 
 /// Returns a new anchor offset by a given amount.
-public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
+@MainActor public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: offset)
 }
 
 /// Returns a new anchor offset by a given amount.
-public func - <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
+@MainActor public func - <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: -offset)
 }
 
 /// Returns a new anchor with an constant multiplied by the given amount.
-public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
+@MainActor public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
     anchor.multiplied(by: multiplier)
 }
 
 // MARK: - Anchors (AnchorType.Alignment)
 
-public extension Anchor where Type: AnchorType.Alignment {
+@MainActor public extension Anchor where Type: AnchorType.Alignment {
     @discardableResult func equal<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal)
     }
@@ -162,7 +162,7 @@ public extension Anchor where Type: AnchorType.Alignment {
 
 // MARK: - Anchors (AnchorType.Dimension)
 
-public extension Anchor where Type: AnchorType.Dimension {
+@MainActor public extension Anchor where Type: AnchorType.Dimension {
     @discardableResult func equal<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal)
     }
@@ -178,7 +178,7 @@ public extension Anchor where Type: AnchorType.Dimension {
 
 // MARK: - Anchors (AnchorType.Dimension)
 
-public extension Anchor where Type: AnchorType.Dimension {
+@MainActor public extension Anchor where Type: AnchorType.Dimension {
     @discardableResult func equal(_ constant: CGFloat) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .equal, constant: constant)
     }
@@ -199,7 +199,7 @@ public extension Anchor where Type: AnchorType.Dimension {
 
 // MARK: - Anchors (AnchorType.Edge)
 
-public extension Anchor where Type: AnchorType.Edge {
+@MainActor public extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the respected edges of the given container.
     @discardableResult func pin(to container: LayoutItem? = nil, inset: CGFloat = 0) -> NSLayoutConstraint {
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
@@ -217,7 +217,7 @@ public extension Anchor where Type: AnchorType.Edge {
 
 // MARK: - Anchors (AnchorType.Center)
 
-public extension Anchor where Type: AnchorType.Center {
+@MainActor public extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
     @discardableResult func align(offset: CGFloat = 0) -> NSLayoutConstraint {
         Constraints.add(self, toItem: item.superview!, attribute: attribute, constant: offset)
@@ -227,7 +227,7 @@ public extension Anchor where Type: AnchorType.Center {
 // MARK: - AnchorCollectionEdges
 
 /// Create multiple constraints at once by operating more than one edge at once.
-public struct AnchorCollectionEdges {
+@MainActor public struct AnchorCollectionEdges {
     let item: LayoutItem
     var isAbsolute = false
 
@@ -317,10 +317,10 @@ public struct AnchorCollectionEdges {
         return constraints
     }
 
-    public struct Alignment {
+    public struct Alignment: Sendable {
 
         /// The alignment along the horizontal axis.
-        public enum Horizontal {
+        public enum Horizontal: Sendable {
             /// Pin both leading and trailing edges to the superview.
             case fill
             /// Center the view in the container along the vertical axis.
@@ -336,7 +336,7 @@ public struct AnchorCollectionEdges {
         }
 
         /// The alignment along the vertical axis.
-        public enum Vertical {
+        public enum Vertical: Sendable {
             /// Pin both top and bottom edges to the superview.
             case fill
             /// Center the view in the container along the vertical axis.
@@ -404,7 +404,7 @@ public struct AnchorCollectionEdges {
 // MARK: - AnchorCollectionCenter
 
 /// Create multiple constraints at once by using both `centerX` and `centerY` anchors.
-public struct AnchorCollectionCenter {
+@MainActor public struct AnchorCollectionCenter {
     let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
     let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
 
@@ -438,7 +438,7 @@ public struct AnchorCollectionCenter {
 // MARK: - AnchorCollectionSize
 
 /// Create multiple constraints at once by using both `width` and `height` anchors.
-public struct AnchorCollectionSize {
+@MainActor public struct AnchorCollectionSize {
     let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
     let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
 
@@ -504,16 +504,16 @@ public struct AnchorCollectionSize {
 ///     // Create your constraints here
 /// }
 /// ```
-public final class Constraints: Collection {
+@MainActor public final class Constraints: Collection {
     public typealias Element = NSLayoutConstraint
     public typealias Index = Int
 
-    public subscript(position: Int) -> NSLayoutConstraint {
-        get { constraints[position] }
+    public nonisolated subscript(position: Int) -> NSLayoutConstraint {
+        get { MainActor.assumeIsolated { constraints[position] } }
     }
-    public var startIndex: Int { constraints.startIndex }
-    public var endIndex: Int { constraints.endIndex }
-    public func index(after i: Int) -> Int { i + 1 }
+    public nonisolated var startIndex: Int { MainActor.assumeIsolated { constraints.startIndex } }
+    public nonisolated var endIndex: Int { MainActor.assumeIsolated { constraints.endIndex } }
+    public nonisolated func index(after i: Int) -> Int { i + 1 }
 
     /// Returns all of the created constraints.
     public private(set) var constraints = [NSLayoutConstraint]()
@@ -548,7 +548,6 @@ public final class Constraints: Collection {
 
     /// Creates and automatically installs a constraint.
     static func add(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0) -> NSLayoutConstraint {
-        precondition(Thread.isMainThread, "Align APIs can only be used from the main thread")
 #if os(iOS) || os(tvOS)
         (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
 #elseif os(macOS)

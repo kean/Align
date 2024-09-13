@@ -5,14 +5,13 @@
 import XCTest
 import Align
 
-
+@MainActor
 class AnchorCollectionCenterTests: XCTestCase {
     let container = View()
     let view = View()
 
-    override func setUp() {
-        super.setUp()
-
+    @MainActor
+    override func setUp() async throws {
         container.addSubview(view)
     }
 

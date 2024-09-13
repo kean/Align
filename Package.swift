@@ -4,9 +4,9 @@ import PackageDescription
 let package = Package(
     name: "Align",
     platforms: [
-        .iOS(.v13),
-        .tvOS(.v13),
-        .macOS(.v10_15),
+        .iOS(.v14),
+        .tvOS(.v14),
+        .macOS(.v10_16),
     ],
     products: [
         .library(name: "Align", targets: ["Align"]),

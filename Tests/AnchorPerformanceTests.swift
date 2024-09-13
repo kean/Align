@@ -6,6 +6,7 @@ import XCTest
 import Align
 
 // WARNING: Don't forget to compile for Release mode!
+@MainActor
 final class AnchorPerformanceTests: XCTestCase {
     func testPin() {
         let view = View()
@@ -23,6 +24,10 @@ final class AnchorPerformanceTests: XCTestCase {
         let view = View()
         let container = View()
         container.addSubview(view)
+
+        Constraints(for: view, container) { view, container in
+            view.top.equal(container.top)
+        }
 
         measure {
             Constraints {
