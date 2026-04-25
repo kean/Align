@@ -21,6 +21,16 @@ import AppKit
 
 extension LayoutItem {
     @_spi(Align) public func _disableAutoresizingMask() {}
+
+    /// Wraps the SPI `superview` lookup so callers in `@inlinable` bodies don't
+    /// have to reach for SPI directly. The body stays in the framework (this is
+    /// `@usableFromInline`, not `@inlinable`), so the SPI access stays private.
+    @usableFromInline func _requireSuperview() -> LayoutItem {
+        guard let superview = superview else {
+            preconditionFailure("Align: \(self) has no superview; pass an explicit container")
+        }
+        return superview
+    }
 }
 
 #if os(iOS) || os(tvOS)
@@ -79,9 +89,9 @@ extension LayoutItem { // Align methods are available via `LayoutAnchors`
 
     // MARK: Anchor Collections
 
-    public var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: item) }
-    public var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
-    public var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
+    @inlinable public var edges: AnchorCollectionEdges { AnchorCollectionEdges(item: item) }
+    @inlinable public var center: AnchorCollectionCenter { AnchorCollectionCenter(x: centerX, y: centerY) }
+    @inlinable public var size: AnchorCollectionSize { AnchorCollectionSize(width: width, height: height) }
 }
 
 // MARK: - Anchors
@@ -215,24 +225,24 @@ public enum AnchorType: Sendable {
 
 // MARK: - Anchors (AnchorType.Edge)
 
+// Public surface below is `@inlinable` so anchor expressions can be optimized
+// across module boundaries. SPI access (`superview`, `_disableAutoresizingMask`)
+// is funneled through `@usableFromInline` helpers (`_requireSuperview`,
+// `Constraints.add/install`) whose bodies stay inside the framework.
+
 @MainActor public extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the respected edges of the given container.
-    @discardableResult consuming func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         let isInverted: Bool = switch attribute {
         case .trailing, .right, .bottom: true
         default: false
         }
-        let target = container ?? {
-            guard let superview = item.superview else {
-                preconditionFailure("Align: \(item) has no superview; pass an explicit container")
-            }
-            return superview
-        }()
+        let target = container ?? item._requireSuperview()
         return Constraints.add(self, toItem: target, attribute: attribute, constant: (isInverted ? -inset : inset), relation: isInverted ? relation.inverted : relation, priority: priority)
     }
 
     /// Adds spacing between the current anchors.
-    @discardableResult consuming func spacing<OtherType: AnchorType.Edge>(_ spacing: CGFloat, to anchor: consuming Anchor<OtherType, Axis>, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func spacing<OtherType: AnchorType.Edge>(_ spacing: CGFloat, to anchor: consuming Anchor<OtherType, Axis>, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         let isInverted = (attribute == .bottom && anchor.attribute == .top) ||
         (attribute == .right && anchor.attribute == .left) ||
         (attribute == .trailing && anchor.attribute == .leading)
@@ -244,11 +254,8 @@ public enum AnchorType: Sendable {
 
 @MainActor public extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
-    @discardableResult consuming func align(offset: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
-        guard let superview = item.superview else {
-            preconditionFailure("Align: \(item) has no superview; pass an explicit container")
-        }
-        return Constraints.add(self, toItem: superview, attribute: attribute, constant: offset, priority: priority)
+    @inlinable @discardableResult consuming func align(offset: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+        Constraints.add(self, toItem: item._requireSuperview(), attribute: attribute, constant: offset, priority: priority)
     }
 }
 
@@ -256,11 +263,16 @@ public enum AnchorType: Sendable {
 
 /// Create multiple constraints at once by operating more than one edge at once.
 @MainActor public struct AnchorCollectionEdges {
-    let item: LayoutItem
-    var isAbsolute = false
+    @usableFromInline let item: LayoutItem
+    @usableFromInline var isAbsolute = false
+
+    @usableFromInline init(item: LayoutItem, isAbsolute: Bool = false) {
+        self.item = item
+        self.isAbsolute = isAbsolute
+    }
 
     /// Use `left` and `right` edges instead of `leading` and `trailing`.
-    public func absolute() -> AnchorCollectionEdges {
+    @inlinable public func absolute() -> AnchorCollectionEdges {
         AnchorCollectionEdges(item: item, isAbsolute: true)
     }
 
@@ -272,20 +284,20 @@ public enum AnchorType: Sendable {
 
     // MARK: Core API
 
-    @discardableResult public func equal(_ item2: LayoutItem, insets: EdgeInsets = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func equal(_ item2: LayoutItem, insets: EdgeInsets = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         pin(to: item2, insets: insets, priority: priority)
     }
 
-    @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: EdgeInsets = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
-        pin(to: item2, insets: insets, axis: nil, alignment: .center, isCenteringEnabled: false, priority: priority)
+    @inlinable @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: EdgeInsets = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+        _pin(to: item2, insets: insets, axis: nil, alignment: .center, isCenteringEnabled: false, priority: priority)
     }
 
-    @discardableResult public func equal(_ item2: LayoutItem, insets: CGFloat, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func equal(_ item2: LayoutItem, insets: CGFloat, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), priority: priority)
     }
 
-    @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: CGFloat, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
-        pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: nil, alignment: .center, isCenteringEnabled: false, priority: priority)
+    @inlinable @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: CGFloat, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+        _pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: nil, alignment: .center, isCenteringEnabled: false, priority: priority)
     }
 
     // MARK: Semantic API
@@ -302,7 +314,7 @@ public enum AnchorType: Sendable {
     /// the available options.
     /// - parameter priority: The priority of the created constraints. Uses the
     /// system's default priority when `nil`.
-    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: CGFloat, axis: Axis? = nil, alignment: Alignment = .fill, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func pin(to item2: LayoutItem? = nil, insets: CGFloat, axis: Axis? = nil, alignment: Alignment = .fill, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: axis, alignment: alignment, priority: priority)
     }
 
@@ -318,17 +330,12 @@ public enum AnchorType: Sendable {
     /// the available options.
     /// - parameter priority: The priority of the created constraints. Uses the
     /// system's default priority when `nil`.
-    @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignment = .fill, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
-        pin(to: item2, insets: insets, axis: axis, alignment: alignment, isCenteringEnabled: true, priority: priority)
+    @inlinable @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignment = .fill, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+        _pin(to: item2, insets: insets, axis: axis, alignment: alignment, isCenteringEnabled: true, priority: priority)
     }
 
-    private func pin(to item2: LayoutItem?, insets: EdgeInsets, axis: Axis?, alignment: Alignment, isCenteringEnabled: Bool, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
-        let item2 = item2 ?? {
-            guard let superview = item.superview else {
-                preconditionFailure("Align: \(item) has no superview; pass an explicit container")
-            }
-            return superview
-        }()
+    @usableFromInline func _pin(to item2: LayoutItem?, insets: EdgeInsets, axis: Axis?, alignment: Alignment, isCenteringEnabled: Bool, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+        let item2 = item2 ?? item._requireSuperview()
         item._disableAutoresizingMask()
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing
@@ -445,32 +452,37 @@ public enum AnchorType: Sendable {
 
 /// Create multiple constraints at once by using both `centerX` and `centerY` anchors.
 @MainActor public struct AnchorCollectionCenter {
-    let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
-    let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
+    @usableFromInline let x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>
+    @usableFromInline let y: Anchor<AnchorType.Center, AnchorAxis.Vertical>
+
+    @usableFromInline init(x: Anchor<AnchorType.Center, AnchorAxis.Horizontal>, y: Anchor<AnchorType.Center, AnchorAxis.Vertical>) {
+        self.x = x
+        self.y = y
+    }
 
     // MARK: Core API
 
-    @discardableResult public func equal<Item: LayoutItem>(_ item2: Item, offset: CGPoint = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func equal<Item: LayoutItem>(_ item2: Item, offset: CGPoint = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [x.equal(item2.anchors.centerX, constant: offset.x, priority: priority), y.equal(item2.anchors.centerY, constant: offset.y, priority: priority)]
     }
 
-    @discardableResult public func greaterThanOrEqual<Item: LayoutItem>(_ item2: Item, offset: CGPoint = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func greaterThanOrEqual<Item: LayoutItem>(_ item2: Item, offset: CGPoint = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [x.greaterThanOrEqual(item2.anchors.centerX, constant: offset.x, priority: priority), y.greaterThanOrEqual(item2.anchors.centerY, constant: offset.y, priority: priority)]
     }
 
-    @discardableResult public func lessThanOrEqual<Item: LayoutItem>(_ item2: Item, offset: CGPoint = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func lessThanOrEqual<Item: LayoutItem>(_ item2: Item, offset: CGPoint = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [x.lessThanOrEqual(item2.anchors.centerX, constant: offset.x, priority: priority), y.lessThanOrEqual(item2.anchors.centerY, constant: offset.y, priority: priority)]
     }
 
     // MARK: Semantic API
 
     /// Centers the view in the superview.
-    @discardableResult public func align(offset: CGPoint = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func align(offset: CGPoint = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [x.align(offset: offset.x, priority: priority), y.align(offset: offset.y, priority: priority)]
     }
 
     /// Makes the axis equal to the other collection of axis.
-    @discardableResult public func align<Item: LayoutItem>(with item: Item, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func align<Item: LayoutItem>(with item: Item, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [x.equal(item.anchors.centerX, priority: priority), y.equal(item.anchors.centerY, priority: priority)]
     }
 }
@@ -479,36 +491,41 @@ public enum AnchorType: Sendable {
 
 /// Create multiple constraints at once by using both `width` and `height` anchors.
 @MainActor public struct AnchorCollectionSize {
-    let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
-    let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
+    @usableFromInline let width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>
+    @usableFromInline let height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>
+
+    @usableFromInline init(width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal>, height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical>) {
+        self.width = width
+        self.height = height
+    }
 
     // MARK: Core API
 
     /// Set the size of item.
-    @discardableResult public func equal(_ size: CGSize, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func equal(_ size: CGSize, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [width.equal(size.width, priority: priority), height.equal(size.height, priority: priority)]
     }
 
     /// Set the size of item.
-    @discardableResult public func greaterThanOrEqual(_ size: CGSize, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func greaterThanOrEqual(_ size: CGSize, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [width.greaterThanOrEqual(size.width, priority: priority), height.greaterThanOrEqual(size.height, priority: priority)]
     }
 
     /// Set the size of item.
-    @discardableResult public func lessThanOrEqual(_ size: CGSize, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func lessThanOrEqual(_ size: CGSize, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [width.lessThanOrEqual(size.width, priority: priority), height.lessThanOrEqual(size.height, priority: priority)]
     }
 
     /// Makes the size of the item equal to the size of the other item.
-    @discardableResult public func equal<Item: LayoutItem>(_ item: Item, insets: CGSize = .zero, multiplier: CGFloat = 1, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func equal<Item: LayoutItem>(_ item: Item, insets: CGSize = .zero, multiplier: CGFloat = 1, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [width.equal(item.anchors.width * multiplier - insets.width, priority: priority), height.equal(item.anchors.height * multiplier - insets.height, priority: priority)]
     }
 
-    @discardableResult public func greaterThanOrEqual<Item: LayoutItem>(_ item: Item, insets: CGSize = .zero, multiplier: CGFloat = 1, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func greaterThanOrEqual<Item: LayoutItem>(_ item: Item, insets: CGSize = .zero, multiplier: CGFloat = 1, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [width.greaterThanOrEqual(item.anchors.width * multiplier - insets.width, priority: priority), height.greaterThanOrEqual(item.anchors.height * multiplier - insets.height, priority: priority)]
     }
 
-    @discardableResult public func lessThanOrEqual<Item: LayoutItem>(_ item: Item, insets: CGSize = .zero, multiplier: CGFloat = 1, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult public func lessThanOrEqual<Item: LayoutItem>(_ item: Item, insets: CGSize = .zero, multiplier: CGFloat = 1, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [width.lessThanOrEqual(item.anchors.width * multiplier - insets.width, priority: priority), height.lessThanOrEqual(item.anchors.height * multiplier - insets.height, priority: priority)]
     }
 }
@@ -610,7 +627,7 @@ public struct Constraints: Collection {
 
     @MainActor static var stack: [[NSLayoutConstraint]] = [] // this is what enables constraint auto-installing
 
-    @MainActor static func install(_ constraint: NSLayoutConstraint, priority: LayoutPriority? = nil) {
+    @MainActor @usableFromInline static func install(_ constraint: NSLayoutConstraint, priority: LayoutPriority? = nil) {
         if let priority { constraint.priority = priority }
         if !stack.isEmpty {
             stack[stack.count - 1].append(constraint)
@@ -642,7 +659,7 @@ public extension NSEdgeInsets {
 #endif
 
 extension NSLayoutConstraint.Relation {
-    var inverted: NSLayoutConstraint.Relation {
+    @usableFromInline var inverted: NSLayoutConstraint.Relation {
         switch self {
         case .greaterThanOrEqual: return .lessThanOrEqual
         case .lessThanOrEqual: return .greaterThanOrEqual
