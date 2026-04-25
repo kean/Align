@@ -29,20 +29,24 @@ import AppKit
     public typealias Axis = NSLayoutConstraint.Orientation
 #endif
 
-    // MARK: Core API
+    // MARK: Core API (Deprecated)
 
+    @available(*, deprecated, message: "Use pin(to:insets:priority:) instead")
     @inlinable @discardableResult public func equal(_ item2: LayoutItem, insets: EdgeInsets = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         pin(to: item2, insets: insets, priority: priority)
     }
 
+    @available(*, deprecated, message: "Use pin(to:insets:alignment:priority:) with alignment .center instead")
     @inlinable @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: EdgeInsets = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         _pin(to: item2, insets: insets, axis: nil, alignment: .center, isCenteringEnabled: false, priority: priority)
     }
 
+    @available(*, deprecated, message: "Use pin(to:insets:priority:) instead")
     @inlinable @discardableResult public func equal(_ item2: LayoutItem, insets: CGFloat, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), priority: priority)
     }
 
+    @available(*, deprecated, message: "Use pin(to:insets:alignment:priority:) with alignment .center instead")
     @inlinable @discardableResult public func lessThanOrEqual(_ item2: LayoutItem, insets: CGFloat, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         _pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: nil, alignment: .center, isCenteringEnabled: false, priority: priority)
     }

@@ -73,21 +73,21 @@ view.anchors.edges.pin(insets: 20, axis: .horizontal, alignment: .center)
 
 ## Topics
 
-### Core Constraints
-
-- ``equal(_:insets:priority:)-(_,EdgeInsets,_)``
-- ``equal(_:insets:priority:)-(_,CGFloat,_)``
-- ``lessThanOrEqual(_:insets:priority:)-(_,EdgeInsets,_)``
-- ``lessThanOrEqual(_:insets:priority:)-(_,CGFloat,_)``
-
 ### Semantic Constraints
 
 - ``pin(to:insets:axis:alignment:priority:)-(_,EdgeInsets,_,_,_)``
 - ``pin(to:insets:axis:alignment:priority:)-(_,CGFloat,_,_,_)``
 
-### Instance Methods
+### Instance Properties
 
-- ``absolute()``
+- ``absolute``
+
+### Deprecated
+
+- ``equal(_:insets:priority:)-(_,EdgeInsets,_)``
+- ``equal(_:insets:priority:)-(_,CGFloat,_)``
+- ``lessThanOrEqual(_:insets:priority:)-(_,EdgeInsets,_)``
+- ``lessThanOrEqual(_:insets:priority:)-(_,CGFloat,_)``
 
 ### Nested Types
 
