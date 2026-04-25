@@ -61,9 +61,10 @@ The [**documentation**](https://kean-docs.github.io/align/documentation/align/) 
 
 ## Requirements
 
-| Align          | Swift       | Xcode             | Platforms                    |
-|----------------|-------------|-------------------|------------------------------|
-| Align 3.3      | Swift 5.10  | Xcode 15.3        | iOS 14, tvOS 14, macOS 10.16 |
+| Align          | Swift       | Xcode             | Platforms                                  |
+|----------------|-------------|-------------------|--------------------------------------------|
+| Align 4.0      | Swift 6.0   | Xcode 16          | iOS 15, tvOS 15, macOS 13, visionOS 1      |
+| Align 3.3      | Swift 5.10  | Xcode 15.3        | iOS 14, tvOS 14, macOS 10.16               |
 
 ## Why Align
 
