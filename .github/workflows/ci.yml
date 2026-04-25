@@ -1,40 +1,73 @@
 name: "Align CI"
 
-on: 
+on:
   push:
-    branches: 
+    branches:
       - main
   pull_request:
-    branches: 
+    branches:
       - '*'
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  macos-run-tests:
-    name: Unit Tests (macOS, Xcode 15.3)
-    runs-on: macOS-14
+  ios-latest:
+    name: Unit Tests (iOS 26.2, Xcode 26.2)
+    runs-on: macOS-26
+    timeout-minutes: 20
     env:
-      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - name: Boot simulator
+        run: |
+          xcrun simctl boot "iPhone 17 Pro"
+          xcrun simctl bootstatus "iPhone 17 Pro" -b
       - name: Run Tests
-        run: swift test
-
-  ios-run-tests-15:
-    name: Unit Tests (iOS 17.3, Xcode 15.3)
-    runs-on: macOS-14
+        run: xcodebuild test -scheme "Align" -destination "OS=26.2,name=iPhone 17 Pro" | xcbeautify
+  macos-latest:
+    name: Unit Tests (macOS, Xcode 26.2)
+    runs-on: macOS-26
+    timeout-minutes: 20
     env:
-      DEVELOPER_DIR: /Applications/Xcode_15.3.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Run Tests
-        run: xcodebuild test -scheme "Align" -destination "OS=17.3,name=iPhone 15 Pro"
-
-  ios-run-tests-14:
-    name: Unit Tests (iOS 16.4, Xcode 14.3.1)
-    runs-on: macOS-13
+        run: xcodebuild test -scheme "Align" -destination "platform=macOS" | xcbeautify
+  tvos-latest:
+    name: Unit Tests (tvOS 26.2, Xcode 26.2)
+    runs-on: macOS-26
+    timeout-minutes: 20
     env:
-      DEVELOPER_DIR: /Applications/Xcode_14.3.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - name: Boot simulator
+        run: |
+          xcrun simctl boot "Apple TV"
+          xcrun simctl bootstatus "Apple TV" -b
       - name: Run Tests
-        run: xcodebuild test -scheme "Align" -destination "OS=16.4,name=iPhone 14 Pro"
+        run: xcodebuild test -scheme "Align" -destination "OS=26.2,name=Apple TV" | xcbeautify
+  macos-xcode-26-0:
+    name: Unit Tests (macOS, Xcode 26.0)
+    runs-on: macOS-26
+    timeout-minutes: 20
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.0.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Tests
+        run: xcodebuild test -scheme "Align" -destination "platform=macOS" | xcbeautify
+  swift-build:
+    name: Swift Build (SPM)
+    runs-on: macOS-26
+    timeout-minutes: 20
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: swift build
