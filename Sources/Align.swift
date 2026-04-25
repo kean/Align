@@ -631,3 +631,39 @@ extension EdgeInsets {
         }
     }
 }
+
+// MARK: - Preview
+
+#if os(iOS) || os(tvOS)
+@available(iOS 17.0, tvOS 17.0, *)
+#Preview {
+    let view = UIView()
+    view.backgroundColor = .white
+
+    let logo = UILabel()
+    logo.font = .systemFont(ofSize: 30)
+    logo.text = "⛵️"
+
+    let title = UILabel()
+    title.font = .systemFont(ofSize: 20, weight: .bold)
+    title.text = "Welcome to Align!"
+
+    let subtitle = UILabel()
+    subtitle.font = .systemFont(ofSize: 15)
+    subtitle.numberOfLines = 0
+    subtitle.text = "An intuitive and powerful Auto Layout"
+
+    let textStack = UIStackView(arrangedSubviews: [title, subtitle])
+    textStack.axis = .vertical
+
+    let stack = UIStackView(arrangedSubviews: [logo, textStack])
+    stack.spacing = 10
+    stack.alignment = .top
+
+    view.addSubview(stack)
+    stack.anchors.centerY.align()
+    stack.anchors.edges.pin(to: view.layoutMarginsGuide, axis: .horizontal, alignment: .center)
+
+    return view
+}
+#endif

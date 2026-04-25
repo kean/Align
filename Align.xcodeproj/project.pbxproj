@@ -37,7 +37,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0C62A9A81FD28B5900C6EA6E /* Align.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Align.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		0C683A0F1FBA4624002ACEB9 /* AnchorCollectionEdgesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnchorCollectionEdgesTests.swift; sourceTree = "<group>"; };
 		0C6C05D2287F102F009CFDE6 /* ci.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; name = ci.yml; path = .github/workflows/ci.yml; sourceTree = "<group>"; };
 		0C81ABB61C889C100036DFD4 /* Align.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Align.swift; sourceTree = "<group>"; };
@@ -126,7 +125,6 @@
 		0CE3610E1C86077B00EA70CF = {
 			isa = PBXGroup;
 			children = (
-				0C62A9A81FD28B5900C6EA6E /* Align.playground */,
 				0CE361261C8607D600EA70CF /* Sources */,
 				0CC3A0721D7476B300754E59 /* Tests */,
 				0CD220BB22BBECD70095AD2A /* Metadata */,

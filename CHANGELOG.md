@@ -5,6 +5,7 @@
 ## Align 3.4 (WIP)
 
 - Fix typo in public API: rename `greaterThanOrEqul(_:)` to `greaterThanOrEqual(_:)` on `AnchorCollectionSize`
+- Remove `Align.playground` in favor of an inline `#Preview` in `Sources/Align.swift`
 
 ## Align 3.3
 
