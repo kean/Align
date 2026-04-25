@@ -11,21 +11,37 @@ import AppKit
 /// A type that has layout anchors: either a view or a layout guide.
 @MainActor public protocol LayoutItem {
 #if os(iOS) || os(tvOS)
-    var superview: UIView? { get }
+    @_spi(Align) var superview: UIView? { get }
 #else
-    var superview: NSView? { get }
+    @_spi(Align) var superview: NSView? { get }
 #endif
+
+    @_spi(Align) func _disableAutoresizingMask()
+}
+
+extension LayoutItem {
+    @_spi(Align) public func _disableAutoresizingMask() {}
 }
 
 #if os(iOS) || os(tvOS)
-extension UIView: LayoutItem {}
+extension UIView: LayoutItem {
+    @_spi(Align) public func _disableAutoresizingMask() {
+        guard !translatesAutoresizingMaskIntoConstraints else { return }
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+}
 extension UILayoutGuide: LayoutItem {
-    public var superview: UIView? { owningView }
+    @_spi(Align) public var superview: UIView? { owningView }
 }
 #elseif os(macOS)
-extension NSView: LayoutItem {}
+extension NSView: LayoutItem {
+    @_spi(Align) public func _disableAutoresizingMask() {
+        guard !translatesAutoresizingMaskIntoConstraints else { return }
+        translatesAutoresizingMaskIntoConstraints = false
+    }
+}
 extension NSLayoutGuide: LayoutItem {
-    public var superview: NSView? { owningView }
+    @_spi(Align) public var superview: NSView? { owningView }
 }
 #endif
 
@@ -568,12 +584,8 @@ public enum AnchorType: Sendable {
     // MARK: Adding Constraints
 
     /// Creates and automatically installs a constraint.
-    static func add(item item1: Any, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: Any? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
-#if os(iOS) || os(tvOS)
-        (item1 as? UIView)?.translatesAutoresizingMaskIntoConstraints = false
-#elseif os(macOS)
-        (item1 as? NSView)?.translatesAutoresizingMaskIntoConstraints = false
-#endif
+    static func add(item item1: LayoutItem, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: LayoutItem? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+        item1._disableAutoresizingMask()
         let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
         install(constraint, priority: priority)
         return constraint
@@ -586,7 +598,7 @@ public enum AnchorType: Sendable {
 
     /// Creates and automatically installs a constraint between an anchor and
     /// a given item.
-    static func add<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: Any?, attribute attr2: NSLayoutConstraint.Attribute?, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    static func add<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: LayoutItem?, attribute attr2: NSLayoutConstraint.Attribute?, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         add(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: constant - lhs.offset, priority: priority)
     }
 
