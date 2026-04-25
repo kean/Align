@@ -329,12 +329,13 @@ public enum AnchorType: Sendable {
             }
             return superview
         }()
+        item._disableAutoresizingMask()
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing
         var constraints = [NSLayoutConstraint]()
 
         func constrain(attribute: NSLayoutConstraint.Attribute, relation: NSLayoutConstraint.Relation, constant: CGFloat) {
-            constraints.append(Constraints.add(item: item, attribute: attribute, relatedBy: relation, toItem: item2, attribute: attribute, multiplier: 1, constant: constant, priority: priority))
+            constraints.append(Constraints._add(item: item, attribute: attribute, relatedBy: relation, toItem: item2, attribute: attribute, multiplier: 1, constant: constant, priority: priority))
         }
 
         if axis == nil || axis == .horizontal {
@@ -592,6 +593,13 @@ public enum AnchorType: Sendable {
     /// Creates and automatically installs a constraint.
     @usableFromInline static func add(item item1: LayoutItem, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: LayoutItem? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         item1._disableAutoresizingMask()
+        return _add(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier, constant: constant, priority: priority)
+    }
+
+    // Same as `add(item:…)` but assumes the caller has already invoked
+    // `_disableAutoresizingMask()` on the receiving item. Used by collection
+    // methods to amortise the autoresizing-mask check across many constraints.
+    static func _add(item item1: LayoutItem, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: LayoutItem? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
         install(constraint, priority: priority)
         return constraint
