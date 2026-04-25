@@ -2,7 +2,7 @@
 
 ### Pin Edges
 
-The main API available for edges is ``pin(to:insets:axis:alignment:priority:)`` that pins the edges to the container.
+The main API available for edges is ``pin(to:insets:axis:alignment:priority:)-(_,EdgeInsets,_,_,_)`` that pins the edges to the container.
 
 ```swift
 // A convenience method:
@@ -33,7 +33,7 @@ view.anchors.edges.pin(to: container.safeAreaLayoutGuide)
 
 ### Pin with Alignment
 
-By default, ``pin(to:insets:axis:alignment:priority:)`` uses alignment ``Alignment/fill``, but there are many other alignments available. For example, with ``Alignment/center``, the view is centered in the container and the edges are pinned with "less than or equal" constraints making sure it doesn't overflow the container.
+By default, ``pin(to:insets:axis:alignment:priority:)-(_,EdgeInsets,_,_,_)`` uses alignment ``Alignment/fill``, but there are many other alignments available. For example, with ``Alignment/center``, the view is centered in the container and the edges are pinned with "less than or equal" constraints making sure it doesn't overflow the container.
 
 ```swift
 view.anchors.edges.pin(insets: 20, alignment: .center)
@@ -75,12 +75,15 @@ view.anchors.edges.pin(insets: 20, axis: .horizontal, alignment: .center)
 
 ### Core Constraints
 
-- ``equal(_:insets:priority:)``
-- ``lessThanOrEqual(_:insets:priority:)``
+- ``equal(_:insets:priority:)-(_,EdgeInsets,_)``
+- ``equal(_:insets:priority:)-(_,CGFloat,_)``
+- ``lessThanOrEqual(_:insets:priority:)-(_,EdgeInsets,_)``
+- ``lessThanOrEqual(_:insets:priority:)-(_,CGFloat,_)``
 
 ### Semantic Constraints
 
-- ``pin(to:insets:axis:alignment:priority:)``
+- ``pin(to:insets:axis:alignment:priority:)-(_,EdgeInsets,_,_,_)``
+- ``pin(to:insets:axis:alignment:priority:)-(_,CGFloat,_,_,_)``
 
 ### Instance Methods
 

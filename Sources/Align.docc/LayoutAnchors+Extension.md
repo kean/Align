@@ -35,7 +35,3 @@
 ### Accessing Underlying View
 
 - ``item``
-
-### Deprecated 
-
-- ``base``

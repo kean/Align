@@ -272,13 +272,15 @@ public enum AnchorType {
     /// Pins the edges to the edges of the given item. By default, pins the edges
     /// to the superview.
     ///
-    /// - parameter target: The target view, by default, uses the superview.
+    /// - parameter item2: The target view, by default, uses the superview.
     /// - parameter insets: Insets the receiver's edges by the given insets.
     /// - parameter axis: If provided, creates constraints only along the given
     /// axis. For example, if you pass axis `.horizontal`, only the `.leading`,
     /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
     /// - parameter alignment: `.fill` by default, see `Alignment` for a list of
     /// the available options.
+    /// - parameter priority: The priority of the created constraints. Uses the
+    /// system's default priority when `nil`.
     @discardableResult public func pin(to item2: LayoutItem? = nil, insets: CGFloat, axis: Axis? = nil, alignment: Alignment = .fill, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         pin(to: item2, insets: EdgeInsets(top: insets, left: insets, bottom: insets, right: insets), axis: axis, alignment: alignment, priority: priority)
     }
@@ -286,13 +288,15 @@ public enum AnchorType {
     /// Pins the edges to the edges of the given item. By default, pins the edges
     /// to the superview.
     ///
-    /// - parameter target: The target view, by default, uses the superview.
+    /// - parameter item2: The target view, by default, uses the superview.
     /// - parameter insets: Insets the receiver's edges by the given insets.
     /// - parameter axis: If provided, creates constraints only along the given
     /// axis. For example, if you pass axis `.horizontal`, only the `.leading`,
     /// `.trailing` (and `.centerX` if needed) attributes are used. `nil` by default
     /// - parameter alignment: `.fill` by default, see `Alignment` for a list of
     /// the available options.
+    /// - parameter priority: The priority of the created constraints. Uses the
+    /// system's default priority when `nil`.
     @discardableResult public func pin(to item2: LayoutItem? = nil, insets: EdgeInsets = .zero, axis: Axis? = nil, alignment: Alignment = .fill, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         pin(to: item2, insets: insets, axis: axis, alignment: alignment, isCenteringEnabled: true, priority: priority)
     }
@@ -535,6 +539,8 @@ public enum AnchorType {
     ///
     /// - parameter activate: Set to `false` to disable automatic activation of
     /// constraints.
+    /// - parameter closure: A closure in which constraints are created. The
+    /// constraints are collected and activated together when the closure returns.
     @discardableResult public init(activate: Bool = true, _ closure: () -> Void) {
         Constraints.stack.append(self)
         closure() // create constraints

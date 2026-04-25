@@ -66,9 +66,9 @@ a.anchors.width.lessThanOrEqual(200)
 
 These constraints can be added between anchors that represent view edges and center, but only if they operate in the same axis.
 
-- ``equal(_:constant:priority:)``
-- ``greaterThanOrEqual(_:constant:priority:)``
-- ``lessThanOrEqual(_:constant:priority:)``
+- ``equal(_:constant:priority:)-(Anchor<OtherType,Axis>,_,_)``
+- ``greaterThanOrEqual(_:constant:priority:)-(Anchor<OtherType,Axis>,_,_)``
+- ``lessThanOrEqual(_:constant:priority:)-(Anchor<OtherType,Axis>,_,_)``
 
 ### Core Constraints for Dimensions
 
@@ -76,9 +76,9 @@ These constraints can be added between anchors that represent view edges and cen
 - ``greaterThanOrEqual(_:priority:)``
 - ``lessThanOrEqual(_:priority:)``
 
-- ``equal(_:constant:priority:)``
-- ``greaterThanOrEqual(_:constant:priority:)``
-- ``lessThanOrEqual(_:constant:priority:)``
+- ``equal(_:constant:priority:)-(Anchor<OtherType,OtherAxis>,_,_)``
+- ``greaterThanOrEqual(_:constant:priority:)-(Anchor<OtherType,OtherAxis>,_,_)``
+- ``lessThanOrEqual(_:constant:priority:)-(Anchor<OtherType,OtherAxis>,_,_)``
 
 ### Core Constraints
 

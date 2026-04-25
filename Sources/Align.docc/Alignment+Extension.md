@@ -1,4 +1,4 @@
-# ``Align/Alignment``
+# ``Align/AnchorCollectionEdges/Alignment``
 
 ## Topics
 
