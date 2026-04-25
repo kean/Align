@@ -564,7 +564,7 @@ public enum AnchorType: Sendable {
 ///
 /// Nesting is supported: each constraint is collected by the innermost group,
 /// and each group honors its own `activate:` flag independently.
-public struct Constraints: Collection {
+public struct Constraints: RandomAccessCollection {
     public typealias Element = NSLayoutConstraint
     public typealias Index = Int
 
@@ -665,17 +665,6 @@ extension NSLayoutConstraint.Relation {
         case .lessThanOrEqual: return .greaterThanOrEqual
         case .equal: return self
         @unknown default: return self
-        }
-    }
-}
-
-extension EdgeInsets {
-    func inset(for attribute: NSLayoutConstraint.Attribute, edge: Bool = false) -> CGFloat {
-        switch attribute {
-        case .top: return top; case .bottom: return edge ? -bottom : bottom
-        case .left, .leading: return left
-        case .right, .trailing: return edge ? -right : right
-        default: return 0
         }
     }
 }
