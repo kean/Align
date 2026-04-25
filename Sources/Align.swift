@@ -209,7 +209,7 @@ public enum AnchorType: Sendable {
 
     /// Clamps the dimension of a view to the given limiting range.
     @inlinable @discardableResult consuming func clamp(to limits: ClosedRange<CGFloat>, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
-        [greaterThanOrEqual(limits.lowerBound, priority: priority), lessThanOrEqual(limits.upperBound, priority: priority)]
+        [(copy self).greaterThanOrEqual(limits.lowerBound, priority: priority), lessThanOrEqual(limits.upperBound, priority: priority)]
     }
 }
 
@@ -217,7 +217,7 @@ public enum AnchorType: Sendable {
 
 @MainActor public extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the respected edges of the given container.
-    @discardableResult func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @discardableResult consuming func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         let isInverted: Bool = switch attribute {
         case .trailing, .right, .bottom: true
         default: false
@@ -232,7 +232,7 @@ public enum AnchorType: Sendable {
     }
 
     /// Adds spacing between the current anchors.
-    @discardableResult func spacing<OtherType: AnchorType.Edge>(_ spacing: CGFloat, to anchor: Anchor<OtherType, Axis>, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @discardableResult consuming func spacing<OtherType: AnchorType.Edge>(_ spacing: CGFloat, to anchor: consuming Anchor<OtherType, Axis>, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         let isInverted = (attribute == .bottom && anchor.attribute == .top) ||
         (attribute == .right && anchor.attribute == .left) ||
         (attribute == .trailing && anchor.attribute == .leading)
@@ -244,7 +244,7 @@ public enum AnchorType: Sendable {
 
 @MainActor public extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
-    @discardableResult func align(offset: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @discardableResult consuming func align(offset: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         guard let superview = item.superview else {
             preconditionFailure("Align: \(item) has no superview; pass an explicit container")
         }
