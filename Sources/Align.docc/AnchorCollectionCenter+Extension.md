@@ -10,11 +10,11 @@ a.anchors.center.align()
 
 ### Core Constraints
 
-- ``equal(_:offset:)``
-- ``lessThanOrEqual(_:offset:)``
-- ``greaterThanOrEqual(_:offset:)``
+- ``equal(_:offset:priority:)``
+- ``lessThanOrEqual(_:offset:priority:)``
+- ``greaterThanOrEqual(_:offset:priority:)``
 
 ### Semantic Constraints
 
-- ``align()``
-- ``align(with:)``
+- ``align(priority:)``
+- ``align(with:priority:)``

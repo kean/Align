@@ -2,7 +2,7 @@
 
 ### Pin Edges
 
-The main API available for edges is ``pin(to:insets:axis:alignment:)-2uvy8`` that pins the edges to the container.
+The main API available for edges is ``pin(to:insets:axis:alignment:priority:)`` that pins the edges to the container.
 
 ```swift
 // A convenience method:
@@ -33,7 +33,7 @@ view.anchors.edges.pin(to: container.safeAreaLayoutGuide)
 
 ### Pin with Alignment
 
-By default, ``pin(to:insets:axis:alignment:)-2uvy8`` uses alignment ``Alignment/fill``, but there are many other alignments available. For example, with ``Alignment/center``, the view is centered in the container and the edges are pinned with "less than or equal" constraints making sure it doesn't overflow the container.
+By default, ``pin(to:insets:axis:alignment:priority:)`` uses alignment ``Alignment/fill``, but there are many other alignments available. For example, with ``Alignment/center``, the view is centered in the container and the edges are pinned with "less than or equal" constraints making sure it doesn't overflow the container.
 
 ```swift
 view.anchors.edges.pin(insets: 20, alignment: .center)
@@ -75,15 +75,12 @@ view.anchors.edges.pin(insets: 20, axis: .horizontal, alignment: .center)
 
 ### Core Constraints
 
-- ``equal(_:insets:)-69yv2``
-- ``equal(_:insets:)-789w8``
-- ``lessThanOrEqual(_:insets:)-a9x4``
-- ``lessThanOrEqual(_:insets:)-ty0q``
+- ``equal(_:insets:priority:)``
+- ``lessThanOrEqual(_:insets:priority:)``
 
 ### Semantic Constraints
 
-- ``pin(to:insets:axis:alignment:)-74nhn``
-- ``pin(to:insets:axis:alignment:)-2uvy8``
+- ``pin(to:insets:axis:alignment:priority:)``
 
 ### Instance Methods
 

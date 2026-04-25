@@ -16,9 +16,9 @@ a.anchors.size.equal(b)
 
 ### Core Constraints
 
-- ``equal(_:)``
-- ``equal(_:insets:multiplier:)``
-- ``lessThanOrEqual(_:)``
-- ``lessThanOrEqual(_:insets:multiplier:)``
-- ``greaterThanOrEqual(_:)``
-- ``greaterThanOrEqual(_:insets:multiplier:)``
+- ``equal(_:priority:)``
+- ``equal(_:insets:multiplier:priority:)``
+- ``lessThanOrEqual(_:priority:)``
+- ``lessThanOrEqual(_:insets:multiplier:priority:)``
+- ``greaterThanOrEqual(_:priority:)``
+- ``greaterThanOrEqual(_:insets:multiplier:priority:)``

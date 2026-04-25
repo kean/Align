@@ -15,6 +15,12 @@ Constraints(for: title, subtitle) { title, subtitle in
 }
 ```
 
+> tip: Every constraint-creating method also accepts an optional `priority:` parameter, so the priority can be set inline without wrapping the call in a `Constraints` group:
+>
+> ```swift
+> subtitle.anchors.bottom.pin(priority: .init(999))
+> ```
+
 `Constraints` also give you easy access to Align anchors (notice, there is no `.anchors` call in the example). And if you want to not activate the constraints, there is an option for that:
 
 ```swift

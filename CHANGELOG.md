@@ -4,6 +4,8 @@
 
 ## Align 3.4 (WIP)
 
+- Add an optional `priority:` parameter to all constraint-creating methods, allowing the priority to be set at creation time without needing to wrap the call in a `Constraints` group
+- Add a `LayoutPriority` typealias (`UILayoutPriority` on iOS/tvOS, `NSLayoutConstraint.Priority` on macOS)
 - Fix typo in public API: rename `greaterThanOrEqul(_:)` to `greaterThanOrEqual(_:)` on `AnchorCollectionSize`
 - Remove `Align.playground` in favor of an inline `#Preview` in `Sources/Align.swift`
 - Replace `superview!` force-unwraps in `pin()` and `align()` with `precondition`s that report the offending view, instead of an opaque `Optional("nil")` trap

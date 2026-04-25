@@ -50,25 +50,35 @@ a.anchors.width.clamp(to: 40...100)
 
 ![06](06.png)
 
+### Setting a Priority
+
+Every constraint-creating method accepts an optional `priority:` parameter. When `nil` (the default), the system's default priority is used.
+
+```swift
+// Set a required width, with a fallback maximum
+a.anchors.width.equal(100, priority: .defaultHigh)
+a.anchors.width.lessThanOrEqual(200)
+```
+
 ## Topics
 
 ### Core Constraints for Edges and Center
 
 These constraints can be added between anchors that represent view edges and center, but only if they operate in the same axis.
 
-- ``equal(_:constant:)-9a08m``
-- ``greaterThanOrEqual(_:constant:)-3ths2``
-- ``lessThanOrEqual(_:constant:)-9nco3``
+- ``equal(_:constant:priority:)``
+- ``greaterThanOrEqual(_:constant:priority:)``
+- ``lessThanOrEqual(_:constant:priority:)``
 
 ### Core Constraints for Dimensions
 
-- ``equal(_:)``
-- ``greaterThanOrEqual(_:)``
-- ``lessThanOrEqual(_:)``
+- ``equal(_:priority:)``
+- ``greaterThanOrEqual(_:priority:)``
+- ``lessThanOrEqual(_:priority:)``
 
-- ``equal(_:constant:)-88kx7``
-- ``greaterThanOrEqual(_:constant:)-6c6e9``
-- ``lessThanOrEqual(_:constant:)-9dk3k``
+- ``equal(_:constant:priority:)``
+- ``greaterThanOrEqual(_:constant:priority:)``
+- ``lessThanOrEqual(_:constant:priority:)``
 
 ### Core Constraints
 
@@ -77,16 +87,16 @@ These constraints can be added between anchors that represent view edges and cen
 
 ### Semantic Constraints for Edges
 
-- ``pin(to:inset:)``
-- ``spacing(_:to:relation:)``
+- ``pin(to:inset:priority:)``
+- ``spacing(_:to:relation:priority:)``
 
 ### Semantic Constraints for Dimensions
 
-- ``clamp(to:)``
+- ``clamp(to:priority:)``
 
 ### Semantic Constraints for Center
 
-- ``align(offset:)``
+- ``align(offset:priority:)``
 
 ### Anchor Parameters
 
