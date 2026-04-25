@@ -620,12 +620,9 @@ public struct Constraints: Collection {
     }
 }
 
-public extension Constraints {
+extension Constraints {
     @MainActor @discardableResult
-    init<each Item: LayoutItem>(
-        for item: repeat each Item,
-        closure: (repeat LayoutAnchors<each Item>) -> Void
-    ) {
+    public init<each Item: LayoutItem>(for item: repeat each Item, closure: (repeat LayoutAnchors<each Item>) -> Void) {
         self.init { closure(repeat (each item).anchors) }
     }
 }
