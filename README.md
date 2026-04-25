@@ -1,7 +1,10 @@
 ![logo](https://user-images.githubusercontent.com/1567433/178810472-8b5f687e-ed7f-491c-99ed-e86e563462ef.png)
 
 <p align="left">
-<img src="https://img.shields.io/badge/platforms-iOS%2C%20tvOS%2C%20macOS-lightgrey.svg?colorA=28a745">
+<img src="https://img.shields.io/badge/Swift-5.10-orange.svg">
+<img src="https://img.shields.io/badge/platforms-iOS%20%7C%20tvOS%20%7C%20macOS-lightgrey.svg?colorA=28a745">
+<img src="https://img.shields.io/badge/SPM-supported-brightgreen.svg">
+<img src="https://img.shields.io/badge/license-MIT-blue.svg">
 </p>
 
 The best way to create constraints in code.
@@ -12,7 +15,23 @@ The best way to create constraints in code.
 - **Fluent**. Concise and clear API that follows [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/).  
 - **Simple**. Stop worrying about `translatesAutoresizingMaskIntoConstraints` and constraints activation.  
 
-Example usage:
+The same constraint, with and without Align:
+
+```swift
+// NSLayoutAnchor
+view.translatesAutoresizingMaskIntoConstraints = false
+NSLayoutConstraint.activate([
+    view.topAnchor.constraint(equalTo: superview.topAnchor, constant: 20),
+    view.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: 20),
+    view.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -20),
+    view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -20)
+])
+
+// Align
+view.anchors.edges.pin(insets: 20)
+```
+
+More examples:
 
 ```swift
 // Core API
@@ -20,7 +39,6 @@ view.anchors.top.equal(superview.top)
 view.anchors.width.equal(view.anchors.height * 2)
 
 // Semantic API
-view.anchors.edges.pin(insets: 20) // Pins to superview
 view.anchors.edges.pin(to: superview.safeAreaLayoutGuide, insets: 20)
 view.anchors.width.clamp(to: 10...40)
 ```
@@ -46,16 +64,15 @@ The [**documentation**](https://kean-docs.github.io/align/documentation/align/) 
 | Align          | Swift       | Xcode             | Platforms                    |
 |----------------|-------------|-------------------|------------------------------|
 | Align 3.3      | Swift 5.10  | Xcode 15.3        | iOS 14, tvOS 14, macOS 10.16 |
-| Align 3.0      | Swift 5.6   | Xcode 13.3        | iOS 12, tvOS 12, macOS 10.14 |
 
 ## Why Align
 
 Align strives for clarity and simplicity by following [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/). Although most of the APIs are compact, it is a *non-goal* to enable the most concise syntax possible.
 
-Align is for someone who:
+What you get with Align:
 
-- Prefers fluent high-level APIs
-- Doesn't want to depend on big, complex libraries – Align has only ~330 lines of code
-- Prefers to have as little extensions for native classes as possible – Align adds a single property: `anchors` 
-- Doesn't overuse operator overloads, prefers [fast compile times](https://github.com/robb/Cartography/issues/215)
-- Likes [NSLayoutAnchor](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html) but wishes it had simpler API which didn't require manually activating constraints
+- **Fluent, high-level API** for everyday Auto Layout
+- **Lightweight** – ~330 lines, zero dependencies
+- **Minimal surface area** – a single new property, `anchors`, on every view and layout guide
+- **Fast to compile** – built on [`NSLayoutAnchor`](https://developer.apple.com/library/ios/documentation/AppKit/Reference/NSLayoutAnchor_ClassReference/index.html), with no [operator-overload soup](https://github.com/robb/Cartography/issues/215)
+- **No ceremony** – constraints are activated for you, and `translatesAutoresizingMaskIntoConstraints` is handled automatically
