@@ -20,7 +20,7 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 
 ## Getting Started
 
-The entire library fits in a single file with around 300 lines of code. The best way to install it is by using Swift Package Manager, buy you can also simply drag-n-drop it into your app. If you install it as a package, you can avoid having to import it in every file by re-exposing its APIs in your app target:
+The entire library fits in a single file with around 300 lines of code. The best way to install it is by using Swift Package Manager, but you can also simply drag-n-drop it into your app. If you install it as a package, you can avoid having to import it in every file by re-exposing its APIs in your app target:
 
 ```swift
 import Align

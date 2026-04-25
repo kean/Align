@@ -10,7 +10,7 @@ view.anchors.edges.pin(insets: 20)
 
 // Same output as the following:
 view.anchors.edges.pin(
-    to: view.superview!
+    to: view.superview!,
     insets: EdgeInsets(top: 20, left: 20, bottom: 20, trailing: 20),
     alignment: .fill
 )
