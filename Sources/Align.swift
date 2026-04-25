@@ -163,15 +163,15 @@ public enum AnchorType: Sendable {
 // MARK: - Anchors (AnchorType.Alignment)
 
 @MainActor public extension Anchor where Type: AnchorType.Alignment {
-    @inlinable @discardableResult func equal<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func equal<OtherType: AnchorType.Alignment>(_ anchor: consuming Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal, priority: priority)
     }
 
-    @inlinable @discardableResult func greaterThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func greaterThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: consuming Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .greaterThanOrEqual, priority: priority)
     }
 
-    @inlinable @discardableResult func lessThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func lessThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: consuming Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .lessThanOrEqual, priority: priority)
     }
 }
@@ -179,15 +179,15 @@ public enum AnchorType: Sendable {
 // MARK: - Anchors (AnchorType.Dimension)
 
 @MainActor public extension Anchor where Type: AnchorType.Dimension {
-    @inlinable @discardableResult func equal<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func equal<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: consuming Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal, priority: priority)
     }
 
-    @inlinable @discardableResult func greaterThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func greaterThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: consuming Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .greaterThanOrEqual, priority: priority)
     }
 
-    @inlinable @discardableResult func lessThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func lessThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: consuming Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .lessThanOrEqual, priority: priority)
     }
 }
@@ -195,20 +195,20 @@ public enum AnchorType: Sendable {
 // MARK: - Anchors (AnchorType.Dimension)
 
 @MainActor public extension Anchor where Type: AnchorType.Dimension {
-    @inlinable @discardableResult func equal(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func equal(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .equal, constant: constant, priority: priority)
     }
 
-    @inlinable @discardableResult func greaterThanOrEqual(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func greaterThanOrEqual(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .greaterThanOrEqual, constant: constant, priority: priority)
     }
 
-    @inlinable @discardableResult func lessThanOrEqual(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func lessThanOrEqual(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .lessThanOrEqual, constant: constant, priority: priority)
     }
 
     /// Clamps the dimension of a view to the given limiting range.
-    @inlinable @discardableResult func clamp(to limits: ClosedRange<CGFloat>, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult consuming func clamp(to limits: ClosedRange<CGFloat>, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [greaterThanOrEqual(limits.lowerBound, priority: priority), lessThanOrEqual(limits.upperBound, priority: priority)]
     }
 }
