@@ -205,7 +205,11 @@ public enum AnchorType {
     /// Pins the edge to the respected edges of the given container.
     @discardableResult func pin(to container: LayoutItem? = nil, inset: CGFloat = 0) -> NSLayoutConstraint {
         let isInverted = [.trailing, .right, .bottom].contains(attribute)
-        return Constraints.add(self, toItem: container ?? item.superview!, attribute: attribute, constant: (isInverted ? -inset : inset))
+        let target = container ?? {
+            precondition(item.superview != nil, "Align: \(item) has no superview; pass an explicit container")
+            return item.superview!
+        }()
+        return Constraints.add(self, toItem: target, attribute: attribute, constant: (isInverted ? -inset : inset))
     }
 
     /// Adds spacing between the current anchors.
@@ -222,7 +226,8 @@ public enum AnchorType {
 @MainActor public extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
     @discardableResult func align(offset: CGFloat = 0) -> NSLayoutConstraint {
-        Constraints.add(self, toItem: item.superview!, attribute: attribute, constant: offset)
+        precondition(item.superview != nil, "Align: \(item) has no superview; pass an explicit container")
+        return Constraints.add(self, toItem: item.superview!, attribute: attribute, constant: offset)
     }
 }
 
@@ -293,7 +298,10 @@ public enum AnchorType {
     }
 
     private func pin(to item2: LayoutItem?, insets: EdgeInsets, axis: Axis?, alignment: Alignment, isCenteringEnabled: Bool) -> [NSLayoutConstraint] {
-        let item2 = item2 ?? item.superview!
+        let item2 = item2 ?? {
+            precondition(item.superview != nil, "Align: \(item) has no superview; pass an explicit container")
+            return item.superview!
+        }()
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing
         var constraints = [NSLayoutConstraint]()

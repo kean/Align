@@ -6,6 +6,7 @@
 
 - Fix typo in public API: rename `greaterThanOrEqul(_:)` to `greaterThanOrEqual(_:)` on `AnchorCollectionSize`
 - Remove `Align.playground` in favor of an inline `#Preview` in `Sources/Align.swift`
+- Replace `superview!` force-unwraps in `pin()` and `align()` with `precondition`s that report the offending view, instead of an opaque `Optional("nil")` trap
 
 ## Align 3.3
 
