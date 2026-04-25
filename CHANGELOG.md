@@ -13,6 +13,8 @@
 - Add `Sendable` conformance to the `AnchorAxis` and `AnchorType` phantom-type namespaces and their nested classes
 - Replace the four hand-rolled `Constraints(for:)` arity overloads with a single variadic-generics initializer using Swift 5.9 parameter packs. Existing trailing-closure call sites (`Constraints(for: a, b) { a, b in ... }`) compile unchanged; non-trailing call sites must now pass the closure with the `closure:` label
 - Move `LayoutItem`'s `superview` requirement behind `@_spi(Align)` and add an SPI-only `_disableAutoresizingMask()` requirement, letting `Constraints.add` dispatch via the witness table instead of an `as?` cast on every constraint. The default public surface is unchanged; clients that need these (e.g. for custom `LayoutItem` conformances) can opt in with `@_spi(Align) import Align`
+- Inline the nested `constrain` helper in `AnchorCollectionEdges.pin` to eliminate per-call closure context allocation
+- Mark hot-path `Anchor` accessors, operators, and `equal/greaterThanOrEqual/lessThanOrEqual` overloads `@inlinable` so callers in client modules can inline through them
 
 ## Align 3.3
 

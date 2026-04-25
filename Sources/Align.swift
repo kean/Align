@@ -47,7 +47,7 @@ extension NSLayoutGuide: LayoutItem {
 
 extension LayoutItem { // Align methods are available via `LayoutAnchors`
     /// Provides access to the layout anchors and anchor collections.
-    @nonobjc public var anchors: LayoutAnchors<Self> { LayoutAnchors(self) }
+    @nonobjc @inlinable public var anchors: LayoutAnchors<Self> { LayoutAnchors(self) }
 }
 
 // MARK: - LayoutAnchors
@@ -57,25 +57,25 @@ extension LayoutItem { // Align methods are available via `LayoutAnchors`
     /// The underlying item.
     public let item: T
 
-    public init(_ item: T) { self.item = item }
+    @inlinable public init(_ item: T) { self.item = item }
 
     // MARK: Anchors
 
-    public var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .top) }
-    public var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .bottom) }
-    public var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .left) }
-    public var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .right) }
-    public var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .leading) }
-    public var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .trailing) }
+    @inlinable public var top: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .top) }
+    @inlinable public var bottom: Anchor<AnchorType.Edge, AnchorAxis.Vertical> { Anchor(item, .bottom) }
+    @inlinable public var left: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .left) }
+    @inlinable public var right: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .right) }
+    @inlinable public var leading: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .leading) }
+    @inlinable public var trailing: Anchor<AnchorType.Edge, AnchorAxis.Horizontal> { Anchor(item, .trailing) }
 
-    public var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(item, .centerX) }
-    public var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(item, .centerY) }
+    @inlinable public var centerX: Anchor<AnchorType.Center, AnchorAxis.Horizontal> { Anchor(item, .centerX) }
+    @inlinable public var centerY: Anchor<AnchorType.Center, AnchorAxis.Vertical> { Anchor(item, .centerY) }
 
-    public var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .firstBaseline) }
-    public var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .lastBaseline) }
+    @inlinable public var firstBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .firstBaseline) }
+    @inlinable public var lastBaseline: Anchor<AnchorType.Baseline, AnchorAxis.Vertical> { Anchor(item, .lastBaseline) }
 
-    public var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(item, .width) }
-    public var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(item, .height) }
+    @inlinable public var width: Anchor<AnchorType.Dimension, AnchorAxis.Horizontal> { Anchor(item, .width) }
+    @inlinable public var height: Anchor<AnchorType.Dimension, AnchorAxis.Vertical> { Anchor(item, .height) }
 
     // MARK: Anchor Collections
 
@@ -121,57 +121,57 @@ public enum AnchorType: Sendable {
 /// - tip: `UIView` does not provide anchor properties for the layout margin attributes.
 /// Instead, call `view.layoutMarginsGuide.anchors`.
 @MainActor public struct Anchor<Type, Axis> { // type and axis are phantom types
-    let item: LayoutItem
-    let attribute: NSLayoutConstraint.Attribute
-    let offset: CGFloat
-    let multiplier: CGFloat
+    @usableFromInline let item: LayoutItem
+    @usableFromInline let attribute: NSLayoutConstraint.Attribute
+    @usableFromInline let offset: CGFloat
+    @usableFromInline let multiplier: CGFloat
 
-    init(_ item: LayoutItem, _ attribute: NSLayoutConstraint.Attribute, offset: CGFloat = 0, multiplier: CGFloat = 1) {
+    @inlinable init(_ item: LayoutItem, _ attribute: NSLayoutConstraint.Attribute, offset: CGFloat = 0, multiplier: CGFloat = 1) {
         self.item = item; self.attribute = attribute; self.offset = offset; self.multiplier = multiplier
     }
 
     /// Returns a new anchor offset by a given amount.
     ///
     /// - tip: Consider using a convenience operator instead: `view.anchors.top + 10`.
-    public func offsetting(by offset: CGFloat) -> Anchor {
+    @inlinable public func offsetting(by offset: CGFloat) -> Anchor {
         Anchor(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
     }
 
     /// Returns a new anchor with an constant multiplied by the given amount.
     ///
     /// - tip: Consider using a convenience operator instead: `view.anchors.height * 2`.
-    public func multiplied(by multiplier: CGFloat) -> Anchor {
+    @inlinable public func multiplied(by multiplier: CGFloat) -> Anchor {
         Anchor(item, attribute, offset: self.offset * multiplier, multiplier: self.multiplier * multiplier)
     }
 }
 
 /// Returns a new anchor offset by a given amount.
-@MainActor public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
+@MainActor @inlinable public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: offset)
 }
 
 /// Returns a new anchor offset by a given amount.
-@MainActor public func - <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
+@MainActor @inlinable public func - <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: -offset)
 }
 
 /// Returns a new anchor with an constant multiplied by the given amount.
-@MainActor public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
+@MainActor @inlinable public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
     anchor.multiplied(by: multiplier)
 }
 
 // MARK: - Anchors (AnchorType.Alignment)
 
 @MainActor public extension Anchor where Type: AnchorType.Alignment {
-    @discardableResult func equal<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult func equal<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal, priority: priority)
     }
 
-    @discardableResult func greaterThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult func greaterThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .greaterThanOrEqual, priority: priority)
     }
 
-    @discardableResult func lessThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult func lessThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .lessThanOrEqual, priority: priority)
     }
 }
@@ -179,15 +179,15 @@ public enum AnchorType: Sendable {
 // MARK: - Anchors (AnchorType.Dimension)
 
 @MainActor public extension Anchor where Type: AnchorType.Dimension {
-    @discardableResult func equal<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult func equal<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal, priority: priority)
     }
 
-    @discardableResult func greaterThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult func greaterThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .greaterThanOrEqual, priority: priority)
     }
 
-    @discardableResult func lessThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult func lessThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .lessThanOrEqual, priority: priority)
     }
 }
@@ -195,20 +195,20 @@ public enum AnchorType: Sendable {
 // MARK: - Anchors (AnchorType.Dimension)
 
 @MainActor public extension Anchor where Type: AnchorType.Dimension {
-    @discardableResult func equal(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult func equal(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .equal, constant: constant, priority: priority)
     }
 
-    @discardableResult func greaterThanOrEqual(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult func greaterThanOrEqual(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .greaterThanOrEqual, constant: constant, priority: priority)
     }
 
-    @discardableResult func lessThanOrEqual(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult func lessThanOrEqual(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .lessThanOrEqual, constant: constant, priority: priority)
     }
 
     /// Clamps the dimension of a view to the given limiting range.
-    @discardableResult func clamp(to limits: ClosedRange<CGFloat>, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+    @inlinable @discardableResult func clamp(to limits: ClosedRange<CGFloat>, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [greaterThanOrEqual(limits.lowerBound, priority: priority), lessThanOrEqual(limits.upperBound, priority: priority)]
     }
 }
@@ -584,7 +584,7 @@ public enum AnchorType: Sendable {
     // MARK: Adding Constraints
 
     /// Creates and automatically installs a constraint.
-    static func add(item item1: LayoutItem, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: LayoutItem? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @usableFromInline static func add(item item1: LayoutItem, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: LayoutItem? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         item1._disableAutoresizingMask()
         let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
         install(constraint, priority: priority)
@@ -592,13 +592,13 @@ public enum AnchorType: Sendable {
     }
 
     /// Creates and automatically installs a constraint between two anchors.
-    static func add<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @usableFromInline static func add<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         add(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: (multiplier / lhs.multiplier) * rhs.multiplier, constant: constant - lhs.offset + rhs.offset, priority: priority)
     }
 
     /// Creates and automatically installs a constraint between an anchor and
     /// a given item.
-    static func add<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: LayoutItem?, attribute attr2: NSLayoutConstraint.Attribute?, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @usableFromInline static func add<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: LayoutItem?, attribute attr2: NSLayoutConstraint.Attribute?, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         add(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: constant - lhs.offset, priority: priority)
     }
 
