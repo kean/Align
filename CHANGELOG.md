@@ -19,6 +19,7 @@
 - Mark the `+`, `-`, and `*` operators on `Anchor` as `consuming` their anchor operand so chains like `view.anchors.top + 10 + 4` collapse to zero extra retains
 - Make `Constraints` a struct to avoid an allocation cost
 - Hoist calls to `_disableAutoresizingMask` in scenarios where it's called many times repeatedly like `edges.pin`
+- Move `@MainActor` from the `Constraints` struct itself to just the members that touch UIKit/AppKit (`init`, `activate`, `deactivate`, `add`, `install`, and the static `stack`). The `Collection` conformance no longer needs `nonisolated` + `MainActor.assumeIsolated`, eliminating a runtime trap when a `Constraints` value was iterated off the main actor and turning that misuse into a compile-time error on the constraint-building entry points instead
 
 ## Align 3.3
 
