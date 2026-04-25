@@ -8,33 +8,6 @@ import UIKit
 import AppKit
 #endif
 
-// MARK: - Misc
-
-#if os(iOS) || os(tvOS)
-public typealias EdgeInsets = UIEdgeInsets
-public typealias LayoutPriority = UILayoutPriority
-#elseif os(macOS)
-public typealias EdgeInsets = NSEdgeInsets
-public typealias LayoutPriority = NSLayoutConstraint.Priority
-
-public extension NSEdgeInsets {
-    static let zero = NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-}
-#endif
-
-extension NSLayoutConstraint.Relation {
-    @usableFromInline var inverted: NSLayoutConstraint.Relation {
-        switch self {
-        case .greaterThanOrEqual: return .lessThanOrEqual
-        case .lessThanOrEqual: return .greaterThanOrEqual
-        case .equal: return self
-        @unknown default: return self
-        }
-    }
-}
-
-// MARK: - Preview
-
 #if DEBUG && (os(iOS) || os(tvOS))
 import SwiftUI
 

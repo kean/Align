@@ -59,3 +59,26 @@ extension LayoutItem { // Align methods are available via `LayoutAnchors`
     /// Provides access to the layout anchors and anchor collections.
     @nonobjc @inlinable public var anchors: LayoutAnchors<Self> { LayoutAnchors(self) }
 }
+
+#if os(iOS) || os(tvOS)
+public typealias EdgeInsets = UIEdgeInsets
+public typealias LayoutPriority = UILayoutPriority
+#elseif os(macOS)
+public typealias EdgeInsets = NSEdgeInsets
+public typealias LayoutPriority = NSLayoutConstraint.Priority
+
+public extension NSEdgeInsets {
+    static let zero = NSEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+}
+#endif
+
+extension NSLayoutConstraint.Relation {
+    @usableFromInline var inverted: NSLayoutConstraint.Relation {
+        switch self {
+        case .greaterThanOrEqual: return .lessThanOrEqual
+        case .lessThanOrEqual: return .greaterThanOrEqual
+        case .equal: return self
+        @unknown default: return self
+        }
+    }
+}
