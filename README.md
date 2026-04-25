@@ -73,7 +73,7 @@ Align strives for clarity and simplicity by following [Swift API Design Guidelin
 What you get with Align:
 
 - **Fluent, high-level API** for everyday Auto Layout
-- **Lightweight** – ~330 lines, zero dependencies
+- **Lightweight** – ~400 lines, zero dependencies
 - **Minimal surface area** – a single new property, `anchors`, on every view and layout guide
 - **Fast to compile** – built on `NSLayoutConstraint`, with no operator-overload soup
 - **No ceremony** – constraints are activated for you, and `translatesAutoresizingMaskIntoConstraints` is handled automatically
