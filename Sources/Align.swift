@@ -615,14 +615,11 @@ public enum AnchorType: Sendable {
     }
 
     static var stack: [[NSLayoutConstraint]] = [] // this is what enables constraint auto-installing
-    static var batchStack: [[NSLayoutConstraint]] = []
 
     static func install(_ constraint: NSLayoutConstraint, priority: LayoutPriority? = nil) {
         if let priority { constraint.priority = priority }
         if !stack.isEmpty {
             stack[stack.count - 1].append(constraint)
-        } else if !batchStack.isEmpty {
-            batchStack[batchStack.count - 1].append(constraint)
         } else {
             constraint.isActive = true
         }
