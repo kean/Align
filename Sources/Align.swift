@@ -450,7 +450,7 @@ public enum AnchorType {
     }
 
     /// Set the size of item.
-    @discardableResult public func greaterThanOrEqul(_ size: CGSize) -> [NSLayoutConstraint] {
+    @discardableResult public func greaterThanOrEqual(_ size: CGSize) -> [NSLayoutConstraint] {
         [width.greaterThanOrEqual(size.width), height.greaterThanOrEqual(size.height)]
     }
 

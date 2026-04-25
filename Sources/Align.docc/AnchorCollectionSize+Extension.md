@@ -20,5 +20,5 @@ a.anchors.size.equal(b)
 - ``equal(_:insets:multiplier:)``
 - ``lessThanOrEqual(_:)``
 - ``lessThanOrEqual(_:insets:multiplier:)``
-- ``greaterThanOrEqul(_:)``
+- ``greaterThanOrEqual(_:)``
 - ``greaterThanOrEqual(_:insets:multiplier:)``

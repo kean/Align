@@ -2,6 +2,10 @@
 
 # Align 3
 
+## Align 3.4 (WIP)
+
+- Fix typo in public API: rename `greaterThanOrEqul(_:)` to `greaterThanOrEqual(_:)` on `AnchorCollectionSize`
+
 ## Align 3.3
 
 *Sep 13, 2024*
