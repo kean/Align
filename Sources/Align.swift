@@ -223,8 +223,10 @@ public enum AnchorType: Sendable {
         default: false
         }
         let target = container ?? {
-            precondition(item.superview != nil, "Align: \(item) has no superview; pass an explicit container")
-            return item.superview!
+            guard let superview = item.superview else {
+                preconditionFailure("Align: \(item) has no superview; pass an explicit container")
+            }
+            return superview
         }()
         return Constraints.add(self, toItem: target, attribute: attribute, constant: (isInverted ? -inset : inset), relation: isInverted ? relation.inverted : relation, priority: priority)
     }
@@ -243,8 +245,10 @@ public enum AnchorType: Sendable {
 @MainActor public extension Anchor where Type: AnchorType.Center {
     /// Aligns the axis with a superview axis.
     @discardableResult func align(offset: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
-        precondition(item.superview != nil, "Align: \(item) has no superview; pass an explicit container")
-        return Constraints.add(self, toItem: item.superview!, attribute: attribute, constant: offset, priority: priority)
+        guard let superview = item.superview else {
+            preconditionFailure("Align: \(item) has no superview; pass an explicit container")
+        }
+        return Constraints.add(self, toItem: superview, attribute: attribute, constant: offset, priority: priority)
     }
 }
 
@@ -320,8 +324,10 @@ public enum AnchorType: Sendable {
 
     private func pin(to item2: LayoutItem?, insets: EdgeInsets, axis: Axis?, alignment: Alignment, isCenteringEnabled: Bool, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         let item2 = item2 ?? {
-            precondition(item.superview != nil, "Align: \(item) has no superview; pass an explicit container")
-            return item.superview!
+            guard let superview = item.superview else {
+                preconditionFailure("Align: \(item) has no superview; pass an explicit container")
+            }
+            return superview
         }()
         let left: NSLayoutConstraint.Attribute = isAbsolute ? .left : .leading
         let right: NSLayoutConstraint.Attribute = isAbsolute ? .right : .trailing
