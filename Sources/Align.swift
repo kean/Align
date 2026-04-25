@@ -8,8 +8,6 @@ import UIKit
 import AppKit
 #endif
 
-import SwiftUI
-
 /// A type that has layout anchors: either a view or a layout guide.
 @MainActor public protocol LayoutItem {
 #if os(iOS) || os(tvOS)
@@ -73,18 +71,18 @@ extension LayoutItem { // Align methods are available via `LayoutAnchors`
 // MARK: - Anchors
 
 /// A type that represents a layout axis.
-public enum AnchorAxis {
-    public class Horizontal {}
-    public class Vertical {}
+public enum AnchorAxis: Sendable {
+    public class Horizontal: @unchecked Sendable {}
+    public class Vertical: @unchecked Sendable {}
 }
 
 /// Represents an anchor type.
-public enum AnchorType {
-    public class Dimension {}
-    public class Alignment {}
-    public class Center: Alignment {}
-    public class Edge: Alignment {}
-    public class Baseline: Alignment {}
+public enum AnchorType: Sendable {
+    public class Dimension: @unchecked Sendable {}
+    public class Alignment: @unchecked Sendable {}
+    public class Center: Alignment, @unchecked Sendable {}
+    public class Edge: Alignment, @unchecked Sendable {}
+    public class Baseline: Alignment, @unchecked Sendable {}
 }
 
 /// An anchor represents one of the view's layout attributes.
@@ -654,6 +652,8 @@ extension EdgeInsets {
 // MARK: - Preview
 
 #if DEBUG && (os(iOS) || os(tvOS))
+import SwiftUI
+
 @available(iOS 17.0, tvOS 17.0, *)
 #Preview {
     // A scrolling gallery of common Align layouts, one per titled card.
