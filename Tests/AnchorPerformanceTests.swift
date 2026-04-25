@@ -29,20 +29,20 @@ import Align
     }
 
     @available(iOS 16, tvOS 16, macOS 13, watchOS 9, *)
-    @Test func pinUsingConstraints() {
+    @Test func batchedPin() {
         let view = View()
         let container = View()
         container.addSubview(view)
 
         let clock = ContinuousClock()
         let elapsed = clock.measure {
-            Constraints {
-                for _ in 0...10_000 {
+            for _ in 0...10_000 {
+                Constraints {
                     view.anchors.edges.pin(alignment: .center)
                 }
             }
         }
-        print("testPinUsingConstraints: \(format(elapsed))")
+        print("batchedPin: \(format(elapsed))")
     }
 
     @available(iOS 16, tvOS 16, macOS 13, watchOS 9, *)
