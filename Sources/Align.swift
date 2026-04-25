@@ -97,18 +97,24 @@ extension LayoutItem { // Align methods are available via `LayoutAnchors`
 // MARK: - Anchors
 
 /// A type that represents a layout axis.
-public enum AnchorAxis: Sendable {
-    public class Horizontal: @unchecked Sendable {}
-    public class Vertical: @unchecked Sendable {}
+public enum AnchorAxis {
+    public enum Horizontal {}
+    public enum Vertical {}
 }
 
+/// A marker protocol identifying the kind of attribute an `Anchor` represents.
+@_marker public protocol AnchorKind {}
+
+/// A marker protocol for anchor kinds that can be aligned with one another
+/// (edges, centers, and baselines).
+@_marker public protocol AlignmentAnchorKind: AnchorKind {}
+
 /// Represents an anchor type.
-public enum AnchorType: Sendable {
-    public class Dimension: @unchecked Sendable {}
-    public class Alignment: @unchecked Sendable {}
-    public class Center: Alignment, @unchecked Sendable {}
-    public class Edge: Alignment, @unchecked Sendable {}
-    public class Baseline: Alignment, @unchecked Sendable {}
+public enum AnchorType {
+    public enum Edge: AlignmentAnchorKind {}
+    public enum Center: AlignmentAnchorKind {}
+    public enum Baseline: AlignmentAnchorKind {}
+    public enum Dimension: AnchorKind {}
 }
 
 /// An anchor represents one of the view's layout attributes.
@@ -170,41 +176,37 @@ public enum AnchorType: Sendable {
     anchor.multiplied(by: multiplier)
 }
 
-// MARK: - Anchors (AnchorType.Alignment)
+// MARK: - Anchors (AlignmentAnchorKind)
 
-@MainActor public extension Anchor where Type: AnchorType.Alignment {
-    @inlinable @discardableResult consuming func equal<OtherType: AnchorType.Alignment>(_ anchor: consuming Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+@MainActor public extension Anchor where Type: AlignmentAnchorKind {
+    @inlinable @discardableResult consuming func equal<OtherType: AlignmentAnchorKind>(_ anchor: consuming Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal, priority: priority)
     }
 
-    @inlinable @discardableResult consuming func greaterThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: consuming Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func greaterThanOrEqual<OtherType: AlignmentAnchorKind>(_ anchor: consuming Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .greaterThanOrEqual, priority: priority)
     }
 
-    @inlinable @discardableResult consuming func lessThanOrEqual<OtherType: AnchorType.Alignment>(_ anchor: consuming Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func lessThanOrEqual<OtherType: AlignmentAnchorKind>(_ anchor: consuming Anchor<OtherType, Axis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .lessThanOrEqual, priority: priority)
     }
 }
 
 // MARK: - Anchors (AnchorType.Dimension)
 
-@MainActor public extension Anchor where Type: AnchorType.Dimension {
-    @inlinable @discardableResult consuming func equal<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: consuming Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+@MainActor public extension Anchor where Type == AnchorType.Dimension {
+    @inlinable @discardableResult consuming func equal<OtherAxis>(_ anchor: consuming Anchor<AnchorType.Dimension, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .equal, priority: priority)
     }
 
-    @inlinable @discardableResult consuming func greaterThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: consuming Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func greaterThanOrEqual<OtherAxis>(_ anchor: consuming Anchor<AnchorType.Dimension, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .greaterThanOrEqual, priority: priority)
     }
 
-    @inlinable @discardableResult consuming func lessThanOrEqual<OtherType: AnchorType.Dimension, OtherAxis>(_ anchor: consuming Anchor<OtherType, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func lessThanOrEqual<OtherAxis>(_ anchor: consuming Anchor<AnchorType.Dimension, OtherAxis>, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, anchor, constant: constant, relation: .lessThanOrEqual, priority: priority)
     }
-}
 
-// MARK: - Anchors (AnchorType.Dimension)
-
-@MainActor public extension Anchor where Type: AnchorType.Dimension {
     @inlinable @discardableResult consuming func equal(_ constant: CGFloat, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(item: item, attribute: attribute, relatedBy: .equal, constant: constant, priority: priority)
     }
@@ -230,7 +232,7 @@ public enum AnchorType: Sendable {
 // is funneled through `@usableFromInline` helpers (`_requireSuperview`,
 // `Constraints.add/install`) whose bodies stay inside the framework.
 
-@MainActor public extension Anchor where Type: AnchorType.Edge {
+@MainActor public extension Anchor where Type == AnchorType.Edge {
     /// Pins the edge to the respected edges of the given container.
     @inlinable @discardableResult consuming func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         let isInverted: Bool = switch attribute {
@@ -242,7 +244,7 @@ public enum AnchorType: Sendable {
     }
 
     /// Adds spacing between the current anchors.
-    @inlinable @discardableResult consuming func spacing<OtherType: AnchorType.Edge>(_ spacing: CGFloat, to anchor: consuming Anchor<OtherType, Axis>, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @inlinable @discardableResult consuming func spacing(_ spacing: CGFloat, to anchor: consuming Anchor<AnchorType.Edge, Axis>, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         let isInverted = (attribute == .bottom && anchor.attribute == .top) ||
         (attribute == .right && anchor.attribute == .left) ||
         (attribute == .trailing && anchor.attribute == .leading)
@@ -252,7 +254,7 @@ public enum AnchorType: Sendable {
 
 // MARK: - Anchors (AnchorType.Center)
 
-@MainActor public extension Anchor where Type: AnchorType.Center {
+@MainActor public extension Anchor where Type == AnchorType.Center {
     /// Aligns the axis with a superview axis.
     @inlinable @discardableResult consuming func align(offset: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         Constraints.add(self, toItem: item._requireSuperview(), attribute: attribute, constant: offset, priority: priority)
