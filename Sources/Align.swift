@@ -481,7 +481,7 @@ public enum AnchorType: Sendable {
         [x.align(offset: offset.x, priority: priority), y.align(offset: offset.y, priority: priority)]
     }
 
-    /// Makes the axis equal to the other collection of axis.
+    /// Makes the axes equal to the other collection of axes.
     @inlinable @discardableResult public func align<Item: LayoutItem>(with item: Item, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
         [x.equal(item.anchors.centerX, priority: priority), y.equal(item.anchors.centerY, priority: priority)]
     }
