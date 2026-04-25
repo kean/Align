@@ -545,6 +545,9 @@ public enum AnchorType: Sendable {
 /// }
 /// ```
 ///
+/// Nesting is supported: each constraint is collected by the innermost group,
+/// and each group honors its own `activate:` flag independently.
+///
 /// - important: Batched activation is also ~5× faster than the default
 /// auto-activating API, which installs each constraint as it's built. Reach
 /// for ``Constraints`` on hot paths (cell layout, repeatedly built view trees).
