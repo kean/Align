@@ -25,7 +25,7 @@ import Align
     }
 
     @Test func firstViewSetToTranslatesAutoresizingMaskIntoConstraints() {
-        // make sure that the precndition is always true
+        // make sure that the precondition is always true
         view.translatesAutoresizingMaskIntoConstraints = true
         container.translatesAutoresizingMaskIntoConstraints = true
         #expect(view.translatesAutoresizingMaskIntoConstraints)

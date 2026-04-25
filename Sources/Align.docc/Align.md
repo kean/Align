@@ -20,7 +20,7 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 
 ## Getting Started
 
-The entire library fits in a single file with around 300 lines of code. The best way to install it is by using Swift Package Manager, but you can also simply drag-n-drop it into your app. If you install it as a package, you can avoid having to import it in every file by re-exposing its APIs in your app target:
+The entire library fits in a single file with around 330 lines of code. The best way to install it is by using Swift Package Manager, but you can also simply drag-n-drop it into your app. If you install it as a package, you can avoid having to import it in every file by re-exposing its APIs in your app target:
 
 ```swift
 import Align
@@ -32,22 +32,20 @@ extension LayoutItem {
 
 ## Overview
 
-The Align APIs for creating constraints in the following quadrant:
+The Align APIs for creating constraints fall into two categories:
 
 ![02](02.png)
 
-**Core API** allows you to create constraints by setting relations between one or more anchors, there APIs are similar to what `NSLayoutAnchor` provides. **Semantic API** is a high-level API that focus on your goals, such as pinning edges to the container, aligning the view, setting spacing between views, etc.
+**Core API** lets you create constraints by setting relations between one or more anchors. These APIs are similar to what `NSLayoutAnchor` provides. **Semantic API** is a high-level API that focuses on your goals, such as pinning edges to the container, aligning the view, setting spacing between views, etc.
 
-Both of these types of APIs are designed to be easily discoverable using Xcode code completions. There is also a [**cheat sheet**](https://github.com/kean/Align/blob/master/Docs/align-cheat-sheet.pdf) available listing all APIs in one place.
+Both APIs are designed to be easily discoverable using Xcode code completions. There is also a [**cheat sheet**](https://github.com/kean/Align/blob/master/Sources/Align.docc/Resources/align-cheat-sheet.pdf) available listing all APIs in one place.
 
 ## Requirements
 
-| Align          | Swift       | Xcode             | Platforms                          |
-|----------------|-------------|-------------------|------------------------------------|
-| Align 3.0      | Swift 5.6   | Xcode 13.3        | iOS 12.0 / tvOS 12.0 / macOS 10.14 |
-| Align 2.0      | Swift 5.1   | Xcode 11.0        | iOS 11.0 / tvOS 11.0 / macOS 10.13 |
-| Align 1.1      | Swift 4.2   | Xcode 10.1        | iOS 10.0 / tvOS 10.0               |
-| Align 1.0      | Swift 4.0   | Xcode 9.2         | iOS 9.0 / tvOS 9.0                 |
+| Align          | Swift       | Xcode             | Platforms                                  |
+|----------------|-------------|-------------------|--------------------------------------------|
+| Align 4.0      | Swift 6.0   | Xcode 16          | iOS 15, tvOS 15, macOS 13, visionOS 1      |
+| Align 3.3      | Swift 5.10  | Xcode 15.3        | iOS 14, tvOS 14, macOS 10.16               |
 
 ## Topics
 

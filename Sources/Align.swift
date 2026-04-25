@@ -335,7 +335,9 @@ public enum AnchorType: Sendable {
         var constraints = [NSLayoutConstraint]()
 
         func constrain(attribute: NSLayoutConstraint.Attribute, relation: NSLayoutConstraint.Relation, constant: CGFloat) {
-            constraints.append(Constraints._add(item: item, attribute: attribute, relatedBy: relation, toItem: item2, attribute: attribute, multiplier: 1, constant: constant, priority: priority))
+            let constraint = NSLayoutConstraint(item: item, attribute: attribute, relatedBy: relation, toItem: item2, attribute: attribute, multiplier: 1, constant: constant)
+            Constraints.install(constraint, priority: priority)
+            constraints.append(constraint)
         }
 
         if axis == nil || axis == .horizontal {
@@ -593,13 +595,6 @@ public enum AnchorType: Sendable {
     /// Creates and automatically installs a constraint.
     @usableFromInline static func add(item item1: LayoutItem, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: LayoutItem? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         item1._disableAutoresizingMask()
-        return _add(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier, constant: constant, priority: priority)
-    }
-
-    // Same as `add(item:…)` but assumes the caller has already invoked
-    // `_disableAutoresizingMask()` on the receiving item. Used by collection
-    // methods to amortise the autoresizing-mask check across many constraints.
-    static func _add(item item1: LayoutItem, attribute attr1: NSLayoutConstraint.Attribute, relatedBy relation: NSLayoutConstraint.Relation = .equal, toItem item2: LayoutItem? = nil, attribute attr2: NSLayoutConstraint.Attribute? = nil, multiplier: CGFloat = 1, constant: CGFloat = 0, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         let constraint = NSLayoutConstraint(item: item1, attribute: attr1, relatedBy: relation, toItem: item2, attribute: attr2 ?? .notAnAttribute, multiplier: multiplier, constant: constant)
         install(constraint, priority: priority)
         return constraint
@@ -618,7 +613,7 @@ public enum AnchorType: Sendable {
 
     private static var stack = [Constraints]() // this is what enabled constraint auto-installing
 
-    private static func install(_ constraint: NSLayoutConstraint, priority: LayoutPriority? = nil) {
+    static func install(_ constraint: NSLayoutConstraint, priority: LayoutPriority? = nil) {
         if let priority { constraint.priority = priority }
         if let group = stack.last {
             group.constraints.append(constraint)

@@ -11,7 +11,7 @@ view.anchors.edges.pin(insets: 20)
 // Same output as the following:
 view.anchors.edges.pin(
     to: view.superview!,
-    insets: EdgeInsets(top: 20, left: 20, bottom: 20, trailing: 20),
+    insets: EdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
     alignment: .fill
 )
 ```
@@ -49,7 +49,7 @@ view.anchors.edges.pin(insets: 20, alignment: .topLeading)
 
 ![Edges](edges-04.png)
 
-In addition to the 9 predefined such as ``Alignment/fill``, ``Alignment/topLeading``, you can also create custom alignments by providing a vertical and horizontal component separately.
+In addition to the predefined alignments such as ``Alignment/fill`` and ``Alignment/topLeading``, you can also create custom alignments by providing a vertical and horizontal component separately.
 
 ```swift
 anchors.edges.pin(
