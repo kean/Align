@@ -26,7 +26,7 @@ extension LayoutItem {
 #if os(iOS) || os(tvOS)
 extension UIView: LayoutItem {
     @_spi(Align) public func _disableAutoresizingMask() {
-        guard !translatesAutoresizingMaskIntoConstraints else { return }
+        guard translatesAutoresizingMaskIntoConstraints else { return }
         translatesAutoresizingMaskIntoConstraints = false
     }
 }
@@ -36,7 +36,7 @@ extension UILayoutGuide: LayoutItem {
 #elseif os(macOS)
 extension NSView: LayoutItem {
     @_spi(Align) public func _disableAutoresizingMask() {
-        guard !translatesAutoresizingMaskIntoConstraints else { return }
+        guard translatesAutoresizingMaskIntoConstraints else { return }
         translatesAutoresizingMaskIntoConstraints = false
     }
 }
