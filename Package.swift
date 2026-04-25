@@ -1,12 +1,13 @@
-// swift-tools-version:5.10
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
     name: "Align",
     platforms: [
-        .iOS(.v14),
-        .tvOS(.v14),
-        .macOS(.v11),
+        .iOS(.v15),
+        .tvOS(.v15),
+        .macOS(.v13),
+        .visionOS(.v1)
     ],
     products: [
         .library(name: "Align", targets: ["Align"]),
