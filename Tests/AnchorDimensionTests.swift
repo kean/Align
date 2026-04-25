@@ -2,54 +2,58 @@
 //
 // Copyright (c) 2017-2026 Alexander Grebenyuk (github.com/kean).
 
-import XCTest
+import Testing
+#if os(iOS) || os(tvOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 import Align
 
 @MainActor
-class AnchorDimensionTests: XCTestCase {
+@Suite struct AnchorDimensionTests {
     let container = View()
     let view = View()
 
-    @MainActor
-    override func setUp() async throws {
+    init() {
         container.addSubview(view)
     }
 
-    func testSetWidth() {
-        XCTAssertEqualConstraints(
+    @Test func setWidth() {
+        expectEqualConstraints(
             view.anchors.width.equal(10),
             NSLayoutConstraint(item: view, attribute: .width, constant: 10)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.width.greaterThanOrEqual(10),
             NSLayoutConstraint(item: view, attribute: .width, relation: .greaterThanOrEqual, constant: 10)
         )
     }
 
-    func testSetHeight() {
-        XCTAssertEqualConstraints(
+    @Test func setHeight() {
+        expectEqualConstraints(
             view.anchors.height.equal(10),
             NSLayoutConstraint(item: view, attribute: .height, constant: 10)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.height.greaterThanOrEqual(10),
             NSLayoutConstraint(item: view, attribute: .height, relation: .greaterThanOrEqual, constant: 10)
         )
     }
 
-    func testMatchWidth() {
-        XCTAssertEqualConstraints(
+    @Test func matchWidth() {
+        expectEqualConstraints(
             view.anchors.width.equal(container.anchors.width),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.width.equal(container.anchors.height), // can mix and match
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .height)
         )
     }
 
-    func testClamp() {
-        XCTAssertEqualConstraints(
+    @Test func clamp() {
+        expectEqualConstraints(
             view.anchors.height.clamp(to: 10...20),
             [NSLayoutConstraint(item: view, attribute: .height, relation: .greaterThanOrEqual, constant: 10),
              NSLayoutConstraint(item: view, attribute: .height, relation: .lessThanOrEqual, constant: 20)]

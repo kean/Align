@@ -2,106 +2,110 @@
 //
 // Copyright (c) 2017-2026 Alexander Grebenyuk (github.com/kean).
 
-import XCTest
+import Testing
+#if os(iOS) || os(tvOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 import Align
 
 @MainActor
-class AnchorTests: XCTestCase {
+@Suite struct AnchorTests {
     let container = View()
     let view = View()
 
-    @MainActor
-    override func setUp() async throws {
+    init() {
         container.addSubview(view)
     }
 
-    func testConstraintsCreatedByAnchorsAreInstalledAutomatically() {
+    @Test func constraintsCreatedByAnchorsAreInstalledAutomatically() {
         let constraint = view.anchors.top.equal(container.anchors.top)
-        XCTAssertEqual(constraint.isActive, true)
+        #expect(constraint.isActive == true)
     }
 
-    func testFirstViewSetToTranslatesAutoresizingMaskIntoConstraints() {
+    @Test func firstViewSetToTranslatesAutoresizingMaskIntoConstraints() {
         // make sure that the precndition is always true
         view.translatesAutoresizingMaskIntoConstraints = true
         container.translatesAutoresizingMaskIntoConstraints = true
-        XCTAssertTrue(view.translatesAutoresizingMaskIntoConstraints)
-        XCTAssertTrue(container.translatesAutoresizingMaskIntoConstraints)
+        #expect(view.translatesAutoresizingMaskIntoConstraints)
+        #expect(container.translatesAutoresizingMaskIntoConstraints)
 
         view.anchors.top.equal(container.anchors.top)
 
-        XCTAssertFalse(view.translatesAutoresizingMaskIntoConstraints)
-        XCTAssertTrue(container.translatesAutoresizingMaskIntoConstraints)
+        #expect(!view.translatesAutoresizingMaskIntoConstraints)
+        #expect(container.translatesAutoresizingMaskIntoConstraints)
 
         view.translatesAutoresizingMaskIntoConstraints = true
         container.anchors.top.equal(view.anchors.top)
 
-        XCTAssertTrue(view.translatesAutoresizingMaskIntoConstraints)
-        XCTAssertFalse(container.translatesAutoresizingMaskIntoConstraints)
+        #expect(view.translatesAutoresizingMaskIntoConstraints)
+        #expect(!container.translatesAutoresizingMaskIntoConstraints)
     }
 
     // MARK: Offsetting
 
-    func testOffsettingTopAnchor() {
+    @Test func offsettingTopAnchor() {
         let anchor = container.anchors.top + 10
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.top.equal(anchor),
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 10)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.top.equal(anchor + 10),
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 20)
         )
-        XCTAssertEqualConstraints( // test that works both ways
+        expectEqualConstraints( // test that works both ways
             anchor.equal(view.anchors.top),
             NSLayoutConstraint(item: container, attribute: .top, toItem: view, attribute: .top, constant: -10)
         )
     }
 
-    func testOffsettingUsingOperators() {
-        XCTAssertEqualConstraints(
+    @Test func offsettingUsingOperators() {
+        expectEqualConstraints(
             view.anchors.top.equal(container.anchors.top + 10),
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 10)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.top.equal(container.anchors.top - 10),
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: -10)
         )
     }
 
-    func testOffsettingRightAnchor() {
+    @Test func offsettingRightAnchor() {
         let anchor = container.anchors.right - 10
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.right.equal(anchor),
             NSLayoutConstraint(item: view, attribute: .right, toItem: container, attribute: .right, constant: -10)
         )
-        XCTAssertEqualConstraints( // test that works both ways
+        expectEqualConstraints( // test that works both ways
             anchor.equal(view.anchors.right),
             NSLayoutConstraint(item: container, attribute: .right, toItem: view, attribute: .right, constant: 10)
         )
     }
 
-    func testAligningTwoOffsetAnchors() {
+    @Test func aligningTwoOffsetAnchors() {
         let containerTop = container.anchors.top + 10
         let viewTop = view.anchors.top + 10
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             viewTop.equal(containerTop), // nobody's going to do that, but it's nice it's their
             NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top, constant: 0)
         )
     }
 
-    func testOffsettingWidth() {
-        XCTAssertEqualConstraints(
+    @Test func offsettingWidth() {
+        expectEqualConstraints(
             view.anchors.height.equal(container.anchors.width + 10),
             NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .width, constant: 10)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.height.equal(container.anchors.width - 10),
             NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .width, constant: -10)
         )
     }
 
-    func testOffsetingMultipleTimes() {
-        XCTAssertEqualConstraints(
+    @Test func offsetingMultipleTimes() {
+        expectEqualConstraints(
             view.anchors.height.equal((container.anchors.width + 10) + 10),
             NSLayoutConstraint(item: view, attribute: .height, toItem: container, attribute: .width, constant: 20)
         )
@@ -109,30 +113,30 @@ class AnchorTests: XCTestCase {
 
     // MARK: Multiplying
 
-    func testMultiplyingWidth() {
-        XCTAssertEqualConstraints(
+    @Test func multiplyingWidth() {
+        expectEqualConstraints(
             view.anchors.width.equal(container.anchors.width * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             (view.anchors.width * 2).equal(container.anchors.width),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5)
         )
     }
 
-    func testMultiplyingMultipleTimes() {
-        XCTAssertEqualConstraints(
+    @Test func multiplyingMultipleTimes() {
+        expectEqualConstraints(
             view.anchors.width.equal((container.anchors.width * 0.5) * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.25)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             ((view.anchors.width * 2) * 2).equal(container.anchors.width),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.25)
         )
     }
 
-    func testMultiplyingBothAnchors() {
-        XCTAssertEqualConstraints(
+    @Test func multiplyingBothAnchors() {
+        expectEqualConstraints(
             (view.anchors.width * 0.5).equal(container.anchors.width * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 1)
         )
@@ -140,25 +144,25 @@ class AnchorTests: XCTestCase {
 
     // MARK: Mixing Multiplier and Offset
 
-    func testMixingMultiplierAndOffset() {
-        XCTAssertEqualConstraints(
+    @Test func mixingMultiplierAndOffset() {
+        expectEqualConstraints(
             view.anchors.width.equal(container.anchors.width * 0.5 + 10),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5, constant: 10)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.width.equal((container.anchors.width + 10) * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5, constant: 5)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.width.equal((container.anchors.width + 10) * 0.5 + 7),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5, constant: 12)
         )
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.width.equal(((container.anchors.width + 10) * 0.5 + 7) * 2),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 1, constant: 24)
         )
 
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             view.anchors.width.equal(container.anchors.width + 10 * 0.5),
             NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 1, constant: 5)
         )

@@ -2,14 +2,19 @@
 //
 // Copyright (c) 2017-2026 Alexander Grebenyuk (github.com/kean).
 
-import XCTest
+import Testing
+#if os(iOS) || os(tvOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 import Align
 
 // WARNING: Don't forget to compile for Release mode!
-@available(iOS 16, tvOS 16, macOS 13, watchOS 9, *)
 @MainActor
-final class AnchorPerformanceTests: XCTestCase {
-    func testPin() {
+@Suite struct AnchorPerformanceTests {
+    @available(iOS 16, tvOS 16, macOS 13, watchOS 9, *)
+    @Test func pin() {
         let view = View()
         let container = View()
         container.addSubview(view)
@@ -23,7 +28,8 @@ final class AnchorPerformanceTests: XCTestCase {
         print("testPin: \(format(elapsed))")
     }
 
-    func testPinUsingConstraints() {
+    @available(iOS 16, tvOS 16, macOS 13, watchOS 9, *)
+    @Test func pinUsingConstraints() {
         let view = View()
         let container = View()
         container.addSubview(view)
@@ -39,7 +45,8 @@ final class AnchorPerformanceTests: XCTestCase {
         print("testPinUsingConstraints: \(format(elapsed))")
     }
 
-    func testConstraintsPin() {
+    @available(iOS 16, tvOS 16, macOS 13, watchOS 9, *)
+    @Test func constraintsPin() {
         let view = View()
         let container = View()
         container.addSubview(view)
@@ -59,6 +66,7 @@ final class AnchorPerformanceTests: XCTestCase {
         print("testConstraintsPin: \(format(elapsed))")
     }
 
+    @available(iOS 16, tvOS 16, macOS 13, watchOS 9, *)
     private func format(_ duration: Duration) -> String {
         let ms = Double(duration.components.seconds) * 1_000 + Double(duration.components.attoseconds) / 1e15
         return String(format: "%.3f ms", ms)

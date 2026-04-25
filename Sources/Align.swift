@@ -598,13 +598,13 @@ public enum AnchorType: Sendable {
     }
 
     /// Creates and automatically installs a constraint between two anchors.
-    @usableFromInline static func add<T1, A1, T2, A2>(_ lhs: Anchor<T1, A1>, _ rhs: Anchor<T2, A2>, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @usableFromInline static func add<T1, A1, T2, A2>(_ lhs: consuming Anchor<T1, A1>, _ rhs: consuming Anchor<T2, A2>, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         add(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: rhs.item, attribute: rhs.attribute, multiplier: (multiplier / lhs.multiplier) * rhs.multiplier, constant: constant - lhs.offset + rhs.offset, priority: priority)
     }
 
     /// Creates and automatically installs a constraint between an anchor and
     /// a given item.
-    @usableFromInline static func add<T1, A1>(_ lhs: Anchor<T1, A1>, toItem item2: LayoutItem?, attribute attr2: NSLayoutConstraint.Attribute?, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
+    @usableFromInline static func add<T1, A1>(_ lhs: consuming Anchor<T1, A1>, toItem item2: LayoutItem?, attribute attr2: NSLayoutConstraint.Attribute?, constant: CGFloat = 0, multiplier: CGFloat = 1, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
         add(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: constant - lhs.offset, priority: priority)
     }
 
@@ -684,6 +684,7 @@ import SwiftUI
     cards.addArrangedSubview(demoCard("Pin edges with insets") { canvas in
         let box = UIView(); box.backgroundColor = .systemBlue
         canvas.addSubview(box)
+
         box.anchors.edges.pin(insets: 12)
     })
 
@@ -691,6 +692,7 @@ import SwiftUI
     cards.addArrangedSubview(demoCard("Center with fixed size") { canvas in
         let box = UIView(); box.backgroundColor = .systemPink
         canvas.addSubview(box)
+
         box.anchors.center.align()
         box.anchors.size.equal(CGSize(width: 120, height: 44))
     })
@@ -698,8 +700,11 @@ import SwiftUI
     // Place `b` 12pt to the right of `a`, matching its size.
     cards.addArrangedSubview(demoCard("Anchor-to-anchor spacing") { canvas in
         let a = UIView(), b = UIView()
-        a.backgroundColor = .systemOrange; b.backgroundColor = .systemGreen
-        canvas.addSubview(a); canvas.addSubview(b)
+        a.backgroundColor = .systemOrange
+        b.backgroundColor = .systemGreen
+        canvas.addSubview(a)
+        canvas.addSubview(b)
+
         a.anchors.leading.pin(inset: 16)
         a.anchors.centerY.align()
         a.anchors.size.equal(CGSize(width: 60, height: 44))
@@ -711,6 +716,7 @@ import SwiftUI
     let scroll = UIScrollView()
     scroll.backgroundColor = .systemBackground
     scroll.addSubview(cards)
+
     // Match the content width to the scroll view so it scrolls vertically only.
     cards.anchors.edges.pin()
     cards.anchors.width.equal(scroll.anchors.width)

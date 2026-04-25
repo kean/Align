@@ -2,38 +2,42 @@
 //
 // Copyright (c) 2017-2026 Alexander Grebenyuk (github.com/kean).
 
-import XCTest
+import Testing
+#if os(iOS) || os(tvOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 import Align
 
 @MainActor
-class ConstraintsTests: XCTestCase {
+@Suite struct ConstraintsTests {
     let container = View()
     let view = View()
 
-    @MainActor
-    override func setUp() async throws {
+    init() {
         container.addSubview(view)
     }
 
-    func testCanChangePriorityInsideInit() {
+    @Test func canChangePriorityInsideInit() {
         Constraints {
             let c = view.anchors.top.pin()
-            XCTAssertEqual(c.priority.rawValue, 1000)
+            #expect(c.priority.rawValue == 1000)
             c.priority = LayoutPriority(999)
-            XCTAssertEqual(c.priority.rawValue, 999)
+            #expect(c.priority.rawValue == 999)
         }
     }
 
     // MARK: Nesting
 
-    func testCallsCanBeNested() { // no arguments
+    @Test func callsCanBeNested() { // no arguments
         Constraints() {
-            XCTAssertEqualConstraints(
+            expectEqualConstraints(
                 view.anchors.top.pin(),
                 NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top)
             )
             Constraints() {
-                XCTAssertEqualConstraints(
+                expectEqualConstraints(
                     view.anchors.bottom.pin(),
                     NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom)
                 )
@@ -43,15 +47,14 @@ class ConstraintsTests: XCTestCase {
 }
 
 @MainActor
-class ConstraintsArityTests: XCTestCase {
+@Suite struct ConstraintsArityTests {
     let container = View()
     let a = View()
     let b = View()
     let c = View()
     let d = View()
 
-    @MainActor
-    override func setUp() async throws {
+    init() {
         container.addSubview(a)
         container.addSubview(b)
         container.addSubview(c)
@@ -60,10 +63,10 @@ class ConstraintsArityTests: XCTestCase {
 
     // MARK: Test That Behaves Like Standard Init
 
-    func testArity() {
+    @Test func arity() {
         Constraints(for: a, b) { a, b in
             let constraint = a.top.equal(b.top)
-            XCTAssertEqualConstraints(constraint, NSLayoutConstraint(
+            expectEqualConstraints(constraint, NSLayoutConstraint(
                 item: self.a,
                 attribute: .top,
                 relation: .equal,
@@ -73,23 +76,23 @@ class ConstraintsArityTests: XCTestCase {
         }
     }
 
-    func testCanChangePriorityInsideInit() {
+    @Test func canChangePriorityInsideInit() {
         Constraints(for: a) {
             let cons = $0.top.pin()
-            XCTAssertEqual(cons.priority.rawValue, 1000)
+            #expect(cons.priority.rawValue == 1000)
             cons.priority = LayoutPriority(999)
-            XCTAssertEqual(cons.priority.rawValue, 999)
+            #expect(cons.priority.rawValue == 999)
         }
     }
 
-    func testCallsCanBeNested() {
+    @Test func callsCanBeNested() {
         Constraints(for: a) {
-            XCTAssertEqualConstraints(
+            expectEqualConstraints(
                 $0.top.pin(),
                 NSLayoutConstraint(item: a, attribute: .top, toItem: container, attribute: .top)
             )
             Constraints(for: a) {
-                XCTAssertEqualConstraints(
+                expectEqualConstraints(
                     $0.bottom.pin(),
                     NSLayoutConstraint(item: a, attribute: .bottom, toItem: container, attribute: .bottom)
                 )
@@ -97,23 +100,23 @@ class ConstraintsArityTests: XCTestCase {
         }
     }
 
-    func testCollection() {
+    @Test func collection() {
         let constraints = Constraints {
             a.anchors.top.pin()
             a.anchors.bottom.pin()
         }
 
-        XCTAssertEqualConstraints(constraints.constraints, [
+        expectEqualConstraints(constraints.constraints, [
             NSLayoutConstraint(item: a, attribute: .top, toItem: container, attribute: .top),
             NSLayoutConstraint(item: a, attribute: .bottom, toItem: container, attribute: .bottom)
         ])
 
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             constraints.constraints[0],
             NSLayoutConstraint(item: a, attribute: .top, toItem: container, attribute: .top)
         )
 
-        XCTAssertEqualConstraints(
+        expectEqualConstraints(
             constraints.constraints[1],
             NSLayoutConstraint(item: a, attribute: .bottom, toItem: container, attribute: .bottom)
         )
@@ -121,85 +124,85 @@ class ConstraintsArityTests: XCTestCase {
 
     // MARK: Multiple Arguments
 
-    func testOne() {
+    @Test func one() {
         Constraints(for: a) {
-            XCTAssertTrue($0.item === a)
+            #expect($0.item === a)
             return
         }
     }
 
-    func testTwo() {
+    @Test func two() {
         Constraints(for: a, b) {
-            XCTAssertTrue($0.item === a)
-            XCTAssertTrue($1.item === b)
+            #expect($0.item === a)
+            #expect($1.item === b)
         }
     }
 
-    func testThree() {
+    @Test func three() {
         Constraints(for: a, b, c) {
-            XCTAssertTrue($0.item === a)
-            XCTAssertTrue($1.item === b)
-            XCTAssertTrue($2.item === c)
+            #expect($0.item === a)
+            #expect($1.item === b)
+            #expect($2.item === c)
         }
     }
 
-    func testFour() {
+    @Test func four() {
         Constraints(for: a, b, c, d) {
-            XCTAssertTrue($0.item === a)
-            XCTAssertTrue($1.item === b)
-            XCTAssertTrue($2.item === c)
-            XCTAssertTrue($3.item === d)
+            #expect($0.item === a)
+            #expect($1.item === b)
+            #expect($2.item === c)
+            #expect($3.item === d)
         }
     }
 }
 
 #if os(iOS) || os(tvOS)
 @MainActor
-class AddingSubviewsTests: XCTestCase {
+@Suite struct AddingSubviewsTests {
     let container = View()
     let a = View()
     let b = View()
     let c = View()
     let d = View()
 
-    func testOne() {
+    @Test func one() {
         container.addSubview(a) {
-            XCTAssertTrue($0.item.superview === container)
-            XCTAssertTrue($0.item === a)
+            #expect($0.item.superview === container)
+            #expect($0.item === a)
             return
         }
     }
 
-    func testTwo() {
+    @Test func two() {
         container.addSubview(a, b) {
-            XCTAssertTrue($0.item.superview === container)
-            XCTAssertTrue($1.item.superview === container)
-            XCTAssertTrue($0.item === a)
-            XCTAssertTrue($1.item === b)
+            #expect($0.item.superview === container)
+            #expect($1.item.superview === container)
+            #expect($0.item === a)
+            #expect($1.item === b)
         }
     }
 
-    func testThree() {
+    @Test func three() {
         container.addSubview(a, b, c) {
-            XCTAssertTrue($0.item.superview === container)
-            XCTAssertTrue($1.item.superview === container)
-            XCTAssertTrue($2.item.superview === container)
-            XCTAssertTrue($0.item === a)
-            XCTAssertTrue($1.item === b)
-            XCTAssertTrue($2.item === c)
+            #expect($0.item.superview === container)
+            #expect($1.item.superview === container)
+            #expect($2.item.superview === container)
+            #expect($0.item === a)
+            #expect($1.item === b)
+            #expect($2.item === c)
         }
     }
 
-    func testFour() {
+    @Test func four() {
         container.addSubview(a, b, c, d) {
-            XCTAssertTrue($0.item.superview === container)
-            XCTAssertTrue($1.item.superview === container)
-            XCTAssertTrue($2.item.superview === container)
-            XCTAssertTrue($3.item.superview === container)
-            XCTAssertTrue($0.item === a)
-            XCTAssertTrue($1.item === b)
-            XCTAssertTrue($2.item === c)
-            XCTAssertTrue($3.item === d)
+            #expect($0.item.superview === container)
+            #expect($1.item.superview === container)
+            #expect($2.item.superview === container)
+            #expect($3.item.superview === container)
+            #expect($0.item === a)
+            #expect($1.item === b)
+            #expect($2.item === c)
+            #expect($3.item === d)
         }
     }
 }

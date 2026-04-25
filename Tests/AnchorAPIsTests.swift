@@ -3,20 +3,24 @@
 // Copyright (c) 2017-2026 Alexander Grebenyuk (github.com/kean).
 
 import Foundation
-import XCTest
+import Testing
+#if os(iOS) || os(tvOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 import Align
 
 @MainActor
-class AnchorAPITests: XCTestCase {
+@Suite struct AnchorAPITests {
     let view = View()
     let container = View()
 
-    @MainActor
-    override func setUp() async throws {
+    init() {
         container.addSubview(view)
     }
 
-    func testAPIs() {
+    @Test func aPIs() {
         // Alignment
         view.anchors.left.equal(container.anchors.left)
         view.anchors.left.equal(container.anchors.left + 10)
