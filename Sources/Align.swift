@@ -115,7 +115,7 @@ public enum AnchorType: Sendable {
 ///
 /// Instead of creating `NSLayoutConstraint` objects directly, start with a `UIView`
 /// or `UILayoutGuide` and select one of its anchors. For example, `view.anchors.top`
-/// is represted by `Anchor<AnchorType.Edge, AnchorAxis.Vertical>`. Then use the
+/// is represented by `Anchor<AnchorType.Edge, AnchorAxis.Vertical>`. Then use the
 /// anchor’s methods to construct your constraint.
 ///
 /// ```swift
@@ -125,8 +125,8 @@ public enum AnchorType: Sendable {
 ///
 /// When you create constraints using `Anchor` APIs, the constraints are activated
 /// automatically and the target view has `translatesAutoresizingMaskIntoConstraints`
-/// set to `false`. If you want to activate all the constraints at the same or
-/// create them without activation, use `Constraints` type.
+/// set to `false`. If you want to activate all the constraints at the same time,
+/// or create them without activation, use `Constraints` type.
 ///
 /// - tip: `UIView` does not provide anchor properties for the layout margin attributes.
 /// Instead, call `view.layoutMarginsGuide.anchors`.
@@ -147,7 +147,7 @@ public enum AnchorType: Sendable {
         Anchor(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
     }
 
-    /// Returns a new anchor with an constant multiplied by the given amount.
+    /// Returns a new anchor with a constant multiplied by the given amount.
     ///
     /// - tip: Consider using a convenience operator instead: `view.anchors.height * 2`.
     @inlinable public consuming func multiplied(by multiplier: CGFloat) -> Anchor {
@@ -165,7 +165,7 @@ public enum AnchorType: Sendable {
     anchor.offsetting(by: -offset)
 }
 
-/// Returns a new anchor with an constant multiplied by the given amount.
+/// Returns a new anchor with a constant multiplied by the given amount.
 @MainActor @inlinable public func * <Type, Axis>(anchor: consuming Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
     anchor.multiplied(by: multiplier)
 }
@@ -370,7 +370,7 @@ public enum AnchorType: Sendable {
         public enum Horizontal: Sendable {
             /// Pin both leading and trailing edges to the superview.
             case fill
-            /// Center the view in the container along the vertical axis.
+            /// Center the view in the container along the horizontal axis.
             case center
             /// Pin the leading edge to the superview and prevent the view from
             /// overflowing the container by pinning the trailing edge using
@@ -421,7 +421,7 @@ public enum AnchorType: Sendable {
         /// edge is pinned using "less than or equal" constraint making sure the view
         /// doesn't overflow the container. The view is also centered horizontally.
         public static let top = Alignment(horizontal: .center, vertical: .top)
-        /// The view is pinned to the bottom-trailing corner of the container with the
+        /// The view is pinned to the top-trailing corner of the container with the
         /// given edge insets and the remaining edges are pinned using "less than or
         /// equal" constraints making sure the view doesn't overflow the container.
         public static let topTrailing = Alignment(horizontal: .trailing, vertical: .top)
@@ -577,8 +577,8 @@ public struct Constraints: RandomAccessCollection {
     public private(set) var constraints: [NSLayoutConstraint]
 
     /// All of the constraints created in the given closure are automatically
-    /// activated at the same time. This is more efficient then installing them
-    /// one-be-one. More importantly, it allows to make changes to the constraints
+    /// activated at the same time. This is more efficient than installing them
+    /// one-by-one. More importantly, it allows to make changes to the constraints
     /// before they are installed (e.g. change `priority`).
     ///
     /// - parameter activate: Set to `false` to disable automatic activation of
