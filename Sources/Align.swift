@@ -202,7 +202,10 @@ public enum AnchorType: Sendable {
 @MainActor public extension Anchor where Type: AnchorType.Edge {
     /// Pins the edge to the respected edges of the given container.
     @discardableResult func pin(to container: LayoutItem? = nil, inset: CGFloat = 0, relation: NSLayoutConstraint.Relation = .equal, priority: LayoutPriority? = nil) -> NSLayoutConstraint {
-        let isInverted = [.trailing, .right, .bottom].contains(attribute)
+        let isInverted: Bool = switch attribute {
+        case .trailing, .right, .bottom: true
+        default: false
+        }
         let target = container ?? {
             precondition(item.superview != nil, "Align: \(item) has no superview; pass an explicit container")
             return item.superview!
