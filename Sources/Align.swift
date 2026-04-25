@@ -133,14 +133,14 @@ public enum AnchorType: Sendable {
     /// Returns a new anchor offset by a given amount.
     ///
     /// - tip: Consider using a convenience operator instead: `view.anchors.top + 10`.
-    @inlinable public func offsetting(by offset: CGFloat) -> Anchor {
+    @inlinable public consuming func offsetting(by offset: CGFloat) -> Anchor {
         Anchor(item, attribute, offset: self.offset + offset, multiplier: self.multiplier)
     }
 
     /// Returns a new anchor with an constant multiplied by the given amount.
     ///
     /// - tip: Consider using a convenience operator instead: `view.anchors.height * 2`.
-    @inlinable public func multiplied(by multiplier: CGFloat) -> Anchor {
+    @inlinable public consuming func multiplied(by multiplier: CGFloat) -> Anchor {
         Anchor(item, attribute, offset: self.offset * multiplier, multiplier: self.multiplier * multiplier)
     }
 }

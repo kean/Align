@@ -15,6 +15,7 @@
 - Move `LayoutItem`'s `superview` requirement behind `@_spi(Align)` and add an SPI-only `_disableAutoresizingMask()` requirement, letting `Constraints.add` dispatch via the witness table instead of an `as?` cast on every constraint. The default public surface is unchanged; clients that need these (e.g. for custom `LayoutItem` conformances) can opt in with `@_spi(Align) import Align`
 - Inline the nested `constrain` helper in `AnchorCollectionEdges.pin` to eliminate per-call closure context allocation
 - Mark hot-path `Anchor` accessors, operators, and `equal/greaterThanOrEqual/lessThanOrEqual` overloads `@inlinable` so callers in client modules can inline through them
+- Mark `Anchor.offsetting(by:)` and `Anchor.multiplied(by:)` as `consuming`, letting the compiler forward the existential's class reference into the returned anchor instead of retaining and releasing it
 
 ## Align 3.3
 
