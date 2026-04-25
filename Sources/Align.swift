@@ -8,6 +8,8 @@ import UIKit
 import AppKit
 #endif
 
+import SwiftUI
+
 /// A type that has layout anchors: either a view or a layout guide.
 @MainActor public protocol LayoutItem {
 #if os(iOS) || os(tvOS)
@@ -634,36 +636,64 @@ extension EdgeInsets {
 
 // MARK: - Preview
 
-#if os(iOS) || os(tvOS)
+#if DEBUG && (os(iOS) || os(tvOS))
 @available(iOS 17.0, tvOS 17.0, *)
 #Preview {
-    let view = UIView()
-    view.backgroundColor = .white
+    // A scrolling gallery of common Align layouts, one per titled card.
+    let cards = UIStackView()
+    cards.axis = .vertical
+    cards.spacing = 24
+    cards.layoutMargins = UIEdgeInsets(top: 24, left: 16, bottom: 24, right: 16)
+    cards.isLayoutMarginsRelativeArrangement = true
 
-    let logo = UILabel()
-    logo.font = .systemFont(ofSize: 30)
-    logo.text = "⛵️"
+    // Pin all four edges with an inset.
+    cards.addArrangedSubview(demoCard("Pin edges with insets") { canvas in
+        let box = UIView(); box.backgroundColor = .systemBlue
+        canvas.addSubview(box)
+        box.anchors.edges.pin(insets: 12)
+    })
 
-    let title = UILabel()
-    title.font = .systemFont(ofSize: 20, weight: .bold)
-    title.text = "Welcome to Align!"
+    // Center the view and set an explicit size.
+    cards.addArrangedSubview(demoCard("Center with fixed size") { canvas in
+        let box = UIView(); box.backgroundColor = .systemPink
+        canvas.addSubview(box)
+        box.anchors.center.align()
+        box.anchors.size.equal(CGSize(width: 120, height: 44))
+    })
 
-    let subtitle = UILabel()
-    subtitle.font = .systemFont(ofSize: 15)
-    subtitle.numberOfLines = 0
-    subtitle.text = "An intuitive and powerful Auto Layout"
+    // Place `b` 12pt to the right of `a`, matching its size.
+    cards.addArrangedSubview(demoCard("Anchor-to-anchor spacing") { canvas in
+        let a = UIView(), b = UIView()
+        a.backgroundColor = .systemOrange; b.backgroundColor = .systemGreen
+        canvas.addSubview(a); canvas.addSubview(b)
+        a.anchors.leading.pin(inset: 16)
+        a.anchors.centerY.align()
+        a.anchors.size.equal(CGSize(width: 60, height: 44))
+        b.anchors.leading.spacing(12, to: a.anchors.trailing)
+        b.anchors.centerY.equal(a.anchors.centerY)
+        b.anchors.size.equal(a)
+    })
 
-    let textStack = UIStackView(arrangedSubviews: [title, subtitle])
-    textStack.axis = .vertical
+    let scroll = UIScrollView()
+    scroll.backgroundColor = .systemBackground
+    scroll.addSubview(cards)
+    // Match the content width to the scroll view so it scrolls vertically only.
+    cards.anchors.edges.pin()
+    cards.anchors.width.equal(scroll.anchors.width)
+    return scroll
+}
 
-    let stack = UIStackView(arrangedSubviews: [logo, textStack])
-    stack.spacing = 10
-    stack.alignment = .top
-
-    view.addSubview(stack)
-    stack.anchors.centerY.align()
-    stack.anchors.edges.pin(to: view.layoutMarginsGuide, axis: .horizontal, alignment: .center)
-
-    return view
+@MainActor private func demoCard(_ title: String, _ build: (UIView) -> Void) -> UIView {
+    let label = UILabel()
+    label.font = .systemFont(ofSize: 13, weight: .semibold)
+    label.textColor = .secondaryLabel
+    label.text = title
+    let canvas = UIView()
+    canvas.backgroundColor = .secondarySystemBackground
+    canvas.anchors.height.equal(120)
+    build(canvas)
+    let stack = UIStackView(arrangedSubviews: [label, canvas])
+    stack.axis = .vertical; stack.spacing = 6
+    return stack
 }
 #endif
