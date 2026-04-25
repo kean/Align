@@ -37,12 +37,9 @@ Constraints(activate: false) {
 
 ### Variadic Initializers
 
-The following initializers provide convenient access to the views and their anchors.
+The following initializer provides convenient access to the views and their anchors. It uses Swift parameter packs, so it works for any number of items.
 
-- ``init(for:_:)``
-- ``init(for:_:_:)``
-- ``init(for:_:_:_:)``
-- ``init(for:_:_:_:_:)``
+- ``init(for:closure:)``
 
 ### Accessing Underlying Constraints
 

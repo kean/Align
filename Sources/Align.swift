@@ -596,20 +596,12 @@ public enum AnchorType: Sendable {
 }
 
 public extension Constraints {
-    @discardableResult convenience init<A: LayoutItem>(for a: A, _ closure: (LayoutAnchors<A>) -> Void) {
-        self.init { closure(a.anchors) }
-    }
-
-    @discardableResult convenience init<A: LayoutItem, B: LayoutItem>(for a: A, _ b: B, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>) -> Void) {
-        self.init { closure(a.anchors, b.anchors) }
-    }
-
-    @discardableResult convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem>(for a: A, _ b: B, _ c: C, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>, LayoutAnchors<C>) -> Void) {
-        self.init { closure(a.anchors, b.anchors, c.anchors) }
-    }
-
-    @discardableResult convenience init<A: LayoutItem, B: LayoutItem, C: LayoutItem, D: LayoutItem>(for a: A, _ b: B, _ c: C, _ d: D, _ closure: (LayoutAnchors<A>, LayoutAnchors<B>, LayoutAnchors<C>, LayoutAnchors<D>) -> Void) {
-        self.init { closure(a.anchors, b.anchors, c.anchors, d.anchors) }
+    @discardableResult
+    convenience init<each Item: LayoutItem>(
+        for item: repeat each Item,
+        closure: (repeat LayoutAnchors<each Item>) -> Void
+    ) {
+        self.init { closure(repeat (each item).anchors) }
     }
 }
 
