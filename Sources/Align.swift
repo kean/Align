@@ -272,7 +272,7 @@ public enum AnchorType: Sendable {
     }
 
     /// Use `left` and `right` edges instead of `leading` and `trailing`.
-    @inlinable public func absolute() -> AnchorCollectionEdges {
+    @inlinable public var absolute: AnchorCollectionEdges {
         AnchorCollectionEdges(item: item, isAbsolute: true)
     }
 

@@ -33,7 +33,7 @@ import Align
 
     @Test func equalAbsolute() {
         expectEqualConstraints(
-            view.anchors.edges.absolute().equal(container),
+            view.anchors.edges.absolute.equal(container),
             [NSLayoutConstraint(item: view, attribute: .top, relation: .equal, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, relation: .equal,toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, relation: .equal, toItem: container, attribute: .bottom),
@@ -75,7 +75,7 @@ import Align
 
     @Test func pinToSuperviewAbsolute() {
         expectEqualConstraints(
-            view.anchors.edges.absolute().pin(),
+            view.anchors.edges.absolute.pin(),
             [NSLayoutConstraint(item: view, attribute: .top, toItem: container, attribute: .top),
              NSLayoutConstraint(item: view, attribute: .left, toItem: container, attribute: .left),
              NSLayoutConstraint(item: view, attribute: .bottom, toItem: container, attribute: .bottom),

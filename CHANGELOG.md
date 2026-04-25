@@ -21,6 +21,7 @@
 - Make `Constraints` a struct to avoid an allocation cost
 - Hoist calls to `_disableAutoresizingMask` in scenarios where it's called many times repeatedly like `edges.pin`
 - Move `@MainActor` from the `Constraints` struct itself to just the members that touch UIKit/AppKit (`init`, `activate`, `deactivate`, `add`, `install`, and the static `stack`). The `Collection` conformance no longer needs `nonisolated` + `MainActor.assumeIsolated`, eliminating a runtime trap when a `Constraints` value was iterated off the main actor and turning that misuse into a compile-time error on the constraint-building entry points instead
+- Convert `AnchorCollectionEdges.absolute()` from a method to a computed property `absolute`, since it takes no arguments and has no side effects. Call sites change from `view.anchors.edges.absolute().pin()` to `view.anchors.edges.absolute.pin()`
 
 ## Align 3.3
 
