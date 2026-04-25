@@ -2,7 +2,12 @@
 //
 // Copyright (c) 2017-2026 Alexander Grebenyuk (github.com/kean).
 
-import XCTest
+import Testing
+#if os(iOS) || os(tvOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 
 func test(_ title: String? = nil, _ closure: () -> Void) {
     closure()
@@ -15,15 +20,15 @@ func test<T>(_ title: String? = nil, with element: T, _ closure: (T) -> Void) {
 // MARK: Asserts
 
 @MainActor
-public func XCTAssertEqualConstraints(_ expected: [NSLayoutConstraint], _ received: [NSLayoutConstraint], file: StaticString = #filePath, line: UInt = #line) {
-    XCTAssertEqual(expected.count, received.count, file: file, line: line)
+public func expectEqualConstraints(_ expected: [NSLayoutConstraint], _ received: [NSLayoutConstraint], sourceLocation: SourceLocation = #_sourceLocation) {
+    #expect(expected.count == received.count, sourceLocation: sourceLocation)
 
     var received = received
     for c in expected {
         let idx = received.firstIndex(where: {
             Constraint($0) == Constraint(c)
         })
-        XCTAssertNotNil(idx, "Failed to find constraints: \(c)\n\nExpected: \(expected)\n\nReceived: \(received)", file: file, line: line)
+        #expect(idx != nil, "Failed to find constraints: \(c)\n\nExpected: \(expected)\n\nReceived: \(received)", sourceLocation: sourceLocation)
         if let idx = idx {
             received.remove(at: idx)
         }
@@ -31,14 +36,14 @@ public func XCTAssertEqualConstraints(_ expected: [NSLayoutConstraint], _ receiv
 }
 
 @MainActor
-public func XCTAssertEqualConstraints(_ expected: NSLayoutConstraint, _ received: NSLayoutConstraint, file: StaticString = #filePath, line: UInt = #line) {
-    XCTAssertEqualConstraints(Constraint(expected), Constraint(received), file: file, line: line)
+public func expectEqualConstraints(_ expected: NSLayoutConstraint, _ received: NSLayoutConstraint, sourceLocation: SourceLocation = #_sourceLocation) {
+    expectEqualConstraints(Constraint(expected), Constraint(received), sourceLocation: sourceLocation)
 }
 
 @MainActor
-private func XCTAssertEqualConstraints<T: Equatable>(_ expected: T, _ received: T, file: StaticString = #filePath, line: UInt = #line) {
+private func expectEqualConstraints<T: Equatable>(_ expected: T, _ received: T, sourceLocation: SourceLocation = #_sourceLocation) {
     print(diff(expected, received))
-    XCTAssertTrue(expected == received, "Found difference for " + diff(expected, received).joined(separator: ", "), file: file, line: line)
+    #expect(expected == received, "Found difference for \(diff(expected, received).joined(separator: ", "))", sourceLocation: sourceLocation)
 }
 
 // MARK: Constraints

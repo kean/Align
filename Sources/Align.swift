@@ -146,17 +146,17 @@ public enum AnchorType: Sendable {
 }
 
 /// Returns a new anchor offset by a given amount.
-@MainActor @inlinable public func + <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
+@MainActor @inlinable public func + <Type, Axis>(anchor: consuming Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: offset)
 }
 
 /// Returns a new anchor offset by a given amount.
-@MainActor @inlinable public func - <Type, Axis>(anchor: Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
+@MainActor @inlinable public func - <Type, Axis>(anchor: consuming Anchor<Type, Axis>, offset: CGFloat) -> Anchor<Type, Axis> {
     anchor.offsetting(by: -offset)
 }
 
 /// Returns a new anchor with an constant multiplied by the given amount.
-@MainActor @inlinable public func * <Type, Axis>(anchor: Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
+@MainActor @inlinable public func * <Type, Axis>(anchor: consuming Anchor<Type, Axis>, multiplier: CGFloat) -> Anchor<Type, Axis> {
     anchor.multiplied(by: multiplier)
 }
 

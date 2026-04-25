@@ -16,6 +16,7 @@
 - Inline the nested `constrain` helper in `AnchorCollectionEdges.pin` to eliminate per-call closure context allocation
 - Mark hot-path `Anchor` accessors, operators, and `equal/greaterThanOrEqual/lessThanOrEqual` overloads `@inlinable` so callers in client modules can inline through them
 - Mark `Anchor.offsetting(by:)` and `Anchor.multiplied(by:)` as `consuming`, letting the compiler forward the existential's class reference into the returned anchor instead of retaining and releasing it
+- Mark the `+`, `-`, and `*` operators on `Anchor` as `consuming` their anchor operand so chains like `view.anchors.top + 10 + 4` collapse to zero extra retains
 
 ## Align 3.3
 
