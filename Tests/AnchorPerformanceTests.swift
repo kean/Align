@@ -16,7 +16,7 @@ final class AnchorPerformanceTests: XCTestCase {
 
         let clock = ContinuousClock()
         let elapsed = clock.measure {
-            for _ in 0...1000 {
+            for _ in 0...10_000 {
                 view.anchors.edges.pin(alignment: .center)
             }
         }
@@ -31,7 +31,7 @@ final class AnchorPerformanceTests: XCTestCase {
         let clock = ContinuousClock()
         let elapsed = clock.measure {
             Constraints {
-                for _ in 0...1000 {
+                for _ in 0...10_000 {
                     view.anchors.edges.pin(alignment: .center)
                 }
             }
@@ -51,7 +51,7 @@ final class AnchorPerformanceTests: XCTestCase {
         let clock = ContinuousClock()
         let elapsed = clock.measure {
             Constraints {
-                for _ in 0...10000 {
+                for _ in 0...10_000 {
                     view.anchors.width.equal(view.anchors.height)
                 }
             }
