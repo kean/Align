@@ -13,22 +13,31 @@ import SwiftUI
 
 @available(iOS 17.0, tvOS 17.0, *)
 #Preview {
-    // A scrolling gallery of common Align layouts, one per titled card.
+    // A scrolling gallery of the highest-value Align layouts, one per titled card.
     let cards = UIStackView()
     cards.axis = .vertical
     cards.spacing = 24
     cards.layoutMargins = UIEdgeInsets(top: 24, left: 16, bottom: 24, right: 16)
     cards.isLayoutMarginsRelativeArrangement = true
 
-    // Pin all four edges with an inset.
+    // The bread-and-butter Align idiom: fill the container with uniform insets.
     cards.addArrangedSubview(demoCard("Pin edges with insets") { canvas in
         let box = UIView(); box.backgroundColor = .systemBlue
         canvas.addSubview(box)
 
-        box.anchors.edges.pin(insets: 12)
+        box.anchors.edges.pin(insets: 16)
     })
 
-    // Center the view and set an explicit size.
+    // `pin` also accepts an `alignment` to anchor a fixed-size view to a corner.
+    cards.addArrangedSubview(demoCard("Pin to a corner") { canvas in
+        let button = UIView(); button.backgroundColor = .systemIndigo
+        canvas.addSubview(button)
+
+        button.anchors.size.equal(CGSize(width: 96, height: 40))
+        button.anchors.edges.pin(insets: 16, alignment: .bottomTrailing)
+    })
+
+    // Center the view and give it an explicit size — a classic badge/dialog layout.
     cards.addArrangedSubview(demoCard("Center with fixed size") { canvas in
         let box = UIView(); box.backgroundColor = .systemPink
         canvas.addSubview(box)
@@ -37,20 +46,14 @@ import SwiftUI
         box.anchors.size.equal(CGSize(width: 120, height: 44))
     })
 
-    // Place `b` 12pt to the right of `a`, matching its size.
-    cards.addArrangedSubview(demoCard("Anchor-to-anchor spacing") { canvas in
-        let a = UIView(), b = UIView()
-        a.backgroundColor = .systemOrange
-        b.backgroundColor = .systemGreen
-        canvas.addSubview(a)
-        canvas.addSubview(b)
+    // Anchor arithmetic: pin horizontally, then drive height from width for a 2:1 banner.
+    cards.addArrangedSubview(demoCard("Aspect ratio with arithmetic") { canvas in
+        let banner = UIView(); banner.backgroundColor = .systemTeal
+        canvas.addSubview(banner)
 
-        a.anchors.leading.pin(inset: 16)
-        a.anchors.centerY.align()
-        a.anchors.size.equal(CGSize(width: 60, height: 44))
-        b.anchors.leading.spacing(12, to: a.anchors.trailing)
-        b.anchors.centerY.equal(a.anchors.centerY)
-        b.anchors.size.equal(a)
+        banner.anchors.edges.pin(insets: 16, axis: .horizontal)
+        banner.anchors.centerY.align()
+        banner.anchors.height.equal(banner.anchors.width * 0.5)
     })
 
     let scroll = UIScrollView()
@@ -70,7 +73,7 @@ import SwiftUI
     label.text = title
     let canvas = UIView()
     canvas.backgroundColor = .secondarySystemBackground
-    canvas.anchors.height.equal(120)
+    canvas.anchors.height.equal(140)
     build(canvas)
     let stack = UIStackView(arrangedSubviews: [label, canvas])
     stack.axis = .vertical; stack.spacing = 6
