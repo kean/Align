@@ -16,5 +16,5 @@ a.anchors.center.align()
 
 ### Semantic Constraints
 
-- ``align(priority:)``
+- ``align(offset:priority:)``
 - ``align(with:priority:)``

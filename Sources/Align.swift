@@ -465,8 +465,8 @@ public enum AnchorType: Sendable {
     // MARK: Semantic API
 
     /// Centers the view in the superview.
-    @discardableResult public func align(priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
-        [x.align(priority: priority), y.align(priority: priority)]
+    @discardableResult public func align(offset: CGPoint = .zero, priority: LayoutPriority? = nil) -> [NSLayoutConstraint] {
+        [x.align(offset: offset.x, priority: priority), y.align(offset: offset.y, priority: priority)]
     }
 
     /// Makes the axis equal to the other collection of axis.
