@@ -551,7 +551,7 @@ public enum AnchorType: Sendable {
 /// - important: Batched activation is also ~5× faster than the default
 /// auto-activating API, which installs each constraint as it's built. Reach
 /// for ``Constraints`` on hot paths (cell layout, repeatedly built view trees).
-@MainActor public final class Constraints: Collection {
+@MainActor public struct Constraints: Collection {
     public typealias Element = NSLayoutConstraint
     public typealias Index = Int
 
@@ -563,7 +563,7 @@ public enum AnchorType: Sendable {
     public nonisolated func index(after i: Int) -> Int { i + 1 }
 
     /// Returns all of the created constraints.
-    public private(set) var constraints = [NSLayoutConstraint]()
+    public private(set) var constraints: [NSLayoutConstraint]
 
     /// All of the constraints created in the given closure are automatically
     /// activated at the same time. This is more efficient then installing them
@@ -575,9 +575,9 @@ public enum AnchorType: Sendable {
     /// - parameter closure: A closure in which constraints are created. The
     /// constraints are collected and activated together when the closure returns.
     @discardableResult public init(activate: Bool = true, _ closure: () -> Void) {
-        Constraints.stack.append(self)
+        Constraints.stack.append([])
         closure() // create constraints
-        Constraints.stack.removeLast()
+        self.constraints = Constraints.stack.removeLast()
         if activate { NSLayoutConstraint.activate(constraints) }
     }
 
@@ -614,12 +614,15 @@ public enum AnchorType: Sendable {
         add(item: lhs.item, attribute: lhs.attribute, relatedBy: relation, toItem: item2, attribute: attr2, multiplier: multiplier / lhs.multiplier, constant: constant - lhs.offset, priority: priority)
     }
 
-    private static var stack = [Constraints]() // this is what enabled constraint auto-installing
+    static var stack: [[NSLayoutConstraint]] = [] // this is what enables constraint auto-installing
+    static var batchStack: [[NSLayoutConstraint]] = []
 
     static func install(_ constraint: NSLayoutConstraint, priority: LayoutPriority? = nil) {
         if let priority { constraint.priority = priority }
-        if let group = stack.last {
-            group.constraints.append(constraint)
+        if !stack.isEmpty {
+            stack[stack.count - 1].append(constraint)
+        } else if !batchStack.isEmpty {
+            batchStack[batchStack.count - 1].append(constraint)
         } else {
             constraint.isActive = true
         }
@@ -628,7 +631,7 @@ public enum AnchorType: Sendable {
 
 public extension Constraints {
     @discardableResult
-    convenience init<each Item: LayoutItem>(
+    init<each Item: LayoutItem>(
         for item: repeat each Item,
         closure: (repeat LayoutAnchors<each Item>) -> Void
     ) {
