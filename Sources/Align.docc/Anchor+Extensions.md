@@ -87,7 +87,7 @@ These constraints can be added between anchors that represent view edges and cen
 
 ### Semantic Constraints for Edges
 
-- ``pin(to:inset:priority:)``
+- ``pin(to:inset:relation:priority:)``
 - ``spacing(_:to:relation:priority:)``
 
 ### Semantic Constraints for Dimensions
