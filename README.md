@@ -51,6 +51,16 @@ view.anchors.edges.pin(insets: 20, alignment: .center)
 
 <img src="https://user-images.githubusercontent.com/1567433/84931836-5cb7e400-b0a1-11ea-8342-ce76b151fcad.png" alt="pin edges with center alignment" width="331px"/>
 
+## Tip: Avoid Repeating `import Align`
+
+To make Align available throughout your module without writing `import Align` in every file, add a single file (e.g. `Align+Exported.swift`) containing:
+
+```swift
+@_exported import Align
+```
+
+Any file in the same module can then use Align's APIs directly. This is especially convenient in app targets that lean heavily on Auto Layout.
+
 ## Documentation
 
 The [**documentation**](https://kean-docs.github.io/align/documentation/align/) for Align is created using DocC and covers all of its APIs in a clear visual way. There is also a [**cheat sheet**](https://github.com/kean/Align/blob/master/Sources/Align.docc/Resources/align-cheat-sheet.pdf) available that lists all of the available APIs.

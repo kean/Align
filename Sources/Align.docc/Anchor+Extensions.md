@@ -18,7 +18,7 @@ a.anchors.height.equal(30)
 
 > tip: Align automatically sets `translatesAutoresizingMaskIntoConstraints` to `false` for every view that you manipulate using it, so you no longer have to worry about it. 
  
-Align also allows you to offset and multiply anchors. This is a lightweight operation with no allocations involved.
+Align also allows you to offset, multiply, and divide anchors. This is a lightweight operation with no allocations involved.
 
 ```swift
 // Offset one of the anchors, creating a "virtual" anchor
@@ -26,6 +26,9 @@ b.anchors.leading.equal(a.anchors.trailing + 20)
 
 // Set aspect ratio for a view
 b.anchors.height.equal(a.anchors.width * 2)
+
+// Divide an anchor — equivalent to multiplying by the reciprocal
+b.anchors.height.equal(a.anchors.height / 2)
 ```
 
 ![04](04.png)

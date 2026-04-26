@@ -88,6 +88,11 @@ public enum AnchorType {
     anchor.multiplied(by: multiplier)
 }
 
+/// Returns a new anchor with a constant divided by the given amount.
+@MainActor @inlinable public func / <Type, Axis>(anchor: consuming Anchor<Type, Axis>, divisor: CGFloat) -> Anchor<Type, Axis> {
+    anchor.multiplied(by: 1 / divisor)
+}
+
 // MARK: - Anchors (AlignmentAnchorKind)
 
 @MainActor public extension Anchor where Type: AlignmentAnchorKind {

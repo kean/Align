@@ -4,6 +4,7 @@
 
 ## Align 3.4 (WIP)
 
+- Add a `/` operator for `Anchor`, mirroring `*`, so dimensions can be written as `view.anchors.height / 2`
 - Add an optional `priority:` parameter to all constraint-creating methods, allowing the priority to be set at creation time without needing to wrap the call in a `Constraints` group
 - Add an optional `relation:` parameter to the single-edge `pin(to:inset:relation:priority:)`, restoring symmetry with `spacing(_:to:relation:priority:)`
 - Add an optional `offset: CGPoint` parameter to `AnchorCollectionCenter.align(offset:priority:)`, restoring symmetry with the single-anchor `Anchor<AnchorType.Center, _>.align(offset:priority:)`

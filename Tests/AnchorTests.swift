@@ -142,6 +142,26 @@ import Align
         )
     }
 
+    // MARK: Dividing
+
+    @Test func dividingWidth() {
+        expectEqualConstraints(
+            view.anchors.width.equal(container.anchors.width / 2),
+            NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.5)
+        )
+        expectEqualConstraints(
+            (view.anchors.width / 2).equal(container.anchors.width),
+            NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 2)
+        )
+    }
+
+    @Test func dividingMatchesMultiplyingByReciprocal() {
+        expectEqualConstraints(
+            view.anchors.width.equal(container.anchors.width / 4),
+            NSLayoutConstraint(item: view, attribute: .width, toItem: container, attribute: .width, multiplier: 0.25)
+        )
+    }
+
     // MARK: Mixing Multiplier and Offset
 
     @Test func mixingMultiplierAndOffset() {
