@@ -1,8 +1,10 @@
 [Changelog](https://github.com/kean/Align/releases) for all versions
 
-# Align 3
+# Align 4
 
-## Align 3.4 (WIP)
+## Align 4.0
+
+*Apr 25, 2026*
 
 ### New APIs
 
@@ -39,6 +41,8 @@
 ### Housekeeping
 
 - Remove `Align.playground` in favor of an inline `#Preview` in `Sources/Align.swift`
+
+# Align 3
 
 ## Align 3.3
 
