@@ -4,27 +4,41 @@
 
 ## Align 3.4 (WIP)
 
-- Add a `/` operator for `Anchor`, mirroring `*`, so dimensions can be written as `view.anchors.height / 2`
+### New APIs
+
 - Add an optional `priority:` parameter to all constraint-creating methods, allowing the priority to be set at creation time without needing to wrap the call in a `Constraints` group
+- Add a `LayoutPriority` typealias (`UILayoutPriority` on iOS/tvOS, `NSLayoutConstraint.Priority` on macOS)
 - Add an optional `relation:` parameter to the single-edge `pin(to:inset:relation:priority:)`, restoring symmetry with `spacing(_:to:relation:priority:)`
 - Add an optional `offset: CGPoint` parameter to `AnchorCollectionCenter.align(offset:priority:)`, restoring symmetry with the single-anchor `Anchor<AnchorType.Center, _>.align(offset:priority:)`
-- Add a `LayoutPriority` typealias (`UILayoutPriority` on iOS/tvOS, `NSLayoutConstraint.Priority` on macOS)
+- Add a `/` operator for `Anchor`, mirroring `*`, so dimensions can be written as `view.anchors.height / 2`
+- Upgrade `Constraints`'s `Collection` conformance to `RandomAccessCollection`, matching the underlying `[NSLayoutConstraint]` storage and giving callers O(1) indexing and `count`
+
+### API Changes & Deprecations
+
 - Fix typo in public API: rename `greaterThanOrEqul(_:)` to `greaterThanOrEqual(_:)` on `AnchorCollectionSize`
-- Remove `Align.playground` in favor of an inline `#Preview` in `Sources/Align.swift`
-- Replace `superview!` force-unwraps in `pin()` and `align()` with `precondition`s that report the offending view, instead of an opaque `Optional("nil")` trap
+- Convert `AnchorCollectionEdges.absolute()` from a method to a computed property `absolute`, since it takes no arguments and has no side effects. Call sites change from `view.anchors.edges.absolute().pin()` to `view.anchors.edges.absolute.pin()`
 - Replace the class hierarchies inside `AnchorAxis` and `AnchorType` with empty enums plus `@_marker` protocols (`AnchorKind`, `AlignmentAnchorKind`). The phantom types are now uninstantiable and inherently `Sendable`. `AnchorType.Alignment` is replaced by `AlignmentAnchorKind`
 - Replace the four hand-rolled `Constraints(for:)` arity overloads with a single variadic-generics initializer using Swift 5.9 parameter packs. Existing trailing-closure call sites (`Constraints(for: a, b) { a, b in ... }`) compile unchanged; non-trailing call sites must now pass the closure with the `closure:` label
+- Deprecated the Core API on `AnchorCollectionEdges` (`equal(_:insets:priority:)` and `lessThanOrEqual(_:insets:priority:)`, both `EdgeInsets` and `CGFloat` overloads), which duplicated the Semantic API. Use `pin(to:insets:priority:)` and `pin(to:insets:alignment:priority:)` (with `.center`) instead
+
+### Safety & Correctness
+
+- Replace `superview!` force-unwraps in `pin()` and `align()` with `precondition`s that report the offending view, instead of an opaque `Optional("nil")` trap
+- Move `@MainActor` from the `Constraints` struct itself to just the members that touch UIKit/AppKit (`init`, `activate`, `deactivate`, `add`, `install`, and the static `stack`). The `Collection` conformance no longer needs `nonisolated` + `MainActor.assumeIsolated`, eliminating a runtime trap when a `Constraints` value was iterated off the main actor and turning that misuse into a compile-time error on the constraint-building entry points instead
 - Move `LayoutItem`'s `superview` requirement behind `@_spi(Align)` and add an SPI-only `_disableAutoresizingMask()` requirement, letting `Constraints.add` dispatch via the witness table instead of an `as?` cast on every constraint. The default public surface is unchanged; clients that need these (e.g. for custom `LayoutItem` conformances) can opt in with `@_spi(Align) import Align`
-- Inline the nested `constrain` helper in `AnchorCollectionEdges.pin` to eliminate per-call closure context allocation
+
+### Performance
+
+- Make `Constraints` a struct to avoid an allocation cost
 - Mark hot-path `Anchor` accessors, operators, and `equal/greaterThanOrEqual/lessThanOrEqual` overloads `@inlinable` so callers in client modules can inline through them
 - Mark `Anchor.offsetting(by:)` and `Anchor.multiplied(by:)` as `consuming`, letting the compiler forward the existential's class reference into the returned anchor instead of retaining and releasing it
 - Mark the `+`, `-`, and `*` operators on `Anchor` as `consuming` their anchor operand so chains like `view.anchors.top + 10 + 4` collapse to zero extra retains
-- Make `Constraints` a struct to avoid an allocation cost
+- Inline the nested `constrain` helper in `AnchorCollectionEdges.pin` to eliminate per-call closure context allocation
 - Hoist calls to `_disableAutoresizingMask` in scenarios where it's called many times repeatedly like `edges.pin`
-- Move `@MainActor` from the `Constraints` struct itself to just the members that touch UIKit/AppKit (`init`, `activate`, `deactivate`, `add`, `install`, and the static `stack`). The `Collection` conformance no longer needs `nonisolated` + `MainActor.assumeIsolated`, eliminating a runtime trap when a `Constraints` value was iterated off the main actor and turning that misuse into a compile-time error on the constraint-building entry points instead
-- Convert `AnchorCollectionEdges.absolute()` from a method to a computed property `absolute`, since it takes no arguments and has no side effects. Call sites change from `view.anchors.edges.absolute().pin()` to `view.anchors.edges.absolute.pin()`
-- Deprecated the Core API on `AnchorCollectionEdges` (`equal(_:insets:priority:)` and `lessThanOrEqual(_:insets:priority:)`, both `EdgeInsets` and `CGFloat` overloads), which duplicated the Semantic API. Use `pin(to:insets:priority:)` and `pin(to:insets:alignment:priority:)` (with `.center`) instead
-- Upgrade `Constraints`'s `Collection` conformance to `RandomAccessCollection`, matching the underlying `[NSLayoutConstraint]` storage and giving callers O(1) indexing and `count`
+
+### Housekeeping
+
+- Remove `Align.playground` in favor of an inline `#Preview` in `Sources/Align.swift`
 
 ## Align 3.3
 
